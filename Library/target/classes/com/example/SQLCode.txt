@@ -1,0 +1,168 @@
+-- Create table for library entity
+CREATE TABLE libraries (
+	id TEXT PRIMARY KEY,
+	name TEXT NOT NULL,
+	address TEXT NOT NULL
+);
+
+-- Create table for librarian entity
+-- Use branch_id as Foreign Key
+CREATE TABLE librarians (
+	id TEXT PRIMARY KEY,
+	last_name TEXT NOT NULL,
+	first_name TEXT NOT NULL,
+	email VARCHAR(254) NOT NULL UNIQUE,
+	password TEXT NOT NULL,
+    branch_id TEXT NOT NULL,
+	FOREIGN KEY(branch_id) REFERENCES libraries(id)
+);
+
+-- Create table for borrower entity
+CREATE TABLE borrowers (
+	id TEXT PRIMARY KEY,
+	last_name TEXT NOT NULL,
+	first_name TEXT NOT NULL,
+	age INTEGER NOT NULL CHECK (age >= 0),
+	email VARCHAR(254) NOT NULL UNIQUE,
+	password TEXT NOT NULL
+);
+
+-- Create table for book entity with book_status as enum
+CREATE TYPE book_status AS ENUM (
+    'available',
+    'checked_out',
+    'reserved',
+    'lost',
+    'damaged'
+);
+
+
+CREATE TABLE books (
+	isbn VARCHAR(13) PRIMARY KEY,
+	title TEXT NOT NULL,
+	author TEXT NOT NULL,
+	publisher TEXT NOT NULL,
+	publication_date DATE NOT NULL,
+	status book_status NOT NULL DEFAULT 'available'
+);
+
+-- Create table for genres and junction table for books + genres
+CREATE TABLE genres (
+	id SERIAL PRIMARY KEY,
+	name TEXT NOT NULL UNIQUE
+);
+
+CREATE TABLE book_genres (
+	book_id VARCHAR(13) NOT NULL REFERENCES books(isbn),
+	genre_id INTEGER NOT NULL REFERENCES genres(id),
+	PRIMARY KEY (book_id, genre_id)
+);
+
+-- Insert Fiction genres
+INSERT INTO genres (name) VALUES
+('Literary Fiction'),
+('Science Fiction'),
+('Fantasy'),
+('Mystery'),
+('Thriller'),
+('Horror'),
+('Romance'),
+('Historical Fiction'),
+('Young Adult'),
+('Children’s Fiction'),
+('Graphic Novel'),
+('Dystopian'),
+('Adventure');
+
+-- Insert Non-Fiction genres
+INSERT INTO genres (name) VALUES
+('Biography'),
+('Autobiography'),
+('Memoir'),
+('History'),
+('Travel'),
+('Self-Help'),
+('Philosophy'),
+('Religion / Spirituality'),
+('True Crime'),
+('Essays'),
+('Humor');
+
+-- Insert Academic genres
+INSERT INTO genres (name) VALUES
+('Academic'),
+('Scholarly'),
+('Research'),
+('Textbook'),
+('Reference'),
+('Thesis'),
+('Dissertation'),
+('Conference Proceedings'),
+('Journal / Periodical'),
+('Case Study'),
+('Technical Manual'),
+('Educational');
+
+-- Insert subject-specific genres
+INSERT INTO genres (name) VALUES
+('Computer Science'),
+('Engineering'),
+('Mathematics'),
+('Physics'),
+('Chemistry'),
+('Biology'),
+('Medicine'),
+('Nursing'),
+('Psychology'),
+('Sociology'),
+('Economics'),
+('Political Science'),
+('Law'),
+('Education'),
+('Linguistics'),
+('Anthropology'),
+('Environmental Science');
+
+-- Create enum for formats and table for available formats
+CREATE TYPE book_format AS ENUM ('physical', 'ebook');
+
+CREATE TABLE available_formats (
+    id SERIAL PRIMARY KEY,
+    isbn VARCHAR(13) NOT NULL,
+    format book_format NOT NULL,
+	FOREIGN KEY(isbn) REFERENCES books(isbn)
+);
+
+
+-- Create table for request entity with request_status as enum
+-- Use book_id, borrower_id, and librarian_id as Foreign Keys
+CREATE TYPE request_status AS ENUM ('pending', 'approved', 'rejected');
+
+CREATE TABLE borrow_request (
+	id TEXT PRIMARY KEY,
+	request_date TIMESTAMPTZ NOT NULL,
+	processed_at TIMESTAMPTZ,
+	status request_status NOT NULL DEFAULT 'pending',
+    book_id VARCHAR(13) NOT NULL,
+    borrower_id TEXT NOT NULL,
+    processed_by TEXT,
+	FOREIGN KEY(book_id) REFERENCES books(isbn),
+	FOREIGN KEY(borrower_id) REFERENCES borrowers(id),
+	FOREIGN KEY(processed_by) REFERENCES librarians(id)
+);
+
+-- Create table for loan entity
+-- Use book_id, borrower_id, and librarian_id as Foreign Keys
+CREATE TABLE loan (
+	id TEXT PRIMARY KEY,
+	loan_date TIMESTAMPTZ NOT NULL,
+	due_date DATE NOT NULL,
+	return_date TIMESTAMPTZ,
+	fine_amount NUMERIC(8,2) CHECK (fine_amount >= 0),
+    book_id VARCHAR(13) NOT NULL,
+    borrower_id TEXT NOT NULL,
+    processed_by TEXT NOT NULL,
+	FOREIGN KEY(book_id) REFERENCES books(isbn),
+	FOREIGN KEY(borrower_id) REFERENCES borrowers(id),
+	FOREIGN KEY(processed_by) REFERENCES librarians(id)
+);
