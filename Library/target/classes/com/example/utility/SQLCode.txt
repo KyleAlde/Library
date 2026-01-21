@@ -145,9 +145,9 @@ CREATE TABLE available_formats (
 -- Use book_id, borrower_id, and librarian_id as Foreign Keys
 CREATE TYPE request_status AS ENUM ('pending', 'approved', 'rejected');
 
-CREATE TABLE borrow_request (
+CREATE TABLE borrow_requests (
 	id TEXT PRIMARY KEY,
-	request_date TIMESTAMPTZ NOT NULL,
+	request_date TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	processed_at TIMESTAMPTZ,
 	status request_status NOT NULL DEFAULT 'pending',
     book_id VARCHAR(13) NOT NULL,
@@ -160,12 +160,12 @@ CREATE TABLE borrow_request (
 
 -- Create table for loan entity
 -- Use book_id, borrower_id, and librarian_id as Foreign Keys
-CREATE TABLE loan (
+CREATE TABLE loans (
 	id TEXT PRIMARY KEY,
-	loan_date TIMESTAMPTZ NOT NULL,
+	loan_date TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	due_date DATE NOT NULL,
 	return_date TIMESTAMPTZ,
-	fine_amount NUMERIC(8,2) CHECK (fine_amount >= 0),
+	fine_amount NUMERIC(8,2) CHECK (fine_amount >= 0) DEFAULT 0,
     book_id VARCHAR(13) NOT NULL,
     borrower_id TEXT NOT NULL,
     processed_by TEXT NOT NULL,

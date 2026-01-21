@@ -10,9 +10,17 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLDataException;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.time.LocalDate;
 
 import com.example.utility.DatabaseConnection;
+import com.example.utility.dao.BookDAO;
+import com.example.utility.dao.LoanDAO;
+import com.example.model.Book;
+import com.example.model.Loan;
 
 /**
  * JavaFX App
@@ -48,11 +56,13 @@ public class App extends Application {
         DatabaseConnection connection = new DatabaseConnection();
         try {
             connection.getConnection();
+            System.err.println("Connection established");
         } catch (SQLException e) {
             System.err.println("Database connection failed");
             e.printStackTrace();
             return;
         }
+        
         launch();
     }
 }
