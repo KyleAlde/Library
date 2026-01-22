@@ -95,7 +95,7 @@ public class BookDAO {
     //                           UPDATE
     //==============================================================
 
-    //Update status of a book in the database
+    //Update status of a book in the database when borrowed or returned
     public void updateStatus(String isbn, String newStatus) throws SQLException{
         String statusQuery = """
             UPDATE books
