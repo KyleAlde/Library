@@ -6,6 +6,7 @@ import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
+import java.util.Random;
 
 import com.example.utility.DatabaseConnection;
 import com.example.model.Loan;
@@ -18,7 +19,12 @@ public class LoanDAO {
     //==============================================================
 
     //Create loan upon confirmation from librarian
-    public void createLoan(String id, String bookId, String borrowerId, String processedBy) throws SQLException{
+    public void createLoan(String bookId, String borrowerId, String processedBy) throws SQLException{
+        //Generate unique ID for borrow request
+        Random random = new Random();
+        int randomNumber = random.nextInt(10000);
+        String id = "L-" + randomNumber;
+
         LocalDate dueDate = LocalDate.now().plusDays(14);
         String insertQuery = "INSERT INTO loans (id, due_date, book_id, borrower_id, processed_by) VALUES (?, ?, ? , ?, ?)";
 

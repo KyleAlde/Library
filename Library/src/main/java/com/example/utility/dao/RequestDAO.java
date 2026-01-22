@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.Random;
 
 import com.example.model.Request;
 import com.example.model.Request.RequestStatus;
@@ -20,7 +21,12 @@ public class RequestDAO {
     //==============================================================
 
     //Send borrow request
-    public void sendRequest(String id, String bookId, String borrowerId) throws SQLException {
+    public void sendRequest(String bookId, String borrowerId) throws SQLException {
+        //Generate unique ID for borrow request
+        Random random = new Random();
+        int randomNumber = random.nextInt(10000);
+        String id = "RQ-" + randomNumber;
+
         String insertQuery = "INSERT INTO borrow_requests (id, book_id, borrower_id) VALUES (?, ?, ?)";
 
         try (PreparedStatement ps = db.getConnection().prepareStatement(insertQuery)) {
