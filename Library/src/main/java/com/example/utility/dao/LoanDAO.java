@@ -1,6 +1,5 @@
 package com.example.utility.dao;
 
-import java.math.BigDecimal;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
@@ -19,7 +18,7 @@ public class LoanDAO {
     //==============================================================
 
     //Create loan upon confirmation from librarian
-    public void createLoan(String id, String bookId, String borrowerID, String processedBy) throws SQLException{
+    public void createLoan(String id, String bookId, String borrowerId, String processedBy) throws SQLException{
         LocalDate dueDate = LocalDate.now().plusDays(14);
         String insertQuery = "INSERT INTO loans (id, due_date, book_id, borrower_id, processed_by) VALUES (?, ?, ? , ?, ?)";
 
@@ -27,7 +26,7 @@ public class LoanDAO {
             ps.setString(1, id);
             ps.setDate(2, java.sql.Date.valueOf(dueDate));
             ps.setString(3, bookId);
-            ps.setString(4, borrowerID);
+            ps.setString(4, borrowerId);
             ps.setString(5, processedBy);
             ps.executeUpdate();
 
@@ -47,15 +46,17 @@ public class LoanDAO {
             ResultSet rs = ps.executeQuery();
 
             if(rs.next()) {
+                //Convert UTC into Local Time Zone
                 OffsetDateTime utcLoanDate = rs.getObject("loan_date", OffsetDateTime.class);
                 ZonedDateTime manilaLoanDate = utcLoanDate.atZoneSameInstant(ZoneId.of("Asia/Manila"));
 
                 OffsetDateTime utcReturnDate = rs.getObject("return_date", OffsetDateTime.class);
-                ZonedDateTime TempManilaReturnDate = null;
+                ZonedDateTime tempManilaReturnDate = null;
                 OffsetDateTime manilaReturnDate = null;
+
                 if (utcReturnDate != null) {
-                    TempManilaReturnDate = utcReturnDate.atZoneSameInstant(ZoneId.of("Asia/Manila"));
-                    manilaReturnDate = TempManilaReturnDate.toOffsetDateTime();
+                    tempManilaReturnDate = utcReturnDate.atZoneSameInstant(ZoneId.of("Asia/Manila"));
+                    manilaReturnDate = tempManilaReturnDate.toOffsetDateTime();
                 }
                 
                 return new Loan(
@@ -69,7 +70,6 @@ public class LoanDAO {
                     rs.getString("processed_by")
                 );
             }
-
             System.out.println("Query Successful");
         }
         return null;
