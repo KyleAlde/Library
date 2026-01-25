@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="920.0" prefWidth="1920.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.aboutController">
+   <children>
+      <StackPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <HBox>
+               <children>
+                  <AnchorPane prefWidth="800.0">
+                     <children>
+                        <VBox alignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <children>
+                              <StackPane alignment="TOP_CENTER" prefHeight="125.0">
+                                 <children>
+                                    <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="75.0" prefWidth="300.0" styleClass="login-logo" stylesheets="@style.css" StackPane.alignment="CENTER_LEFT">
+                                       <StackPane.margin>
+                                          <Insets left="50.0" />
+                                       </StackPane.margin>
+                                    </Pane>
+                                 </children>
+                              </StackPane>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="about-text-header" text="Elevating Academic Discovery Through Technology" wrappingWidth="580.0">
+                                 <VBox.margin>
+                                    <Insets top="5.0" />
+                                 </VBox.margin>
+                              </Text>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="about-text-content" text="Welcome to NU Codex, the National University Philippines' innovative digital library platform. Born from a 2nd-year Computer Science project, we're redefining how knowledge is accessed, managed, and shared within academic communities." wrappingWidth="580.0">
+                                 <VBox.margin>
+                                    <Insets top="5.0" />
+                                 </VBox.margin>
+                              </Text>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="about-text-header" text="Our Story" wrappingWidth="580.0">
+                                 <VBox.margin>
+                                    <Insets top="20.0" />
+                                 </VBox.margin>
+                              </Text>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="about-text-content" text="In 2024, a group of Computer Science students at National University Philippines identified a gap between traditional library systems and modern user expectations. Thus began NU Codex – a mission to bridge centuries of archival tradition with cutting-edge digital accessibility.The name &quot;Codex&quot; pays homage to the ancient book format that revolutionized knowledge preservation, while &quot;NU&quot; anchors this innovation firmly within our university's commitment to excellence and service." wrappingWidth="580.0">
+                                 <VBox.margin>
+                                    <Insets top="5.0" />
+                                 </VBox.margin>
+                              </Text>
+                              <Pane VBox.vgrow="ALWAYS" />
+                              <StackPane alignment="BOTTOM_CENTER">
+                                 <children>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="copyright-text" text="&quot;Copyright © 2026 by Neckhurts University. All rights reserved. Used with/out permission.&quot; ">
+                                       <StackPane.margin>
+                                          <Insets bottom="20.0" />
+                                       </StackPane.margin>
+                                    </Text>
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets bottom="20.0" />
+                                 </VBox.margin>
+                              </StackPane>
+                           </children>
+                        </VBox>
+                     </children></AnchorPane>
+                  <AnchorPane prefWidth="1180.0">
+                     <children>
+                        <Pane prefHeight="920.0" prefWidth="1180.0" styleClass="login-Background" />
+                        <Pane prefHeight="920.0" prefWidth="1180.0" styleClass="login-Filter" />
+                        <StackPane prefHeight="150.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <children>
+                              <StackPane />
+                           </children>
+                        </StackPane>
+                     </children>
+                  </AnchorPane>
+               </children>
+            </HBox>
+         </children>
+      </StackPane>
+   </children>
+</AnchorPane>

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.memberPortalController">
+   <children>
+      <BorderPane fx:id="imageHeader" layoutY="1.0" prefHeight="1080.0" prefWidth="1920.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <center>
+            <BorderPane BorderPane.alignment="CENTER">
+               <top>
+                  <VBox fx:id="header" alignment="CENTER" styleClass="header-background" BorderPane.alignment="CENTER">
+                     <children>
+                        <HBox alignment="CENTER" maxHeight="80.0" minHeight="80.0" prefHeight="80.0" spacing="10.0" styleClass="lower-header-color">
+                           <children>
+                              <Button fx:id="openSideBar" maxHeight="50.0" maxWidth="50.0" minHeight="50.0" minWidth="50.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" styleClass="open-Side-Panel" text="▶" textFill="WHITE">
+                                 <font>
+                                    <Font name="Arial" size="24.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="100.0" />
+                                 </HBox.margin>
+                              </Button>
+                              <Pane fx:id="headerLogo" prefWidth="200.0" styleClass="logo-image" />
+                              <Pane HBox.hgrow="ALWAYS" />
+                              <TextField promptText="search" styleClass="member-search-bar">
+                                 <font>
+                                    <Font name="Segoe UI" size="18.0" />
+                                 </font>
+                              </TextField>
+                              <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="60.0" prefWidth="60.0" styleClass="member-Account-Icon">
+                                 <HBox.margin>
+                                    <Insets right="100.0" />
+                                 </HBox.margin>
+                              </Pane>
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+               </top>
+               <center>
+                  <ScrollPane hbarPolicy="NEVER" maxWidth="1920.0" minWidth="1620.0" styleClass="no-scroll" vbarPolicy="ALWAYS" BorderPane.alignment="CENTER">
+                     <content>
+                        <VBox fx:id="sectionContainer" alignment="CENTER" maxWidth="1920.0" minWidth="1620.0" prefHeight="1000.0" />
+                     </content>
+                  </ScrollPane>
+               </center>
+            </BorderPane>
+         </center>
+         <left>
+            <AnchorPane fx:id="sideBar" BorderPane.alignment="CENTER">
+               <children>
+                  <VBox prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <HBox alignment="CENTER" prefHeight="80.0">
+                           <children>
+                              <Pane prefWidth="170.0" styleClass="member-Portal-logo" />
+                              <Pane HBox.hgrow="ALWAYS" />
+                              <Button fx:id="closeSideBar" maxHeight="50.0" maxWidth="50.0" minHeight="50.0" minWidth="50.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" styleClass="close-Side-Panel" text="X">
+                                 <HBox.margin>
+                                    <Insets right="20.0" />
+                                 </HBox.margin>
+                                 <font>
+                                    <Font name="Arial" size="24.0" />
+                                 </font>
+                              </Button>
+                           </children>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                           <padding>
+                              <Insets left="20.0" />
+                           </padding>
+                        </HBox>
+                        <Button mnemonicParsing="false" styleClass="member-portal-button" text="Browse">
+                           <VBox.margin>
+                              <Insets left="14.0" top="10.0" />
+                           </VBox.margin>
+                        </Button>
+                        <Button mnemonicParsing="false" styleClass="member-portal-button" text="My Cart">
+                           <VBox.margin>
+                              <Insets left="14.0" top="10.0" />
+                           </VBox.margin>
+                        </Button>
+                        <Button mnemonicParsing="false" styleClass="member-portal-button" text="My Loans">
+                           <VBox.margin>
+                              <Insets left="14.0" top="10.0" />
+                           </VBox.margin>
+                        </Button>
+                        <Button mnemonicParsing="false" styleClass="member-portal-button" text="Reservations">
+                           <VBox.margin>
+                              <Insets left="14.0" top="10.0" />
+                           </VBox.margin>
+                        </Button>
+                        <Button mnemonicParsing="false" styleClass="member-portal-button" text="Returns">
+                           <VBox.margin>
+                              <Insets left="14.0" top="10.0" />
+                           </VBox.margin>
+                        </Button>
+                        <Button mnemonicParsing="false" styleClass="member-portal-button" text="Accounts">
+                           <VBox.margin>
+                              <Insets left="14.0" top="10.0" />
+                           </VBox.margin>
+                        </Button>
+                     </children>
+                  </VBox>
+                  <Line endX="300.0" endY="1.52587890625E-5" startX="300.0" startY="1080.0" strokeWidth="0.5" />
+               </children>
+            </AnchorPane>
+         </left>
+      </BorderPane>
+   </children>
+</AnchorPane>
