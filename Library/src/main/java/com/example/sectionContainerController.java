@@ -20,14 +20,14 @@ public class sectionContainerController {
 
     @FXML
     private void initialize() {
-        // Load 16 books into the FlowPane
-        loadBooks();
+        // Load 10 placeholder books
+        loadPlaceholderBooks();
     }
 
-    private void loadBooks() {
+    private void loadPlaceholderBooks() {
         try {
-            // Load 16 books
-            for (int i = 0; i < 16; i++) {
+            // Load 10 placeholder books
+            for (int i = 0; i < 10; i++) {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("fxml/Collection/books.fxml"));
                 VBox bookNode = loader.load();
                 booksFlowPane.getChildren().add(bookNode);
@@ -41,23 +41,23 @@ public class sectionContainerController {
         genreTitle.setText(title);
     }
 
-    // Method for when sidebar is OPEN - reduce width for 5 books per row
-    public void adjustForSidebarOpen() {
-        // Set width to fit 5 books per row (6th goes to next row)
-        booksFlowPane.setMaxWidth(1180.0);  // 5 books × 220px + 4 gaps × 20px = 1180px + padding
-        booksFlowPane.setPrefWidth(1180.0);
+    // Method for when sidebar is OPEN - resize bookCollectionContainer to 1620px width
+    public void adjustForSidebarOpen(VBox bookCollectionContainer) {
+        // Set bookCollectionContainer width to 1620px for sidebar open state
+        bookCollectionContainer.setPrefWidth(1620.0);
+        bookCollectionContainer.setMaxWidth(1620.0);
         
         // Force layout recalculation
-        booksFlowPane.requestLayout();
+        bookCollectionContainer.requestLayout();
     }
 
-    // Method for when sidebar is CLOSED - full width for 6 books per row
-    public void adjustForSidebarClosed() {
-        // Set width for 6 books per row
-        booksFlowPane.setMaxWidth(1420.0);  // 6 books × 220px + 5 gaps × 20px = 1420px
-        booksFlowPane.setPrefWidth(1420.0);
+    // Method for when sidebar is CLOSED - restore bookCollectionContainer to 1180px width
+    public void adjustForSidebarClosed(VBox bookCollectionContainer) {
+        // Set bookCollectionContainer width back to 1180px for sidebar closed state
+        bookCollectionContainer.setPrefWidth(1180.0);
+        bookCollectionContainer.setMaxWidth(1180.0);
         
         // Force layout recalculation
-        booksFlowPane.requestLayout();
+        bookCollectionContainer.requestLayout();
     }
 }

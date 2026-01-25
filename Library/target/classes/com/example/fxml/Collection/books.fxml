@@ -8,6 +8,6 @@
 <VBox fx:id="book" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="220.0" minHeight="-Infinity" minWidth="220.0" prefHeight="320.0" prefWidth="220.0" style="-fx-background-color: transparent;" stylesheets="@../style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.booksController">
    <children>
       <Pane fx:id="bookCover" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="220.0" style="-fx-background-color: black;" />
-      <Text fx:id="bookTitle" strokeType="OUTSIDE" strokeWidth="0.0" text="TitlePlaceholder" />
+      <Text fx:id="bookTitle" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="book-title" text="TitlePlaceholder" />
    </children>
 </VBox>

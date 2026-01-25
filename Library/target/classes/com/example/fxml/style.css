@@ -234,14 +234,6 @@
     -fx-opacity: 0;
 }
 
-.no-scroll .scroll-pane {
-    -fx-background-color: transparent;
-}
-
-.no-scroll .scroll-pane .viewport {
-    -fx-background-color: transparent;
-}
-
 .no-scroll .scroll-pane .scroll-bar:vertical .increment-arrow,
 .no-scroll .scroll-pane .scroll-bar:vertical .decrement-arrow,
 .no-scroll .scroll-pane .scroll-bar:vertical .thumb {
@@ -259,6 +251,14 @@
     -fx-font-family: "Segoe UI";
     -fx-font-size: 40px;
     -fx-text-fill: rgba(0,0,0,1);
+}
+
+/* Book Title */
+.book-title {
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 14px;
+    -fx-text-fill: rgba(0,0,0,1);
+    -fx-text-alignment: CENTER;
 }
 
 /* Cart Header */

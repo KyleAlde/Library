@@ -7,8 +7,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import java.util.ArrayList;
-import java.util.List;
 
 public class memberPortalController {
 
@@ -25,7 +23,7 @@ public class memberPortalController {
     private Button openSideBar;
 
     @FXML
-    private VBox sectionContainer;
+    private VBox bookCollectionContainer;
 
     @FXML
     private BorderPane imageHeader;
@@ -33,7 +31,7 @@ public class memberPortalController {
     @FXML
     private AnchorPane sideBar;
 
-    private List<sectionContainerController> sectionControllers = new ArrayList<>();
+    private sectionContainerController sectionController;
 
     @FXML
     private void initialize() {
@@ -44,6 +42,13 @@ public class memberPortalController {
         // Load section containers with books
         loadSectionContainers();
         
+        // Debug: Log initial width
+        javafx.application.Platform.runLater(() -> {
+            System.out.println("DEBUG - Initial bookCollectionContainer width: " + bookCollectionContainer.getWidth());
+            System.out.println("DEBUG - Initial bookCollectionContainer prefWidth: " + bookCollectionContainer.getPrefWidth());
+            System.out.println("DEBUG - Initial bookCollectionContainer bounds: " + bookCollectionContainer.getBoundsInParent());
+        });
+        
         closeSideBar.setOnAction(event -> {
             sideBar.setVisible(false);
             imageHeader.setLeft(null);
@@ -51,8 +56,15 @@ public class memberPortalController {
             headerLogo.setVisible(true);
             openSideBar.setVisible(true);
             
+            // Debug: Log width when sidebar closed
+            javafx.application.Platform.runLater(() -> {
+                System.out.println("DEBUG - Sidebar CLOSED - bookCollectionContainer width: " + bookCollectionContainer.getWidth());
+                System.out.println("DEBUG - Sidebar CLOSED - bookCollectionContainer prefWidth: " + bookCollectionContainer.getPrefWidth());
+                System.out.println("DEBUG - Sidebar CLOSED - bookCollectionContainer bounds: " + bookCollectionContainer.getBoundsInParent());
+            });
+            
             // Sidebar closed: restore original layout
-            adjustSectionsForSidebar(false);
+            sectionController.adjustForSidebarClosed(bookCollectionContainer);
         });
         
         openSideBar.setOnAction(event -> {
@@ -62,49 +74,35 @@ public class memberPortalController {
             headerLogo.setVisible(false);
             openSideBar.setVisible(false);
             
+            // Debug: Log width when sidebar opened
+            javafx.application.Platform.runLater(() -> {
+                System.out.println("DEBUG - Sidebar OPENED - bookCollectionContainer width: " + bookCollectionContainer.getWidth());
+                System.out.println("DEBUG - Sidebar OPENED - bookCollectionContainer prefWidth: " + bookCollectionContainer.getPrefWidth());
+                System.out.println("DEBUG - Sidebar OPENED - bookCollectionContainer bounds: " + bookCollectionContainer.getBoundsInParent());
+            });
+            
             // Sidebar open: adjust layout for overflow
-            adjustSectionsForSidebar(true);
+            sectionController.adjustForSidebarOpen(bookCollectionContainer);
         });
-    }
-
-    private void adjustSectionsForSidebar(boolean sidebarOpen) {
-        // Apply width adjustment to all sections - HBox will handle centering
-        for (sectionContainerController controller : sectionControllers) {
-            if (sidebarOpen) {
-                controller.adjustForSidebarOpen();
-            } else {
-                controller.adjustForSidebarClosed();
-            }
-        }
     }
 
     private void loadSectionContainers() {
         try {
-            // Load multiple section containers
-            String[] genres = {"Fiction", "Non-Fiction", "Science", "History"};
+            // Load single section container for all books
+            javafx.scene.layout.HBox sectionWrapper = new javafx.scene.layout.HBox();
+            sectionWrapper.setAlignment(javafx.geometry.Pos.CENTER);
+            sectionWrapper.setPrefWidth(1920.0);
             
-            for (String genre : genres) {
-                // Create an HBox wrapper for centering
-                // Create an HBox wrapper for centering
-                javafx.scene.layout.HBox sectionWrapper = new javafx.scene.layout.HBox();
-                sectionWrapper.setAlignment(javafx.geometry.Pos.CENTER);
-                sectionWrapper.setPrefWidth(1920.0);
-                sectionWrapper.setStyle("-fx-background-color: transparent;");
-                
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("fxml/Collection/sectionContainer.fxml"));
-                VBox sectionNode = loader.load();
-                
-                // Get the controller and set the genre title
-                sectionContainerController controller = loader.getController();
-                controller.setGenreTitle(genre);
-                
-                // Store controller reference
-                sectionControllers.add(controller);
-                
-                // Add section to wrapper, then wrapper to main container
-                sectionWrapper.getChildren().add(sectionNode);
-                sectionContainer.getChildren().add(sectionWrapper);
-            }
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("fxml/Collection/sectionContainer.fxml"));
+            VBox sectionNode = loader.load();
+            
+            // Get the controller and set the genre title
+            sectionController = loader.getController();
+            sectionController.setGenreTitle("hihi haha");
+            
+            // Add section to wrapper, then wrapper to main container
+            sectionWrapper.getChildren().add(sectionNode);
+            bookCollectionContainer.getChildren().add(sectionWrapper);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -5,13 +5,13 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<VBox maxHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="1420.0" stylesheets="@../style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.sectionContainerController">
+<VBox maxHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="1180.0" stylesheets="@../style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.sectionContainerController">
    <children>
       <HBox fx:id="sectionHeader" alignment="CENTER_LEFT" prefHeight="80.0">
          <children>
             <Text fx:id="genreTitle" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="section-Header" text="Placeholder" />
          </children>
       </HBox>
-      <FlowPane fx:id="booksFlowPane" columnHalignment="CENTER" hgap="20.0" prefHeight="320.0" prefWidth="1420.0" prefWrapLength="0.0" rowValignment="TOP" vgap="20.0" />
+      <FlowPane fx:id="booksFlowPane" columnHalignment="CENTER" hgap="20.0" prefHeight="320.0" prefWidth="1180.0" prefWrapLength="0.0" rowValignment="TOP" vgap="20.0" />
    </children>
 </VBox>

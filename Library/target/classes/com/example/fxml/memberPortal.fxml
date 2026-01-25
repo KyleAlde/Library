@@ -50,7 +50,7 @@
                <center>
                   <ScrollPane hbarPolicy="NEVER" maxWidth="1920.0" minWidth="1620.0" styleClass="no-scroll" vbarPolicy="ALWAYS" BorderPane.alignment="CENTER">
                      <content>
-                        <VBox fx:id="sectionContainer" alignment="CENTER" maxWidth="1920.0" minWidth="1620.0" prefHeight="1000.0" />
+                        <VBox fx:id="bookCollectionContainer" alignment="TOP_CENTER" maxWidth="1920.0" minWidth="1180.0" prefWidth="1180.0" prefHeight="1000.0" />
                      </content>
                   </ScrollPane>
                </center>
