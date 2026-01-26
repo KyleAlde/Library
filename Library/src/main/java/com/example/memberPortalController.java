@@ -35,12 +35,6 @@ public class memberPortalController {
     private Button returnLoans;
 
     @FXML
-    private Button returnReservations;
-
-    @FXML
-    private Button returnReturns;
-
-    @FXML
     private VBox bookCollectionContainer;
 
     @FXML
@@ -168,6 +162,58 @@ public class memberPortalController {
         }
     }
 
+    // Method to show loans page
+    public void showLoans() {
+        try {
+            // Clear current content
+            bookCollectionContainer.getChildren().clear();
+            
+            // Create HBox wrapper for centering
+            javafx.scene.layout.HBox loansWrapper = new javafx.scene.layout.HBox();
+            loansWrapper.setAlignment(javafx.geometry.Pos.CENTER);
+            loansWrapper.setPrefWidth(1920.0);
+            
+            // Load Loans.fxml
+            FXMLLoader loansLoader = new FXMLLoader(getClass().getResource("fxml/Loans.fxml"));
+            javafx.scene.layout.AnchorPane loansNode = loansLoader.load();
+            
+            // Add loans to wrapper, then wrapper to main container
+            loansWrapper.getChildren().add(loansNode);
+            bookCollectionContainer.getChildren().add(loansWrapper);
+            
+            System.out.println("Loans page loaded successfully");
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("Error loading loans page: " + e.getMessage());
+        }
+    }
+
+    // Method to show account page
+    public void showAccount() {
+        try {
+            // Clear current content
+            bookCollectionContainer.getChildren().clear();
+            
+            // Create HBox wrapper for centering
+            javafx.scene.layout.HBox accountWrapper = new javafx.scene.layout.HBox();
+            accountWrapper.setAlignment(javafx.geometry.Pos.CENTER);
+            accountWrapper.setPrefWidth(1920.0);
+            
+            // Load account.fxml
+            FXMLLoader accountLoader = new FXMLLoader(getClass().getResource("fxml/account.fxml"));
+            javafx.scene.layout.AnchorPane accountNode = accountLoader.load();
+            
+            // Add account to wrapper, then wrapper to main container
+            accountWrapper.getChildren().add(accountNode);
+            bookCollectionContainer.getChildren().add(accountWrapper);
+            
+            System.out.println("Account page loaded successfully");
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("Error loading account page: " + e.getMessage());
+        }
+    }
+
     // Action handlers for sidebar buttons
     @FXML
     private void handleBrowseButton() {
@@ -177,6 +223,16 @@ public class memberPortalController {
     @FXML
     private void handleCartButton() {
         showCart();
+    }
+
+    @FXML
+    private void handleLoansButton() {
+        showLoans();
+    }
+
+    @FXML
+    private void handleAccountButton() {
+        showAccount();
     }
 
 }

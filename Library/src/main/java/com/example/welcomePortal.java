@@ -44,7 +44,7 @@ public class welcomePortal {
 
     private void showLoginView() {
         try {
-            FXMLLoader loader = new FXMLLoader(App.class.getResource("fxml/login.fxml"));
+            FXMLLoader loader = new FXMLLoader(App.class.getResource("fxml/welcomePage/login.fxml"));
             Node loginView = loader.load();
             contentArea.getChildren().setAll(loginView);
             tabName.setText("Login");
@@ -55,7 +55,7 @@ public class welcomePortal {
     
     private void showAboutView() {
         try {
-            FXMLLoader loader = new FXMLLoader(App.class.getResource("fxml/About.fxml"));
+            FXMLLoader loader = new FXMLLoader(App.class.getResource("fxml/welcomePage/About.fxml"));
             Node aboutView = loader.load();
             contentArea.getChildren().setAll(aboutView);
             tabName.setText("About");
@@ -66,7 +66,7 @@ public class welcomePortal {
     
     private void showHomeView() {
         try {
-            FXMLLoader loader = new FXMLLoader(App.class.getResource("fxml/home.fxml"));
+            FXMLLoader loader = new FXMLLoader(App.class.getResource("fxml/welcomePage/home.fxml"));
             Node homeView = loader.load();
             contentArea.getChildren().setAll(homeView);
             tabName.setText("Home");
@@ -77,7 +77,7 @@ public class welcomePortal {
     
     private void showBranchesView() {
         try {
-            FXMLLoader loader = new FXMLLoader(App.class.getResource("fxml/branches.fxml"));
+            FXMLLoader loader = new FXMLLoader(App.class.getResource("fxml/welcomePage/Branches.fxml"));
             Node branchesView = loader.load();
             contentArea.getChildren().setAll(branchesView);
             tabName.setText("Branches");

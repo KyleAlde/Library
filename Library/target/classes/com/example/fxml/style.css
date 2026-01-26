@@ -263,7 +263,7 @@
 
 /* Cart Header */
 
-.cart-Header {
+.cart-Text-Header {
     -fx-font-family: "Bodoni MT";
     -fx-font-size: 60px;
     -fx-text-fill: rgba(0,0,0,1);

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1000.0" prefWidth="1420.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.accountController">
+   <children>
+      <BorderPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <center>
+            <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+               <children>
+                  <StackPane prefHeight="300.0" prefWidth="200.0">
+                     <children>
+                        <BorderPane prefHeight="200.0" prefWidth="200.0">
+                           <center>
+                              <VBox BorderPane.alignment="CENTER">
+                                 <children>
+                                    <StackPane>
+                                       <children>
+                                          <HBox alignment="CENTER_RIGHT" style="-fx-background-color: green;">
+                                             <children>
+                                                <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="260.0" prefWidth="260.0" style="-fx-background-color: pink; -fx-background-radius: 10;">
+                                                   <HBox.margin>
+                                                      <Insets bottom="20.0" right="20.0" top="20.0" />
+                                                   </HBox.margin>
+                                                </Pane>
+                                             </children>
+                                          </HBox>
+                                          <VBox alignment="CENTER">
+                                             <children>
+                                                <StackPane>
+                                                   <children>
+                                                      <Text fx:id="currentMemberName" strokeType="OUTSIDE" strokeWidth="0.0" text="memberName" />
+                                                   </children>
+                                                </StackPane>
+                                                <StackPane>
+                                                   <children>
+                                                      <Text fx:id="memberType" strokeType="OUTSIDE" strokeWidth="0.0" text="memberType" />
+                                                   </children>
+                                                </StackPane>
+                                                <StackPane>
+                                                   <children>
+                                                      <HBox alignment="TOP_CENTER">
+                                                         <children>
+                                                            <VBox alignment="TOP_CENTER">
+                                                               <children>
+                                                                  <Text fx:id="borrowedBooks" strokeType="OUTSIDE" strokeWidth="0.0" text="no.OfBorrow" />
+                                                                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Borrowed Books" />
+                                                               </children>
+                                                            </VBox>
+                                                         </children>
+                                                      </HBox>
+                                                   </children>
+                                                </StackPane>
+                                             </children>
+                                          </VBox>
+                                       </children>
+                                    </StackPane>
+                                    <StackPane maxHeight="700.0" minHeight="700.0" prefHeight="700.0" />
+                                 </children>
+                              </VBox>
+                           </center>
+                        </BorderPane>
+                     </children>
+                  </StackPane>
+               </children>
+            </VBox>
+         </center>
+      </BorderPane>
+   </children>
+</AnchorPane>

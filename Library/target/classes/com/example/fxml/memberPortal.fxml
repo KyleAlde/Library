@@ -91,22 +91,12 @@
                               <Insets left="14.0" top="10.0" />
                            </VBox.margin>
                         </Button>
-                        <Button fx:id="returnLoans" mnemonicParsing="false" styleClass="member-portal-button" text="My Loans">
+                        <Button fx:id="returnLoans" mnemonicParsing="false" onAction="#handleLoansButton" styleClass="member-portal-button" text="My Loans">
                            <VBox.margin>
                               <Insets left="14.0" top="10.0" />
                            </VBox.margin>
                         </Button>
-                        <Button fx:id="returnReservations" mnemonicParsing="false" styleClass="member-portal-button" text="Reservations">
-                           <VBox.margin>
-                              <Insets left="14.0" top="10.0" />
-                           </VBox.margin>
-                        </Button>
-                        <Button fx:id="returnReturns" mnemonicParsing="false" styleClass="member-portal-button" text="Returns">
-                           <VBox.margin>
-                              <Insets left="14.0" top="10.0" />
-                           </VBox.margin>
-                        </Button>
-                        <Button fx:id="returnAccount" mnemonicParsing="false" styleClass="member-portal-button" text="Accounts">
+                        <Button fx:id="returnAccount" mnemonicParsing="false" onAction="#handleAccountButton" styleClass="member-portal-button" text="Accounts">
                            <VBox.margin>
                               <Insets left="14.0" top="10.0" />
                            </VBox.margin>

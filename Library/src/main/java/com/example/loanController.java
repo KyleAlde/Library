@@ -6,10 +6,13 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.Pane;
 
-public class cartController {
+public class loanController {
 
     @FXML
     private Button addBookToCheckout;
+
+    @FXML
+    private TableColumn<?, ?> booPublication;
 
     @FXML
     private TableColumn<?, ?> bookAuthor;
@@ -27,18 +30,18 @@ public class cartController {
     private TableView<?> bookDetails1;
 
     @FXML
+    private TableColumn<?, ?> bookDueDate;
+
+    @FXML
     private TableColumn<?, ?> bookPublication;
 
     @FXML
-    private TableColumn<?, ?> bookTitlte;
+    private TableColumn<?, ?> bookTitle;
 
     @FXML
     private Button checkoutButton;
 
     @FXML
     private Pane filler;
-
-    @FXML
-    private Button removeBookfromCheckout;
 
 }
