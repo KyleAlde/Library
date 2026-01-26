@@ -1,8 +1,0 @@
-com\example\PlaceholderUIController.class
-module-info.class
-com\example\App.class
-com\example\model\Book.class
-com\example\model\Book$BookStatus.class
-com\example\model\Library.class
-com\example\model\Librarian.class
-com\example\model\Borrower.class

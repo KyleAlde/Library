@@ -146,6 +146,19 @@ public class BookDAO {
         return books;
     }
 
+    //View cart items for a list of book IDs
+    public List<Book> viewCart(List<String> bookIds) throws SQLException {
+        List<Book> cartItems = new ArrayList<>();
+        for (String bookId : bookIds) {
+            Book book = getBook(bookId);
+            if (book != null) {
+                cartItems.add(book);
+            }
+        }
+        System.out.println("Query Successful - Retrieved " + cartItems.size() + " cart items");
+        return cartItems;
+    }
+
     //==============================================================
     //                           UPDATE
     //==============================================================
