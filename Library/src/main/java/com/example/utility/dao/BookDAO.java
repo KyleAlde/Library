@@ -17,8 +17,8 @@ public class BookDAO {
     //==============================================================
 
     //Add new book into the database
-    public void addBook(String isbn, String title, String author, String publisher, LocalDate publicationDate) throws SQLException {
-        String insertQuery = "INSERT INTO books (isbn, title, author, publisher, publication_date) VALUES (?, ?, ?, ?, ?);";
+    public void addBook(String isbn, String title, String synopsis, String author, String publisher, LocalDate publicationDate) throws SQLException {
+        String insertQuery = "INSERT INTO books (isbn, title, author, publisher, publication_date, synopsis) VALUES (?, ?, ?, ?, ?, ?);";
 
         try (PreparedStatement ps = db.getConnection().prepareStatement(insertQuery)) {
             ps.setString(1, isbn);
@@ -26,6 +26,7 @@ public class BookDAO {
             ps.setString(3, author);
             ps.setString(4, publisher);
             ps.setDate(5, java.sql.Date.valueOf(publicationDate));
+            ps.setString(6, synopsis);
             ps.executeUpdate();
 
             System.out.println("Query Successful");
@@ -52,6 +53,7 @@ public class BookDAO {
                     rs.getString("isbn"),
                     rs.getString("title"),
                     rs.getString("author"),
+                    rs.getString("synopsis"),
                     rs.getString("publisher"),
                     rs.getDate("publication_date").toLocalDate(),
                     BookStatus.valueOf(rs.getString("status").toUpperCase())
@@ -106,6 +108,7 @@ public class BookDAO {
                     rs.getString("isbn"),
                     rs.getString("title"),
                     rs.getString("author"),
+                    rs.getString("synopsis"),
                     rs.getString("publisher"),
                     rs.getDate("publication_date").toLocalDate(),
                     BookStatus.valueOf(rs.getString("status").toUpperCase())
