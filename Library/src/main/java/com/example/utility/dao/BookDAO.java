@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.example.utility.DatabaseConnection;
+import com.example.utility.CoverImageMatcher;
 import com.example.model.Book;
 import com.example.model.Book.BookStatus;
 
@@ -56,7 +57,8 @@ public class BookDAO {
                     rs.getString("synopsis"),
                     rs.getString("publisher"),
                     rs.getDate("publication_date").toLocalDate(),
-                    BookStatus.valueOf(rs.getString("status").toUpperCase())
+                    BookStatus.valueOf(rs.getString("status").toUpperCase()),
+                    CoverImageMatcher.getCoverImagePath(rs.getString("title")) // Set cover image path
                 );
             } else {
                 System.out.println("No book found with ISBN: " + isbn);
@@ -111,7 +113,8 @@ public class BookDAO {
                     rs.getString("synopsis"),
                     rs.getString("publisher"),
                     rs.getDate("publication_date").toLocalDate(),
-                    BookStatus.valueOf(rs.getString("status").toUpperCase())
+                    BookStatus.valueOf(rs.getString("status").toUpperCase()),
+                    CoverImageMatcher.getCoverImagePath(rs.getString("title")) // Set cover image path
                 );
 
                 // Load genres for this book

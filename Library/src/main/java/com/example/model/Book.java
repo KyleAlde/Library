@@ -12,10 +12,11 @@ public class Book {
     private LocalDate publicationDate;
     private BookStatus status;
     private String synopsis;
+    private String coverImagePath;
     private Set<String> genres;
     private Set<String> availableFormats;
 
-    public Book(String isbn, String title, String author, String synopsis, String publisher, LocalDate publicationDate, BookStatus status) {
+    public Book(String isbn, String title, String author, String synopsis, String publisher, LocalDate publicationDate, BookStatus status, String coverImagePath) {
         this.isbn = isbn;
         this.title = title;
         this.author = author;
@@ -23,6 +24,7 @@ public class Book {
         this.publisher = publisher;
         this.publicationDate = publicationDate;
         this.status = status;
+        this.coverImagePath = coverImagePath;
         this.genres = new HashSet<>();
         this.availableFormats = new HashSet<>();
     }
@@ -34,8 +36,13 @@ public class Book {
     public String getPublisher() { return publisher; }
     public LocalDate getPublicationDate() { return publicationDate; }
     public BookStatus getStatus() { return status; }
+    public String getCoverImagePath() { return coverImagePath; }
     public Set<String> getGenres() { return genres; }
     public Set<String> getAvailableFormats() { return availableFormats; }
+
+    public void setCoverImagePath(String coverImagePath) { 
+        this.coverImagePath = coverImagePath; 
+    }
 
 
     public void addGenre(String genre) {
