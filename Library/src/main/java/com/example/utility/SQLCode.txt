@@ -51,7 +51,8 @@ CREATE TABLE books (
 	synopsis TEXT NOT NULL,
 	publisher TEXT NOT NULL,
 	publication_date DATE NOT NULL,
-	status book_status NOT NULL DEFAULT 'available'
+	status book_status NOT NULL DEFAULT 'available',
+	cover_id TEXT
 );
 
 -- Create table for genres and junction table for books + genres
