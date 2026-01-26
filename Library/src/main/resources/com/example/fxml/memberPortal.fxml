@@ -50,7 +50,7 @@
                <center>
                   <ScrollPane hbarPolicy="NEVER" maxWidth="1920.0" minWidth="1620.0" styleClass="no-scroll" vbarPolicy="ALWAYS" BorderPane.alignment="CENTER">
                      <content>
-                        <VBox fx:id="bookCollectionContainer" alignment="TOP_CENTER" maxWidth="1920.0" minWidth="1180.0" prefWidth="1180.0" prefHeight="1000.0" />
+                        <VBox fx:id="bookCollectionContainer" alignment="TOP_CENTER" maxWidth="1920.0" minWidth="1180.0" prefHeight="1000.0" prefWidth="1180.0" />
                      </content>
                   </ScrollPane>
                </center>
@@ -81,32 +81,32 @@
                               <Insets left="20.0" />
                            </padding>
                         </HBox>
-                        <Button mnemonicParsing="false" styleClass="member-portal-button" text="Browse">
+                        <Button fx:id="returnBrowse" mnemonicParsing="false" onAction="#handleBrowseButton" styleClass="member-portal-button" text="Browse">
                            <VBox.margin>
                               <Insets left="14.0" top="10.0" />
                            </VBox.margin>
                         </Button>
-                        <Button mnemonicParsing="false" styleClass="member-portal-button" text="My Cart">
+                        <Button fx:id="returnCart" mnemonicParsing="false" onAction="#handleCartButton" styleClass="member-portal-button" text="My Cart">
                            <VBox.margin>
                               <Insets left="14.0" top="10.0" />
                            </VBox.margin>
                         </Button>
-                        <Button mnemonicParsing="false" styleClass="member-portal-button" text="My Loans">
+                        <Button fx:id="returnLoans" mnemonicParsing="false" styleClass="member-portal-button" text="My Loans">
                            <VBox.margin>
                               <Insets left="14.0" top="10.0" />
                            </VBox.margin>
                         </Button>
-                        <Button mnemonicParsing="false" styleClass="member-portal-button" text="Reservations">
+                        <Button fx:id="returnReservations" mnemonicParsing="false" styleClass="member-portal-button" text="Reservations">
                            <VBox.margin>
                               <Insets left="14.0" top="10.0" />
                            </VBox.margin>
                         </Button>
-                        <Button mnemonicParsing="false" styleClass="member-portal-button" text="Returns">
+                        <Button fx:id="returnReturns" mnemonicParsing="false" styleClass="member-portal-button" text="Returns">
                            <VBox.margin>
                               <Insets left="14.0" top="10.0" />
                            </VBox.margin>
                         </Button>
-                        <Button mnemonicParsing="false" styleClass="member-portal-button" text="Accounts">
+                        <Button fx:id="returnAccount" mnemonicParsing="false" styleClass="member-portal-button" text="Accounts">
                            <VBox.margin>
                               <Insets left="14.0" top="10.0" />
                            </VBox.margin>

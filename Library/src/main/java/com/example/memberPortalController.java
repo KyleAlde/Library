@@ -23,6 +23,24 @@ public class memberPortalController {
     private Button openSideBar;
 
     @FXML
+    private Button returnAccount;
+
+    @FXML
+    private Button returnBrowse;
+
+    @FXML
+    private Button returnCart;
+
+    @FXML
+    private Button returnLoans;
+
+    @FXML
+    private Button returnReservations;
+
+    @FXML
+    private Button returnReturns;
+
+    @FXML
     private VBox bookCollectionContainer;
 
     @FXML
@@ -42,11 +60,11 @@ public class memberPortalController {
         // Load section containers with books
         loadSectionContainers();
         
-        // Debug: Log initial width
+        // Set initial width to ensure proper centering
         javafx.application.Platform.runLater(() -> {
-            System.out.println("DEBUG - Initial bookCollectionContainer width: " + bookCollectionContainer.getWidth());
-            System.out.println("DEBUG - Initial bookCollectionContainer prefWidth: " + bookCollectionContainer.getPrefWidth());
-            System.out.println("DEBUG - Initial bookCollectionContainer bounds: " + bookCollectionContainer.getBoundsInParent());
+            bookCollectionContainer.setPrefWidth(1920.0);
+            bookCollectionContainer.setMaxWidth(1920.0);
+            bookCollectionContainer.requestLayout();
         });
         
         closeSideBar.setOnAction(event -> {
@@ -98,7 +116,7 @@ public class memberPortalController {
             
             // Get the controller and set the genre title
             sectionController = loader.getController();
-            sectionController.setGenreTitle("hihi haha");
+            sectionController.setGenreTitle("All Books");
             
             // Add section to wrapper, then wrapper to main container
             sectionWrapper.getChildren().add(sectionNode);
@@ -106,6 +124,59 @@ public class memberPortalController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    // Method to show cart page
+    public void showCart() {
+        try {
+            // Clear current content
+            bookCollectionContainer.getChildren().clear();
+            
+            // Create HBox wrapper for centering
+            javafx.scene.layout.HBox cartWrapper = new javafx.scene.layout.HBox();
+            cartWrapper.setAlignment(javafx.geometry.Pos.CENTER);
+            cartWrapper.setPrefWidth(1920.0);
+            
+            // Load cart.fxml
+            FXMLLoader cartLoader = new FXMLLoader(getClass().getResource("fxml/Cart.fxml"));
+            javafx.scene.layout.AnchorPane cartNode = cartLoader.load();
+            
+            // Add cart to wrapper, then wrapper to main container
+            cartWrapper.getChildren().add(cartNode);
+            bookCollectionContainer.getChildren().add(cartWrapper);
+            
+            System.out.println("Cart page loaded successfully");
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("Error loading cart page: " + e.getMessage());
+        }
+    }
+
+    // Method to show books page (Browse)
+    public void showBooks() {
+        try {
+            // Clear current content
+            bookCollectionContainer.getChildren().clear();
+            
+            // Reload books
+            loadSectionContainers();
+            
+            System.out.println("Books page loaded successfully");
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("Error loading books page: " + e.getMessage());
+        }
+    }
+
+    // Action handlers for sidebar buttons
+    @FXML
+    private void handleBrowseButton() {
+        showBooks();
+    }
+
+    @FXML
+    private void handleCartButton() {
+        showCart();
     }
 
 }

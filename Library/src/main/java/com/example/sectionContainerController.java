@@ -6,6 +6,9 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import com.example.utility.dao.BookDAO;
+import com.example.model.Book;
+import java.util.List;
 
 public class sectionContainerController {
 
@@ -20,20 +23,30 @@ public class sectionContainerController {
 
     @FXML
     private void initialize() {
-        // Load 10 placeholder books
-        loadPlaceholderBooks();
+        // Load books from database
+        loadBooksFromDatabase();
     }
 
-    private void loadPlaceholderBooks() {
+    private void loadBooksFromDatabase() {
         try {
-            // Load 10 placeholder books
-            for (int i = 0; i < 10; i++) {
+            BookDAO bookDAO = new BookDAO();
+            List<Book> books = bookDAO.getAllBooks();
+            
+            for (Book book : books) {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("fxml/Collection/books.fxml"));
                 VBox bookNode = loader.load();
+                
+                // Get the books controller and set book data
+                booksController controller = loader.getController();
+                controller.setBookData(book);
+                
                 booksFlowPane.getChildren().add(bookNode);
             }
+            
+            System.out.println("Loaded " + books.size() + " books from database");
         } catch (Exception e) {
             e.printStackTrace();
+            System.err.println("Error loading books from database: " + e.getMessage());
         }
     }
 
@@ -51,11 +64,11 @@ public class sectionContainerController {
         bookCollectionContainer.requestLayout();
     }
 
-    // Method for when sidebar is CLOSED - restore bookCollectionContainer to 1180px width
+    // Method for when sidebar is CLOSED - restore bookCollectionContainer to 1920px width
     public void adjustForSidebarClosed(VBox bookCollectionContainer) {
-        // Set bookCollectionContainer width back to 1180px for sidebar closed state
-        bookCollectionContainer.setPrefWidth(1180.0);
-        bookCollectionContainer.setMaxWidth(1180.0);
+        // Set bookCollectionContainer width back to 1920px for sidebar closed state
+        bookCollectionContainer.setPrefWidth(1920.0);
+        bookCollectionContainer.setMaxWidth(1920.0);
         
         // Force layout recalculation
         bookCollectionContainer.requestLayout();
