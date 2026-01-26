@@ -174,3 +174,11 @@ CREATE TABLE loans (
 	FOREIGN KEY(borrower_id) REFERENCES borrowers(id),
 	FOREIGN KEY(processed_by) REFERENCES librarians(id)
 );
+
+CREATE TABLE cart (
+	book_id VARCHAR(13) NOT NULL,
+	borrower_id TEXT NOT NULL,
+	FOREIGN KEY(book_id) REFERENCES books(isbn),
+	FOREIGN KEY(borrower_id) REFERENCES borrowers(id),
+	PRIMARY KEY (book_id, borrower_id)
+);
