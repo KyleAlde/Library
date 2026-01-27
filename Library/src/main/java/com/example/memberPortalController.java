@@ -2,11 +2,15 @@ package com.example;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import java.util.HashMap;
+import java.util.Map;
 
 public class memberPortalController {
 
@@ -44,6 +48,12 @@ public class memberPortalController {
     private AnchorPane sideBar;
 
     private sectionContainerController sectionController;
+    
+    // Page caching system for efficient layout management
+    private Map<String, Node> loadedPages = new HashMap<>();
+    
+    // Constants for layout dimensions
+    private static final double FULL_WIDTH = 1920.0;
 
     @FXML
     private void initialize() {
@@ -51,13 +61,16 @@ public class memberPortalController {
         sideBar.setVisible(false);
         imageHeader.setLeft(null);
         
-        // Load section containers with books
-        loadSectionContainers();
+        // Preload all pages for efficient navigation
+        preloadPages();
+        
+        // Show initial page
+        showInitialPage();
         
         // Set initial width to ensure proper centering
         javafx.application.Platform.runLater(() -> {
-            bookCollectionContainer.setPrefWidth(1920.0);
-            bookCollectionContainer.setMaxWidth(1920.0);
+            bookCollectionContainer.setPrefWidth(FULL_WIDTH);
+            bookCollectionContainer.setMaxWidth(FULL_WIDTH);
             bookCollectionContainer.requestLayout();
         });
         
@@ -98,120 +111,74 @@ public class memberPortalController {
         });
     }
 
-    private void loadSectionContainers() {
+    // Preload all pages for efficient navigation
+    private void preloadPages() {
+        loadPageOnce("books", "fxml/Collection/sectionContainer.fxml");
+        loadPageOnce("cart", "fxml/Cart.fxml");
+        loadPageOnce("loans", "fxml/Loans.fxml");
+        loadPageOnce("account", "fxml/account.fxml");
+    }
+    
+    // Load a page once and cache it
+    private void loadPageOnce(String pageName, String fxmlPath) {
         try {
-            // Load single section container for all books
-            javafx.scene.layout.HBox sectionWrapper = new javafx.scene.layout.HBox();
-            sectionWrapper.setAlignment(javafx.geometry.Pos.CENTER);
-            sectionWrapper.setPrefWidth(1920.0);
+            HBox wrapper = new HBox();
+            wrapper.setAlignment(javafx.geometry.Pos.CENTER);
+            wrapper.setPrefWidth(FULL_WIDTH);
             
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("fxml/Collection/sectionContainer.fxml"));
-            VBox sectionNode = loader.load();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
+            Node pageNode = loader.load();
             
-            // Get the controller and set the genre title
-            sectionController = loader.getController();
-            sectionController.setGenreTitle("All Books");
+            // Store the controller reference for books page
+            if ("books".equals(pageName)) {
+                sectionController = loader.getController();
+                sectionController.setGenreTitle("All Books");
+            }
             
-            // Add section to wrapper, then wrapper to main container
-            sectionWrapper.getChildren().add(sectionNode);
-            bookCollectionContainer.getChildren().add(sectionWrapper);
+            wrapper.getChildren().add(pageNode);
+            loadedPages.put(pageName, wrapper);
+            
+            System.out.println("Successfully preloaded " + pageName + " page");
         } catch (Exception e) {
+            System.err.println("Failed to preload " + pageName + ": " + e.getMessage());
             e.printStackTrace();
+        }
+    }
+    
+    // Show the initial page (books)
+    private void showInitialPage() {
+        switchToPage("books");
+    }
+    
+    // Efficient page switching using cached pages
+    private void switchToPage(String pageName) {
+        Node page = loadedPages.get(pageName);
+        if (page != null) {
+            bookCollectionContainer.getChildren().setAll(page);
+            System.out.println("Switched to " + pageName + " page");
+        } else {
+            System.err.println("Page " + pageName + " not found in cache");
         }
     }
 
     // Method to show cart page
     public void showCart() {
-        try {
-            // Clear current content
-            bookCollectionContainer.getChildren().clear();
-            
-            // Create HBox wrapper for centering
-            javafx.scene.layout.HBox cartWrapper = new javafx.scene.layout.HBox();
-            cartWrapper.setAlignment(javafx.geometry.Pos.CENTER);
-            cartWrapper.setPrefWidth(1920.0);
-            
-            // Load cart.fxml
-            FXMLLoader cartLoader = new FXMLLoader(getClass().getResource("fxml/Cart.fxml"));
-            javafx.scene.layout.AnchorPane cartNode = cartLoader.load();
-            
-            // Add cart to wrapper, then wrapper to main container
-            cartWrapper.getChildren().add(cartNode);
-            bookCollectionContainer.getChildren().add(cartWrapper);
-            
-            System.out.println("Cart page loaded successfully");
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.err.println("Error loading cart page: " + e.getMessage());
-        }
+        switchToPage("cart");
     }
 
     // Method to show books page (Browse)
     public void showBooks() {
-        try {
-            // Clear current content
-            bookCollectionContainer.getChildren().clear();
-            
-            // Reload books
-            loadSectionContainers();
-            
-            System.out.println("Books page loaded successfully");
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.err.println("Error loading books page: " + e.getMessage());
-        }
+        switchToPage("books");
     }
 
     // Method to show loans page
     public void showLoans() {
-        try {
-            // Clear current content
-            bookCollectionContainer.getChildren().clear();
-            
-            // Create HBox wrapper for centering
-            javafx.scene.layout.HBox loansWrapper = new javafx.scene.layout.HBox();
-            loansWrapper.setAlignment(javafx.geometry.Pos.CENTER);
-            loansWrapper.setPrefWidth(1920.0);
-            
-            // Load Loans.fxml
-            FXMLLoader loansLoader = new FXMLLoader(getClass().getResource("fxml/Loans.fxml"));
-            javafx.scene.layout.AnchorPane loansNode = loansLoader.load();
-            
-            // Add loans to wrapper, then wrapper to main container
-            loansWrapper.getChildren().add(loansNode);
-            bookCollectionContainer.getChildren().add(loansWrapper);
-            
-            System.out.println("Loans page loaded successfully");
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.err.println("Error loading loans page: " + e.getMessage());
-        }
+        switchToPage("loans");
     }
 
     // Method to show account page
     public void showAccount() {
-        try {
-            // Clear current content
-            bookCollectionContainer.getChildren().clear();
-            
-            // Create HBox wrapper for centering
-            javafx.scene.layout.HBox accountWrapper = new javafx.scene.layout.HBox();
-            accountWrapper.setAlignment(javafx.geometry.Pos.CENTER);
-            accountWrapper.setPrefWidth(1920.0);
-            
-            // Load account.fxml
-            FXMLLoader accountLoader = new FXMLLoader(getClass().getResource("fxml/account.fxml"));
-            javafx.scene.layout.AnchorPane accountNode = accountLoader.load();
-            
-            // Add account to wrapper, then wrapper to main container
-            accountWrapper.getChildren().add(accountNode);
-            bookCollectionContainer.getChildren().add(accountWrapper);
-            
-            System.out.println("Account page loaded successfully");
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.err.println("Error loading account page: " + e.getMessage());
-        }
+        switchToPage("account");
     }
 
     // Action handlers for sidebar buttons
@@ -232,6 +199,27 @@ public class memberPortalController {
 
     @FXML
     private void handleAccountButton() {
+        showAccount();
+    }
+
+    // Navigation button event handlers
+    @FXML
+    private void handleReturnBrowse() {
+        showBooks();
+    }
+
+    @FXML
+    private void handleReturnCart() {
+        showCart();
+    }
+
+    @FXML
+    private void handleReturnLoans() {
+        showLoans();
+    }
+
+    @FXML
+    private void handleReturnAccount() {
         showAccount();
     }
 

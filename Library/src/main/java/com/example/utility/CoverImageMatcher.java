@@ -2,20 +2,21 @@ package com.example.utility;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class CoverImageMatcher {
     
     private static final String COVERS_FOLDER_PATH = "/com/example/fxml/Images/Covers/";
-    private static Map<String, String> titleToImageMap;
+    private static final Map<String, String> titleToImageMap = new HashMap<>();
+    private static final Map<String, String> normalizedTitleMap = new HashMap<>();
+    private static final Map<String, String> matchCache = new ConcurrentHashMap<>();
     
     static {
         initializeTitleToImageMap();
+        buildNormalizedMap();
     }
     
     private static void initializeTitleToImageMap() {
-        titleToImageMap = new HashMap<>();
-        
-        // Map book titles to their cover image files
         titleToImageMap.put("1984", "1984.jpg");
         titleToImageMap.put("Brave New World", "brave new world.jpg");
         titleToImageMap.put("A Brief History of Time", "brief history of time.jpg");
@@ -28,8 +29,16 @@ public class CoverImageMatcher {
         titleToImageMap.put("To Kill a Mockingbird", "to kill a mockingbird.jpg");
     }
     
+    private static void buildNormalizedMap() {
+        // Pre-compute normalized keys for O(1) case-insensitive lookup
+        for (Map.Entry<String, String> entry : titleToImageMap.entrySet()) {
+            String normalizedKey = entry.getKey().toLowerCase().trim();
+            normalizedTitleMap.put(normalizedKey, entry.getValue());
+        }
+    }
+    
     /**
-     * Matches a book title to its cover image path
+     * Matches a book title to its cover image path with optimized performance
      * @param bookTitle The title of the book
      * @return The relative path to the cover image, or null if no match found
      */
@@ -38,36 +47,45 @@ public class CoverImageMatcher {
             return null;
         }
         
-        // Try exact match first
-        String imagePath = titleToImageMap.get(bookTitle.trim());
+        // Use cache for repeated lookups
+        return matchCache.computeIfAbsent(bookTitle, CoverImageMatcher::findImagePath);
+    }
+    
+    private static String findImagePath(String bookTitle) {
+        String normalizedTitle = bookTitle.toLowerCase().trim();
+        
+        // O(1) exact match (case-insensitive)
+        String imagePath = normalizedTitleMap.get(normalizedTitle);
         if (imagePath != null) {
             return COVERS_FOLDER_PATH + imagePath;
         }
         
-        // Try case-insensitive match
-        for (Map.Entry<String, String> entry : titleToImageMap.entrySet()) {
-            if (entry.getKey().equalsIgnoreCase(bookTitle.trim())) {
+        // Fallback to partial matching (only if needed)
+        return findPartialMatch(normalizedTitle);
+    }
+    
+    private static String findPartialMatch(String normalizedTitle) {
+        // Optimized partial matching with early exit
+        for (Map.Entry<String, String> entry : normalizedTitleMap.entrySet()) {
+            String key = entry.getKey();
+            if (key.contains(normalizedTitle) || normalizedTitle.contains(key)) {
                 return COVERS_FOLDER_PATH + entry.getValue();
             }
         }
-        
-        // Try partial match (contains)
-        for (Map.Entry<String, String> entry : titleToImageMap.entrySet()) {
-            if (entry.getKey().toLowerCase().contains(bookTitle.trim().toLowerCase()) ||
-                bookTitle.trim().toLowerCase().contains(entry.getKey().toLowerCase())) {
-                return COVERS_FOLDER_PATH + entry.getValue();
-            }
-        }
-        
-        return null; // No match found
+        return null;
     }
     
     /**
-     * Updates a book's cover image path based on its title
-     * @param bookTitle The title of the book
-     * @return The cover image path or null if no match
+     * Clears the match cache (useful for testing or memory management)
      */
-    public static String updateBookCoverPath(String bookTitle) {
-        return getCoverImagePath(bookTitle);
+    public static void clearCache() {
+        matchCache.clear();
+    }
+    
+    /**
+     * Gets cache statistics for monitoring
+     */
+    public static int getCacheSize() {
+        return matchCache.size();
     }
 }

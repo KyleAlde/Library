@@ -3,8 +3,6 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
@@ -14,80 +12,50 @@
 <?import javafx.scene.text.Text?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1000.0" prefWidth="1420.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.cartController">
+   
    <children>
       <BorderPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <center>
-            <HBox BorderPane.alignment="CENTER">
+         <top>
+            <StackPane alignment="CENTER_LEFT" prefHeight="100.0" BorderPane.alignment="TOP_LEFT">
                <children>
-                  <ScrollPane fitToHeight="true" fitToWidth="true">
-                     <content>
-                        <VBox prefWidth="1000.0">
-                           <children>
-                              <StackPane alignment="TOP_LEFT" prefHeight="100.0" styleClass="cart-Text-Header">
-                                 <children>
-                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Your Cart" />
-                                 </children>
-                              </StackPane>
-                              <StackPane prefHeight="100.0">
-                                 <children>
-                                    <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
-                                       <children>
-                                          <Pane fx:id="bookCover" prefHeight="100.0" prefWidth="100.0" />
-                                          <TableView fx:id="bookDetails" prefHeight="100.0" prefWidth="600.0">
-                                            <columns>
-                                              <TableColumn fx:id="bookTitlte" prefWidth="200.0" text="Title" />
-                                                <TableColumn fx:id="bookAuthor" prefWidth="200.0" text="Author" />
-                                                <TableColumn fx:id="bookPublication" prefWidth="200.0" text="Publication" />
-                                            </columns>
-                                          </TableView>
-                                          <Button fx:id="removeBookfromCheckout" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" text="-" />
-                                          <Button fx:id="addBookToCheckout" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" text="+" />
-                                       </children>
-                                    </HBox>
-                                 </children>
-                              </StackPane>
-                           </children>
-                        </VBox>
-                     </content>
-                  </ScrollPane>
-                  <ScrollPane fitToHeight="true" fitToWidth="true">
-                     <content>
-                        <VBox prefWidth="420.0">
-                           <children>
-                              <StackPane alignment="TOP_LEFT" prefHeight="100.0" styleClass="cart-Text-Header">
-                                 <children>
-                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Checkout" />
-                                 </children>
-                              </StackPane>
-                              <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
-                                 <children>
-                                    <Pane fx:id="bookCover1" prefHeight="100.0" prefWidth="100.0">
-                                       <HBox.margin>
-                                          <Insets right="20.0" />
-                                       </HBox.margin>
-                                    </Pane>
-                                    <TableView fx:id="bookDetails1" prefHeight="100.0" prefWidth="300.0">
-                                       <columns>
-                                          <TableColumn fx:id="bookTitlte" prefWidth="100.0" text="Title" />
-                                          <TableColumn fx:id="bookAuthor" prefWidth="100.0" text="Author" />
-                                          <TableColumn fx:id="bookPublication" prefWidth="100.0" text="Publication" />
-                                       </columns>
-                                    </TableView>
-                                 </children>
-                              </HBox>
-                              <Pane fx:id="filler" VBox.vgrow="ALWAYS" />
-                              <StackPane prefHeight="100.0">
-                                 <children>
-                                    <Button fx:id="checkoutButton" mnemonicParsing="false" text="Checkout" />
-                                 </children>
-                              </StackPane>
-                           </children>
-                        </VBox>
-                     </content>
-                  </ScrollPane>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="Text-Header" text="Your Cart" StackPane.alignment="TOP_LEFT">
+                     <StackPane.margin>
+                        <Insets />
+                     </StackPane.margin>
+                  </Text>
                </children>
-            </HBox>
+            </StackPane>
+         </top>
+         <bottom>
+            <StackPane prefHeight="100.0" BorderPane.alignment="CENTER">
+               <children>
+                  <HBox alignment="CENTER_LEFT">
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="Text-Body" text="No. of items in cart. ">
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                        </Text>
+                        <Text fx:id="itemNo" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="Text-Body" text="placeholder" />
+                        <Pane HBox.hgrow="ALWAYS" />
+                        <Button fx:id="cartCheckout" mnemonicParsing="false" prefHeight="60.0" prefWidth="120.0" styleClass="CarLoan-Button" text="Checkout">
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                        </Button>
+                     </children>
+                  </HBox>
+               </children>
+            </StackPane>
+         </bottom>
+         <center>
+            <ScrollPane fitToWidth="true" BorderPane.alignment="CENTER">
+               <content>
+                  <VBox fx:id="cartItemContainer" prefWidth="1420.0" />
+               </content>
+            </ScrollPane>
          </center>
+         
       </BorderPane>
    </children>
 </AnchorPane>
