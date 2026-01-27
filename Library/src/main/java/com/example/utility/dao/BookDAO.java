@@ -165,6 +165,74 @@ public class BookDAO {
         return cartItems;
     }
 
+    //Search for books
+    public List<Book> searchBooks(String input) throws SQLException {
+        List<Book> books = new ArrayList<>();
+        String searchQuery = """
+            SELECT DISTINCT b.* 
+            FROM books b
+            LEFT JOIN book_genres bg ON b.isbn = bg.book_id
+            LEFT JOIN genres g ON bg.genre_id = g.id
+            WHERE LOWER(b.title) LIKE LOWER(?)
+               OR LOWER(b.author) LIKE LOWER(?)
+               OR LOWER(b.publisher) LIKE LOWER(?)
+               OR LOWER(g.name) LIKE LOWER(?)
+            ORDER BY b.title
+        """;
+
+        try (PreparedStatement ps = db.getConnection().prepareStatement(searchQuery)) {
+            String likeInput = "%" + input + "%";
+            ps.setString(1, likeInput);
+            ps.setString(2, likeInput);
+            ps.setString(3, likeInput);
+            ps.setString(4, likeInput);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Book book = new Book(
+                    rs.getString("isbn"),
+                    rs.getString("title"),
+                    rs.getString("author"),
+                    rs.getString("synopsis"),
+                    rs.getString("publisher"),
+                    rs.getDate("publication_date").toLocalDate(),
+                    BookStatus.valueOf(rs.getString("status").toUpperCase()),
+                    CoverImageMatcher.getCoverImagePath(rs.getString("title"))
+                );
+
+                // Load genres for this book
+                String genreQuery = """
+                    SELECT g.name
+                    FROM genres g
+                    JOIN book_genres bg ON g.id = bg.genre_id
+                    WHERE bg.book_id = ?
+                """;
+                try (PreparedStatement psGenre = db.getConnection().prepareStatement(genreQuery)) {
+                    psGenre.setString(1, book.getIsbn());
+                    ResultSet genreRs = psGenre.executeQuery();
+                    while (genreRs.next()) {
+                        book.addGenre(genreRs.getString("name"));
+                    }
+                }
+
+                // Load available formats for this book
+                String formatQuery = "SELECT format FROM available_formats WHERE isbn = ?";
+                try (PreparedStatement psFormat = db.getConnection().prepareStatement(formatQuery)) {
+                    psFormat.setString(1, book.getIsbn());
+                    ResultSet formatRs = psFormat.executeQuery();
+                    while (formatRs.next()) {
+                        book.addAvailableFormats(formatRs.getString("format"));
+                    }
+                }
+
+                books.add(book);
+            }
+        }
+
+        System.out.println("Search successful - Retrieved " + books.size() + " books matching '" + input + "'");
+        return books;
+    }
+
     //==============================================================
     //                           UPDATE
     //==============================================================
