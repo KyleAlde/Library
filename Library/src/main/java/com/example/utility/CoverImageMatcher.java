@@ -20,13 +20,34 @@ public class CoverImageMatcher {
         titleToImageMap.put("1984", "1984.jpg");
         titleToImageMap.put("Brave New World", "brave new world.jpg");
         titleToImageMap.put("A Brief History of Time", "brief history of time.jpg");
-        titleToImageMap.put("Harry Potter and the Sorcerer's Stone", "harry potter and the sorcerer's stone.jpg");
+        titleToImageMap.put("Harry Potter and the Sorcerer’s Stone", "harry potter and the sorcerer’s stone.jpg");
         titleToImageMap.put("Pride and Prejudice", "pride and prejudice.jpg");
         titleToImageMap.put("The Da Vinci Code", "the da vinci code.jpg");
         titleToImageMap.put("The Great Gatsby", "the great gatsby.jpg");
         titleToImageMap.put("The Hobbit", "the hobbit.jfif");
         titleToImageMap.put("The Road", "the road.jpg");
         titleToImageMap.put("To Kill a Mockingbird", "to kill a mockingbird.jpg");
+        titleToImageMap.put("Animal Farm", "animal farm.jpg");
+        titleToImageMap.put("One Hundred Years of Solitude", "one hundred years of solitude.jpg");
+        titleToImageMap.put("Meditations", "meditations.jpg");
+        titleToImageMap.put("The Catcher in the Rye", "the catcher in the rye.jpg");
+        titleToImageMap.put("Dracula", "dracula.jpg");
+        titleToImageMap.put("The Fellowship of the Ring", "the fellowship of the ring.jpg");
+        titleToImageMap.put("Sapiens: A Brief History of Humankind", "sapiens a brief history of humankind.jpg");
+        titleToImageMap.put("Thinking, Fast and Slow", "thinking, fast and slow.jpg");
+        titleToImageMap.put("The Book Thief", "the book thief.jpg");
+        titleToImageMap.put("The Girl with the Dragon Tattoo", "the girl with the dragon tattoo.jpg");
+        titleToImageMap.put("Guns, Germs, and Steel", "guns, germs, and steel.jpg");
+        titleToImageMap.put("Fahrenheit 451", "fahrenheit 451.jpg");
+        titleToImageMap.put("Jane Eyre", "jane eyre.jpg");
+        titleToImageMap.put("Cosmos", "cosmos.jpg");
+        titleToImageMap.put("Of Mice and Men", "of mice and men.jpg");
+        titleToImageMap.put("The Alchemist", "the alchemist.jpg");
+        titleToImageMap.put("Slaughterhouse-Five", "slaughterhouse-five.jpg");
+        titleToImageMap.put("The Republic", "the republic.jpg");
+        titleToImageMap.put("Where the Wild Things Are", "where the wild things are.jpg");
+        titleToImageMap.put("Astrophysics for People in a Hurry", "astrophysics for people in a hurry.jpg");
+        titleToImageMap.put("Nigga si Martin", "martin.jpg");
     }
     
     private static void buildNormalizedMap() {
