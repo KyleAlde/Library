@@ -6,12 +6,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.example.model.Book;
 import com.example.utility.DatabaseConnection;
 
 public class CartDAO {
     private final DatabaseConnection db = new DatabaseConnection();
-    private final BookDAO bookDAO = new BookDAO();
 
     //==============================================================
     //                           CREATE
