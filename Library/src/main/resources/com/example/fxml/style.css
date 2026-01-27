@@ -298,3 +298,14 @@
     -fx-border-width: 2px;
     -fx-border-insets: 2px;
 }
+
+.librarian-Text-Body {
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 24px;
+    -fx-text-fill: white;
+}
+
+.librarian-header {
+    -fx-border-color: transparent transparent black transparent;
+    -fx-border-width: 0.5px 0.5px 0.5px 0.5px;
+}

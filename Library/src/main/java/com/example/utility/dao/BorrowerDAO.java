@@ -5,6 +5,8 @@ import com.example.model.Borrower;
 import com.example.model.Borrower.BorrowerType;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class BorrowerDAO {
@@ -15,7 +17,7 @@ public class BorrowerDAO {
     //==============================================================
 
     //Create new borrower account
-    public void createBorrower(String lastName, String firstName, int age, String type, String email, String password) {
+    public void createBorrower(String lastName, String firstName, int age, String type, String email, String password) throws SQLException {
         //Generate unique ID for borrower
         Random random = new Random();
         int randomNumber = random.nextInt(100000);
@@ -36,6 +38,7 @@ public class BorrowerDAO {
             System.out.println("Borrower account created successfully with ID: " + borrowerID);
         } catch (SQLException e) {
             System.err.println("Error creating borrower account: " + e.getMessage());
+            throw e; // Re-throw the exception to be handled by the controller
         }
     }
 
@@ -68,6 +71,32 @@ public class BorrowerDAO {
         }            
         return null;
     }
+    
+    //Get all borrowers from the database
+    public List<Borrower> getAllBorrowers() throws SQLException {
+        List<Borrower> borrowers = new ArrayList<>();
+        String selectQuery = "SELECT * FROM borrowers ORDER BY last_name, first_name";
+
+        try (PreparedStatement ps = db.getConnection().prepareStatement(selectQuery);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                Borrower borrower = new Borrower(
+                    rs.getString("id"),
+                    rs.getString("last_name"),
+                    rs.getString("first_name"),
+                    rs.getInt("age"),
+                    BorrowerType.valueOf(rs.getString("type").toUpperCase()),
+                    rs.getString("email"),
+                    rs.getString("password")
+                );
+                borrowers.add(borrower);
+            }
+
+            System.out.println("Successfully retrieved " + borrowers.size() + " borrowers");
+        }            
+        return borrowers;
+    }
 
     //==============================================================
     //                           UPDATE
@@ -79,7 +108,7 @@ public class BorrowerDAO {
 
         try (PreparedStatement ps = db.getConnection().prepareStatement(updateQuery)) {
             if (columnName.equals("type")) {
-                ps.setObject(1, newValue, java.sql.Types.OTHER);
+                ps.setObject(1, newValue.toLowerCase(), java.sql.Types.OTHER);
             } else if (columnName.equals("age")) {
                 ps.setInt(1, Integer.parseInt(newValue));
             } else {

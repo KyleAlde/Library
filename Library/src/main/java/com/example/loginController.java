@@ -48,21 +48,23 @@ public class loginController {
         String password = passwordField.getText().trim();
         System.out.println("Credentials entered - ID: '" + memberID + "', Password: '" + password + "'");
 
-        if (validateCredentials(memberID, password)) {
-            System.out.println("Login validation successful");
-            // Login successful - navigate to member portal
+        String userType = validateCredentials(memberID, password);
+        if (userType != null) {
+            System.out.println("Login validation successful - User type: " + userType);
+            // Login successful - navigate to appropriate portal
             try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("fxml/memberPortal.fxml"));
+                String fxmlPath = "librarian".equals(userType) ? "fxml/librarianPortal.fxml" : "fxml/memberPortal.fxml";
+                FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
                 Parent root = loader.load();
                 
                 Stage stage = (Stage) returnLogin.getScene().getWindow();
-                Scene scene = new Scene(root, 1200, 800);
+                Scene scene = new Scene(root, 1920, 1080);
                 stage.setScene(scene);
                 stage.setFullScreen(true);
                 stage.show();
             } catch (IOException e) {
                 e.printStackTrace();
-                showError("Error loading member portal.");
+                showError("Error loading portal.");
             }
         } else {
             System.out.println("Login validation failed");
@@ -77,26 +79,48 @@ public class loginController {
         verify.setVisible(true);
     }
 
-    private boolean validateCredentials(String memberID, String password) {
+    private String validateCredentials(String memberID, String password) {
         if (memberID.isEmpty() || password.isEmpty()) {
-            return false;
+            return null;
         }
 
-        String query = "SELECT * FROM borrowers WHERE id = ? AND password = ?";
+        // First check if it's a librarian
+        String librarianQuery = "SELECT * FROM librarians WHERE id = ? AND password = ?";
         
         try (Connection conn = new DatabaseConnection().getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(query)) {
+             PreparedStatement pstmt = conn.prepareStatement(librarianQuery)) {
             
             pstmt.setString(1, memberID);
             pstmt.setString(2, password);
             
             ResultSet rs = pstmt.executeQuery();
-            return rs.next(); // Returns true if a record is found
+            if (rs.next()) {
+                return "librarian";
+            }
             
         } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
+            System.err.println("Error checking librarian credentials: " + e.getMessage());
         }
+
+        // Then check if it's a borrower
+        String borrowerQuery = "SELECT * FROM borrowers WHERE id = ? AND password = ?";
+        
+        try (Connection conn = new DatabaseConnection().getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(borrowerQuery)) {
+            
+            pstmt.setString(1, memberID);
+            pstmt.setString(2, password);
+            
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return "borrower";
+            }
+            
+        } catch (SQLException e) {
+            System.err.println("Error checking borrower credentials: " + e.getMessage());
+        }
+        
+        return null; // No match found
     }
 
 }
