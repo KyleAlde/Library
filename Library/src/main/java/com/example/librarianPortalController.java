@@ -78,8 +78,8 @@ public class librarianPortalController {
     // Preload all pages for efficient navigation
     private void preloadPages() {
         loadPageOnce("accounts", "LibrarianPage/manageAccounts.fxml");
+        loadPageOnce("books", "LibrarianPage/manageBooks.fxml");
         // Add other pages when they exist
-        // loadPageOnce("books", "LibrarianPage/manageBooks.fxml");
         // loadPageOnce("requests", "LibrarianPage/manageRequests.fxml");
     }
     
@@ -126,8 +126,7 @@ public class librarianPortalController {
 
     @FXML
     void handleBooksButton(ActionEvent event) {
-        // TODO: Implement when manageBooks.fxml exists
-        System.out.println("Manage Books - Coming Soon");
+        switchToPage("books");
     }
 
     @FXML

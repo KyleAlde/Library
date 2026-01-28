@@ -1,6 +1,8 @@
 package com.example;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -8,6 +10,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 
 public class welcomePortal {
@@ -33,57 +36,82 @@ public class welcomePortal {
     @FXML
     private Text tabName;
 
+    // Cache for loaded views to improve performance
+    private final Map<String, Node> loadedViews = new HashMap<>();
+    
+    // Track current view to avoid unnecessary reloads
+    private String currentView = "";
+
     @FXML
     private void initialize() {
+        // Set up button handlers
         loginButton.setOnAction(event -> showLoginView());
         aboutButton.setOnAction(event -> showAboutView());
         homeButton.setOnAction(event -> showHomeView());
         branchesButton.setOnAction(event -> showBranchesView());
-        showHomeView(); // Load home view on startup
+        
+        // Load home view asynchronously to improve startup time
+        javafx.application.Platform.runLater(this::showHomeView);
     }
 
     private void showLoginView() {
-        try {
-            FXMLLoader loader = new FXMLLoader(App.class.getResource("fxml/welcomePage/login.fxml"));
-            Node loginView = loader.load();
-            contentArea.getChildren().setAll(loginView);
-            tabName.setText("Login");
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (!"login".equals(currentView)) {
+            loadViewAsync("login", "fxml/welcomePage/login.fxml", "Login");
         }
     }
     
     private void showAboutView() {
-        try {
-            FXMLLoader loader = new FXMLLoader(App.class.getResource("fxml/welcomePage/About.fxml"));
-            Node aboutView = loader.load();
-            contentArea.getChildren().setAll(aboutView);
-            tabName.setText("About");
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (!"about".equals(currentView)) {
+            loadViewAsync("about", "fxml/welcomePage/About.fxml", "About");
         }
     }
     
     private void showHomeView() {
-        try {
-            FXMLLoader loader = new FXMLLoader(App.class.getResource("fxml/welcomePage/home.fxml"));
-            Node homeView = loader.load();
-            contentArea.getChildren().setAll(homeView);
-            tabName.setText("Home");
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (!"home".equals(currentView)) {
+            loadViewAsync("home", "fxml/welcomePage/home.fxml", "Home");
         }
     }
     
     private void showBranchesView() {
-        try {
-            FXMLLoader loader = new FXMLLoader(App.class.getResource("fxml/welcomePage/Branches.fxml"));
-            Node branchesView = loader.load();
-            contentArea.getChildren().setAll(branchesView);
-            tabName.setText("Branches");
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (!"branches".equals(currentView)) {
+            loadViewAsync("branches", "fxml/welcomePage/Branches.fxml", "Branches");
         }
+    }
+    
+    // Optimized view loading with caching
+    private void loadViewAsync(String viewName, String fxmlPath, String tabText) {
+        // Check if view is already cached
+        Node cachedView = loadedViews.get(viewName);
+        if (cachedView != null) {
+            contentArea.getChildren().setAll(cachedView);
+            tabName.setText(tabText);
+            currentView = viewName;
+            System.out.println("Loaded " + viewName + " from cache");
+            return;
+        }
+        
+        // Load view asynchronously if not cached
+        javafx.application.Platform.runLater(() -> {
+            try {
+                FXMLLoader loader = new FXMLLoader(App.class.getResource(fxmlPath));
+                Node viewNode = loader.load();
+                
+                // Cache the loaded view
+                loadedViews.put(viewName, viewNode);
+                
+                // Update UI on JavaFX Application Thread
+                javafx.application.Platform.runLater(() -> {
+                    contentArea.getChildren().setAll(viewNode);
+                    tabName.setText(tabText);
+                    currentView = viewName;
+                    System.out.println("Loaded and cached " + viewName);
+                });
+                
+            } catch (IOException e) {
+                System.err.println("Failed to load " + viewName + ": " + e.getMessage());
+                e.printStackTrace();
+            }
+        });
     }
 
 }

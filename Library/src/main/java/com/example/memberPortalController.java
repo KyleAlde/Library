@@ -14,6 +14,9 @@ import java.util.Map;
 
 public class memberPortalController {
 
+    // Static reference for global access
+    private static memberPortalController instance;
+    
     @FXML
     private Button closeSideBar;
 
@@ -55,8 +58,16 @@ public class memberPortalController {
     // Constants for layout dimensions
     private static final double FULL_WIDTH = 1920.0;
 
+    // Static getter for global access
+    public static memberPortalController getInstance() {
+        return instance;
+    }
+
     @FXML
     private void initialize() {
+        // Set static instance for global access
+        instance = this;
+        
         // Initially hide sidebar and remove from layout
         sideBar.setVisible(false);
         imageHeader.setLeft(null);
@@ -221,6 +232,23 @@ public class memberPortalController {
     @FXML
     private void handleReturnAccount() {
         showAccount();
+    }
+
+    // Book view navigation methods
+    public void showBookView(javafx.scene.Parent bookViewRoot) {
+        // Create a wrapper for the book view to match the pattern used by other pages
+        VBox wrapper = new VBox(bookViewRoot);
+        wrapper.setPrefWidth(1420.0);
+        wrapper.setMaxWidth(1420.0);
+        
+        // Use the same switching logic as other scenes
+        bookCollectionContainer.getChildren().setAll(wrapper);
+        System.out.println("Switched to book view");
+    }
+    
+    public void showBookCollection() {
+        // Return to the normal book collection view using the same pattern
+        showBooks();
     }
 
 }
