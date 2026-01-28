@@ -130,7 +130,13 @@ INSERT INTO genres (name) VALUES
 ('Education'),
 ('Linguistics'),
 ('Anthropology'),
-('Environmental Science');
+('Environmental Science'),
+('Science'),
+('Astronomy');
+
+-- Extra
+INSERT INTO genres (name) VALUES
+('Non-Fiction');
 
 -- Create enum for formats and table for available formats
 CREATE TYPE book_format AS ENUM ('physical', 'ebook');
