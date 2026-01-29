@@ -32,7 +32,7 @@
                               </Button>
                               <Pane fx:id="headerLogo" prefWidth="200.0" styleClass="logo-image" />
                               <Pane HBox.hgrow="ALWAYS" />
-                              <TextField promptText="search" styleClass="member-search-bar">
+                              <TextField fx:id="searchBar" promptText="search" styleClass="member-search-bar">
                                  <font>
                                     <Font name="Segoe UI" size="18.0" />
                                  </font>

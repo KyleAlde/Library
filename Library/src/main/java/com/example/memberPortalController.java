@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -49,6 +50,9 @@ public class memberPortalController {
 
     @FXML
     private AnchorPane sideBar;
+
+    @FXML
+    private TextField searchBar;
 
     private sectionContainerController sectionController;
     
@@ -120,6 +124,25 @@ public class memberPortalController {
             // Sidebar open: adjust layout for overflow
             sectionController.adjustForSidebarOpen(bookCollectionContainer);
         });
+
+        if (searchBar != null) {
+            searchBar.setOnAction(event -> handleSearch());
+        }
+    }
+
+    @FXML
+    private void handleSearch() {
+        String searchQuery = searchBar.getText().trim();
+        
+        if (sectionController != null) {
+            if (searchQuery.isEmpty()) {
+                // If search is empty, show all books
+                sectionController.loadAllBooks();
+            } else {
+                // Show search results
+                sectionController.searchBooks(searchQuery);
+            }
+        }
     }
 
     // Preload all pages for efficient navigation

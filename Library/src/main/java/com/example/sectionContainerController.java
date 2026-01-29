@@ -21,19 +21,44 @@ public class sectionContainerController {
     @FXML
     private HBox sectionHeader;
 
+    private final BookDAO bookDAO = new BookDAO();
+
     @FXML
     private void initialize() {
         // Load books from database
-        loadBooksFromDatabase();
+        loadAllBooks();
     }
 
-    private void loadBooksFromDatabase() {
+    public void loadAllBooks() {
         try {
-            BookDAO bookDAO = new BookDAO();
             List<Book> books = bookDAO.getAllBooks();
-            
+            displayBooks(books);
+            genreTitle.setText("All Books");
+            System.out.println("Loaded " + books.size() + " books from database");
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("Error loading books from database: " + e.getMessage());
+        }
+    }
+
+    public void searchBooks(String searchQuery) {
+        try {
+            List<Book> searchResults = bookDAO.searchBooks(searchQuery);
+            displayBooks(searchResults);
+            genreTitle.setText("Search Results: " + searchQuery);
+            System.out.println("Found " + searchResults.size() + " books matching: " + searchQuery);
+        } catch (Exception e) {
+            System.err.println("Error searching books: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+    
+    private void displayBooks(List<Book> books) {
+        booksFlowPane.getChildren().clear();
+        
+        try {
             for (Book book : books) {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("fxml/Collection/books.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/fxml/Collection/books.fxml"));
                 VBox bookNode = loader.load();
                 
                 // Get the books controller and set book data
@@ -42,11 +67,10 @@ public class sectionContainerController {
                 
                 booksFlowPane.getChildren().add(bookNode);
             }
-            
-            System.out.println("Loaded " + books.size() + " books from database");
+            System.out.println("Displayed " + books.size() + " books");
         } catch (Exception e) {
+            System.err.println("Error displaying books: " + e.getMessage());
             e.printStackTrace();
-            System.err.println("Error loading books from database: " + e.getMessage());
         }
     }
 
