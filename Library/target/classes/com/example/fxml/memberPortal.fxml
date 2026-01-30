@@ -30,7 +30,7 @@
                                     <Insets left="100.0" />
                                  </HBox.margin>
                               </Button>
-                              <Pane fx:id="headerLogo" prefWidth="200.0" styleClass="logo-image" />
+                              <Button fx:id="headerLogo" maxHeight="60.0" maxWidth="200.0" minHeight="60.0" minWidth="200.0" mnemonicParsing="false" onAction="#handleHeaderLogoClick" prefHeight="60.0" prefWidth="200.0" styleClass="logo-image-button" text="" />
                               <Pane HBox.hgrow="ALWAYS" />
                               <TextField fx:id="searchBar" promptText="search" styleClass="member-search-bar">
                                  <font>

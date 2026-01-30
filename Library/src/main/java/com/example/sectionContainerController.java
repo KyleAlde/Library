@@ -6,7 +6,6 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import com.example.utility.dao.BookDAO;
 import com.example.model.Book;
 import java.util.List;
 
@@ -21,39 +20,28 @@ public class sectionContainerController {
     @FXML
     private HBox sectionHeader;
 
-    private final BookDAO bookDAO = new BookDAO();
-
     @FXML
     private void initialize() {
-        // Load books from database
-        loadAllBooks();
+        // Books display removed - container will be empty
+        genreTitle.setText("Catalog");
     }
 
     public void loadAllBooks() {
-        try {
-            List<Book> books = bookDAO.getAllBooks();
-            displayBooks(books);
-            genreTitle.setText("All Books");
-            System.out.println("Loaded " + books.size() + " books from database");
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.err.println("Error loading books from database: " + e.getMessage());
-        }
+        // Books loading disabled - container remains empty
+        booksFlowPane.getChildren().clear();
+        genreTitle.setText("Catalog");
+        System.out.println("Books display disabled");
     }
 
     public void searchBooks(String searchQuery) {
-        try {
-            List<Book> searchResults = bookDAO.searchBooks(searchQuery);
-            displayBooks(searchResults);
-            genreTitle.setText("Search Results: " + searchQuery);
-            System.out.println("Found " + searchResults.size() + " books matching: " + searchQuery);
-        } catch (Exception e) {
-            System.err.println("Error searching books: " + e.getMessage());
-            e.printStackTrace();
-        }
+        // Search functionality disabled - container remains empty
+        booksFlowPane.getChildren().clear();
+        genreTitle.setText("Search Disabled");
+        System.out.println("Book search disabled");
     }
-    
-    private void displayBooks(List<Book> books) {
+
+    // Public method to display books in this section
+    public void displayBooks(List<Book> books) {
         booksFlowPane.getChildren().clear();
         
         try {
@@ -67,13 +55,13 @@ public class sectionContainerController {
                 
                 booksFlowPane.getChildren().add(bookNode);
             }
-            System.out.println("Displayed " + books.size() + " books");
+            System.out.println("Displayed " + books.size() + " books in section");
         } catch (Exception e) {
             System.err.println("Error displaying books: " + e.getMessage());
             e.printStackTrace();
         }
     }
-
+    
     public void setGenreTitle(String title) {
         genreTitle.setText(title);
     }

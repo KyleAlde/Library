@@ -20,6 +20,21 @@
     -fx-background-position: center;
 }
 
+.logo-image-button {
+    -fx-background-image: url('Images/Logo.png');
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: auto 40px;
+    -fx-background-position: center;
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-cursor: hand;
+}
+
+.logo-image-button:hover {
+    -fx-background-color: rgba(255,255,255,0.1);
+    -fx-border-color: transparent;
+}
+
 .upper-header-color {
     -fx-background-color: rgba(44,59,57,0.80);
 }
@@ -234,15 +249,16 @@
     -fx-opacity: 0;
 }
 
-.no-scroll .scroll-pane .scroll-bar:vertical .increment-arrow,
-.no-scroll .scroll-pane .scroll-bar:vertical .decrement-arrow,
-.no-scroll .scroll-pane .scroll-bar:vertical .thumb {
+/* Make scroll bars transparent while preserving ScrollPane layout */
+.no-scroll .scroll-bar:vertical .increment-arrow,
+.no-scroll .scroll-bar:vertical .decrement-arrow,
+.no-scroll .scroll-bar:vertical .thumb {
     -fx-opacity: 0;
 }
 
-.no-scroll .scroll-pane .scroll-bar:horizontal .increment-arrow,
-.no-scroll .scroll-pane .scroll-bar:horizontal .decrement-arrow,
-.no-scroll .scroll-pane .scroll-bar:horizontal .thumb {
+.no-scroll .scroll-bar:horizontal .increment-arrow,
+.no-scroll .scroll-bar:horizontal .decrement-arrow,
+.no-scroll .scroll-bar:horizontal .thumb {
     -fx-opacity: 0;
 }
 

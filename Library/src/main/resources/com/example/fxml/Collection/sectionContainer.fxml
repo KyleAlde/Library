@@ -9,7 +9,7 @@
    <children>
       <HBox fx:id="sectionHeader" alignment="CENTER_LEFT" prefHeight="80.0">
          <children>
-            <Text fx:id="genreTitle" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="section-Header" text="Placeholder" />
+            <Text fx:id="genreTitle" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="section-Header" text="Catalog" />
          </children>
       </HBox>
       <FlowPane fx:id="booksFlowPane" columnHalignment="CENTER" hgap="20.0" prefHeight="320.0" prefWidth="1420.0" prefWrapLength="0.0" rowValignment="TOP" vgap="20.0" />

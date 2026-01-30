@@ -206,112 +206,43 @@ public class BookDAO {
         return books;
     }
 
-    //==============================================================
-    //                           UPDATE
-    //==============================================================
-
-    // Update book details (excluding status)
-    public void updateBook(String isbn, String title, String synopsis, String author, 
-                          String publisher, LocalDate publicationDate, BookStatus status) throws SQLException {
-        String updateQuery = """
-            UPDATE books 
-            SET title = ?, author = ?, publisher = ?, publication_date = ?, 
-                synopsis = ?, status = ?
-            WHERE isbn = ?
+    // Get books by specific genre
+    public List<Book> getBooksByGenre(String genreName) throws SQLException {
+        List<Book> books = new ArrayList<>();
+        String query = """
+            SELECT DISTINCT b.* 
+            FROM books b
+            JOIN book_genres bg ON b.isbn = bg.book_id
+            JOIN genres g ON bg.genre_id = g.id
+            WHERE LOWER(g.name) = LOWER(?)
+            ORDER BY b.title
             """;
 
-        try (PreparedStatement ps = db.getConnection().prepareStatement(updateQuery)) {
-            ps.setString(1, title);
-            ps.setString(2, author);
-            ps.setString(3, publisher);
-            ps.setDate(4, java.sql.Date.valueOf(publicationDate));
-            ps.setString(5, synopsis);
-            ps.setString(6, status.toString());
-            ps.setString(7, isbn);
-            
-            int rowsUpdated = ps.executeUpdate();
-            if (rowsUpdated > 0) {
-                System.out.println("Book updated: " + title);
-            } else {
-                System.out.println("No book found with ISBN: " + isbn);
+        try (PreparedStatement ps = db.getConnection().prepareStatement(query)) {
+            ps.setString(1, genreName);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Book book = new Book(
+                    rs.getString("isbn"),
+                    rs.getString("title"),
+                    rs.getString("author"),
+                    rs.getString("synopsis"),
+                    rs.getString("publisher"),
+                    rs.getDate("publication_date").toLocalDate(),
+                    BookStatus.valueOf(rs.getString("status").toUpperCase()),
+                    CoverImageMatcher.getCoverImagePath(rs.getString("title"))
+                );
+
+                loadGenresForBook(book);
+                loadFormatsForBook(book);
+                books.add(book);
             }
         }
+
+        System.out.println("Retrieved " + books.size() + " books for genre: " + genreName);
+        return books;
     }
-
-    // Update status of a book
-    public void updateStatus(String isbn, String newStatus) throws SQLException {
-        String statusQuery = "UPDATE books SET status = ? WHERE isbn = ?";
-
-        try (PreparedStatement ps = db.getConnection().prepareStatement(statusQuery)) {
-            ps.setObject(1, newStatus, java.sql.Types.OTHER);
-            ps.setString(2, isbn);
-            ps.executeUpdate();
-            System.out.println("Status updated for book: " + isbn);
-        }
-    }
-
-    // Update genres for a book
-    public void updateGenres(String isbn, List<String> newGenres) throws SQLException {
-        // First delete existing genres
-        String deleteQuery = "DELETE FROM book_genres WHERE book_id = ?";
-        try (PreparedStatement ps = db.getConnection().prepareStatement(deleteQuery)) {
-            ps.setString(1, isbn);
-            ps.executeUpdate();
-        }
-        
-        // Then add new genres
-        addGenres(isbn, newGenres);
-    }
-
-    // Update formats for a book
-    public void updateFormats(String isbn, List<String> newFormats) throws SQLException {
-        // First delete existing formats
-        String deleteQuery = "DELETE FROM available_formats WHERE isbn = ?";
-        try (PreparedStatement ps = db.getConnection().prepareStatement(deleteQuery)) {
-            ps.setString(1, isbn);
-            ps.executeUpdate();
-        }
-        
-        // Then add new formats
-        addFormats(isbn, newFormats);
-    }
-
-    //==============================================================
-    //                           DELETE
-    //==============================================================
-
-    // Delete a book from the database
-    public void deleteBook(String isbn) throws SQLException {
-        // Delete from dependent tables first (due to foreign key constraints)
-        String deleteGenres = "DELETE FROM book_genres WHERE book_id = ?";
-        String deleteFormats = "DELETE FROM available_formats WHERE isbn = ?";
-        String deleteBook = "DELETE FROM books WHERE isbn = ?";
-
-        try (PreparedStatement psGenres = db.getConnection().prepareStatement(deleteGenres);
-             PreparedStatement psFormats = db.getConnection().prepareStatement(deleteFormats);
-             PreparedStatement psBook = db.getConnection().prepareStatement(deleteBook)) {
-            
-            // Delete in correct order
-            psGenres.setString(1, isbn);
-            psGenres.executeUpdate();
-            
-            psFormats.setString(1, isbn);
-            psFormats.executeUpdate();
-            
-            psBook.setString(1, isbn);
-            int rowsDeleted = psBook.executeUpdate();
-            
-            if (rowsDeleted > 0) {
-                System.out.println("Book deleted: " + isbn);
-            } else {
-                System.out.println("No book found with ISBN: " + isbn);
-            }
-        }
-    }
-
-    //==============================================================
-    //                         HELPER METHODS
-    //==============================================================
 
     private void loadGenresForBook(Book book) throws SQLException {
         String genreQuery = """
@@ -330,20 +261,6 @@ public class BookDAO {
         }
     }
 
-    // Get all available genres from database
-    public List<String> getAllGenres() throws SQLException {
-        List<String> genres = new ArrayList<>();
-        String query = "SELECT name FROM genres ORDER BY name";
-        
-        try (PreparedStatement ps = db.getConnection().prepareStatement(query);
-             ResultSet rs = ps.executeQuery()) {
-            while (rs.next()) {
-                genres.add(rs.getString("name"));
-            }
-        }
-        return genres;
-    }
-
     private void loadFormatsForBook(Book book) throws SQLException {
         String formatQuery = "SELECT format FROM available_formats WHERE isbn = ?";
 
@@ -352,6 +269,14 @@ public class BookDAO {
             ResultSet rs = psFormat.executeQuery();
             while (rs.next()) {
                 book.addAvailableFormats(rs.getString("format"));
+            }
+        } catch (SQLException e) {
+            // Table doesn't exist, add default format
+            if (e.getMessage().contains("does not exist")) {
+                book.addAvailableFormats("physical");
+                System.out.println("available_formats table not found, using default format for book: " + book.getIsbn());
+            } else {
+                throw e;
             }
         }
     }

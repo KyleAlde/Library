@@ -8,7 +8,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,7 +24,7 @@ public class memberPortalController {
     private VBox header;
 
     @FXML
-    private Pane headerLogo;
+    private Button headerLogo;
 
     @FXML
     private Button openSideBar;
@@ -55,6 +54,7 @@ public class memberPortalController {
     private TextField searchBar;
 
     private sectionContainerController sectionController;
+    private displayCatalogueController catalogueController;
     
     // Page caching system for efficient layout management
     private Map<String, Node> loadedPages = new HashMap<>();
@@ -134,20 +134,22 @@ public class memberPortalController {
     private void handleSearch() {
         String searchQuery = searchBar.getText().trim();
         
-        if (sectionController != null) {
-            if (searchQuery.isEmpty()) {
-                // If search is empty, show all books
-                sectionController.loadAllBooks();
-            } else {
-                // Show search results
-                sectionController.searchBooks(searchQuery);
-            }
+        // Switch to catalogue page first
+        showCatalogue();
+        
+        // Use the stored catalogue controller to perform search
+        if (catalogueController != null) {
+            catalogueController.performSearch(searchQuery);
+            System.out.println("Searching for: \"" + searchQuery + "\"");
+        } else {
+            System.err.println("Catalogue controller not available");
         }
     }
 
     // Preload all pages for efficient navigation
     private void preloadPages() {
         loadPageOnce("books", "fxml/Collection/sectionContainer.fxml");
+        loadPageOnce("catalogue", "fxml/displayCatalogue.fxml");
         loadPageOnce("cart", "fxml/Cart.fxml");
         loadPageOnce("loans", "fxml/Loans.fxml");
         loadPageOnce("account", "fxml/account.fxml");
@@ -166,7 +168,12 @@ public class memberPortalController {
             // Store the controller reference for books page
             if ("books".equals(pageName)) {
                 sectionController = loader.getController();
-                sectionController.setGenreTitle("All Books");
+                sectionController.setGenreTitle("Catalog");
+            }
+            
+            // Store the controller reference for catalogue page
+            if ("catalogue".equals(pageName)) {
+                catalogueController = loader.getController();
             }
             
             wrapper.getChildren().add(pageNode);
@@ -179,9 +186,9 @@ public class memberPortalController {
         }
     }
     
-    // Show the initial page (books)
+    // Show the initial page (catalogue)
     private void showInitialPage() {
-        switchToPage("books");
+        switchToPage("catalogue");
     }
     
     // Efficient page switching using cached pages
@@ -198,6 +205,11 @@ public class memberPortalController {
     // Method to show cart page
     public void showCart() {
         switchToPage("cart");
+    }
+
+    // Method to show catalogue page
+    public void showCatalogue() {
+        switchToPage("catalogue");
     }
 
     // Method to show books page (Browse)
@@ -217,8 +229,13 @@ public class memberPortalController {
 
     // Action handlers for sidebar buttons
     @FXML
+    private void handleHeaderLogoClick() {
+        showCatalogue();
+    }
+
+    @FXML
     private void handleBrowseButton() {
-        showBooks();
+        showCatalogue();
     }
 
     @FXML
