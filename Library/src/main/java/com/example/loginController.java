@@ -17,6 +17,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import com.example.utility.DatabaseConnection;
+import com.example.utility.UserSession;
 
 public class loginController {
 
@@ -48,12 +49,17 @@ public class loginController {
         String password = passwordField.getText().trim();
         System.out.println("Credentials entered - ID: '" + memberID + "', Password: '" + password + "'");
 
-        String userType = validateCredentials(memberID, password);
-        if (userType != null) {
-            System.out.println("Login validation successful - User type: " + userType);
+        UserData userData = validateCredentials(memberID, password);
+        if (userData != null) {
+            System.out.println("Login validation successful - User type: " + userData.userType);
+            
+            // Create user session
+            UserSession session = UserSession.getInstance();
+            session.createSession(userData.userId, userData.userName, userData.userType);
+            
             // Login successful - navigate to appropriate portal
             try {
-                String fxmlPath = "librarian".equals(userType) ? "fxml/librarianPortal.fxml" : "fxml/memberPortal.fxml";
+                String fxmlPath = "librarian".equals(userData.userType) ? "fxml/librarianPortal.fxml" : "fxml/memberPortal.fxml";
                 FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
                 Parent root = loader.load();
                 
@@ -79,7 +85,7 @@ public class loginController {
         verify.setVisible(true);
     }
 
-    private String validateCredentials(String memberID, String password) {
+    private UserData validateCredentials(String memberID, String password) {
         if (memberID.isEmpty() || password.isEmpty()) {
             return null;
         }
@@ -95,7 +101,8 @@ public class loginController {
             
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
-                return "librarian";
+                String fullName = rs.getString("first_name") + " " + rs.getString("last_name");
+                return new UserData(rs.getString("id"), fullName, "librarian");
             }
             
         } catch (SQLException e) {
@@ -113,7 +120,8 @@ public class loginController {
             
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
-                return "borrower";
+                String fullName = rs.getString("first_name") + " " + rs.getString("last_name");
+                return new UserData(rs.getString("id"), fullName, "borrower");
             }
             
         } catch (SQLException e) {
@@ -121,6 +129,19 @@ public class loginController {
         }
         
         return null; // No match found
+    }
+
+    // Inner class to hold user data
+    private static class UserData {
+        String userId;
+        String userName;
+        String userType;
+
+        UserData(String userId, String userName, String userType) {
+            this.userId = userId;
+            this.userName = userName;
+            this.userType = userType;
+        }
     }
 
 }

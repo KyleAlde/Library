@@ -4,13 +4,19 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+
+import com.example.utility.UserSession;
 
 public class librarianPortalController {
 
@@ -49,6 +55,16 @@ public class librarianPortalController {
 
     @FXML
     private void initialize() {
+        // Validate user session
+        UserSession session = UserSession.getInstance();
+        if (!session.isLoggedIn() || !session.isLibrarian()) {
+            System.err.println("Unauthorized access to librarian portal - redirecting to login");
+            // TODO: Navigate back to login screen
+            return;
+        }
+        
+        System.out.println("Librarian portal initialized for user: " + session.getUserId());
+        
         // Initially hide sidebar
         sideBar.setVisible(false);
         imageHeader.setLeft(null);

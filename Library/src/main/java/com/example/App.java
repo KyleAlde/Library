@@ -75,7 +75,7 @@ public class App extends Application {
         javafx.application.Platform.runLater(() -> {
             try {
                 // Load the main content
-                Parent mainRoot = loadFXML("fxml/memberPortal");
+                Parent mainRoot = loadFXML("fxml/welcomePage/welcomePortal");
                 
                 // Replace loading screen with main content
                 scene.setRoot(mainRoot);

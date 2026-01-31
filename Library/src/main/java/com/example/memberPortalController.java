@@ -3,14 +3,20 @@ package com.example;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+
+import com.example.utility.UserSession;
 
 public class memberPortalController {
 
@@ -69,6 +75,16 @@ public class memberPortalController {
 
     @FXML
     private void initialize() {
+        // Validate user session
+        UserSession session = UserSession.getInstance();
+        if (!session.isLoggedIn() || !session.isBorrower()) {
+            System.err.println("Unauthorized access to member portal - redirecting to login");
+            // TODO: Navigate back to login screen
+            return;
+        }
+        
+        System.out.println("Member portal initialized for user: " + session.getUserId());
+        
         // Set static instance for global access
         instance = this;
         
