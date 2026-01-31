@@ -190,6 +190,11 @@ public class memberPortalController {
             // Store the controller reference for catalogue page
             if ("catalogue".equals(pageName)) {
                 catalogueController = loader.getController();
+                // Preload catalogue data in background for faster initial display
+                javafx.application.Platform.runLater(() -> {
+                    System.out.println("Preloading catalogue data...");
+                    catalogueController.refreshCatalogue();
+                });
             }
             
             wrapper.getChildren().add(pageNode);
@@ -226,11 +231,19 @@ public class memberPortalController {
     // Method to show catalogue page
     public void showCatalogue() {
         switchToPage("catalogue");
+        // Refresh catalogue to show full catalogue instead of search results
+        if (catalogueController != null) {
+            catalogueController.refreshCatalogue();
+        }
     }
 
     // Method to show books page (Browse)
     public void showBooks() {
         switchToPage("books");
+        // Refresh catalogue to show full catalogue instead of search results
+        if (catalogueController != null) {
+            catalogueController.refreshCatalogue();
+        }
     }
 
     // Method to show loans page

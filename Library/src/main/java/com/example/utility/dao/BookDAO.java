@@ -271,10 +271,9 @@ public class BookDAO {
                 book.addAvailableFormats(rs.getString("format"));
             }
         } catch (SQLException e) {
-            // Table doesn't exist, add default format
+            // Table doesn't exist, add default format silently
             if (e.getMessage().contains("does not exist")) {
                 book.addAvailableFormats("physical");
-                System.out.println("available_formats table not found, using default format for book: " + book.getIsbn());
             } else {
                 throw e;
             }

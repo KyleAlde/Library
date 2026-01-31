@@ -11,6 +11,11 @@ import com.example.model.Book;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Arrays;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.ArrayList;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -26,98 +31,278 @@ public class displayCatalogueController {
     private final BookDAO bookDAO = new BookDAO();
     private final DatabaseConnection dbConnection = new DatabaseConnection();
     private Map<String, sectionContainerController> genreSections = new HashMap<>();
+    private boolean isDataLoaded = false;
 
     @FXML
     private void initialize() {
-        try {
-            loadCatalogue();
-            checkUnusedGenres(); // Check which genres aren't being used
-        } catch (Exception e) {
-            System.err.println("Error initializing catalogue: " + e.getMessage());
-            e.printStackTrace();
-        }
+        System.out.println("Initializing catalogue display...");
+        loadCatalogue();
     }
 
     private void loadCatalogue() {
         try {
-            // Get all genres that actually have books
-            List<String> genresWithBooks = getGenresWithBooks();
+            System.out.println("Loading catalogue...");
             
-            if (genresWithBooks.isEmpty()) {
-                System.out.println("No genres with books found");
+            // Clear existing content
+            catalogueContainer.getChildren().clear();
+            genreSections.clear();
+            
+            // Get all genres that actually have books
+            List<String> availableGenres = getAvailableGenres();
+            System.out.println("Found genres: " + String.join(", ", availableGenres));
+            
+            if (availableGenres.isEmpty()) {
+                showEmptyMessage("No books available in the catalogue.");
                 return;
             }
             
-            // Load books for each genre using sectionContainer layout
-            for (String genre : genresWithBooks) {
-                loadGenreSection(genre);
-            }
+            // Create 4 main genre sections
+            createGenreSections(availableGenres);
             
-            System.out.println("Catalogue loaded with " + genresWithBooks.size() + " genres containing books");
+            System.out.println("Catalogue loaded successfully!");
+            isDataLoaded = true;
             
         } catch (Exception e) {
             System.err.println("Error loading catalogue: " + e.getMessage());
             e.printStackTrace();
+            showErrorMessage("Failed to load catalogue. Please try again.");
         }
     }
 
-    private List<String> getGenresWithBooks() throws SQLException {
-        List<String> genresWithBooks = new java.util.ArrayList<>();
+    private List<String> getAvailableGenres() throws SQLException {
+        List<String> genres = new ArrayList<>();
         
         String query = """
-            SELECT g.name, COUNT(b.isbn) as book_count
+            SELECT DISTINCT g.name 
             FROM genres g
             INNER JOIN book_genres bg ON g.id = bg.genre_id
             INNER JOIN books b ON bg.book_id = b.isbn
             WHERE b.status = 'available'
-            GROUP BY g.name
-            HAVING COUNT(b.isbn) > 0
-            ORDER BY book_count DESC, g.name ASC
+            ORDER BY g.name
             """;
 
-        try (java.sql.PreparedStatement ps = dbConnection.getConnection().prepareStatement(query);
-             java.sql.ResultSet rs = ps.executeQuery()) {
+        try (PreparedStatement ps = dbConnection.getConnection().prepareStatement(query);
+             ResultSet rs = ps.executeQuery()) {
+            
             while (rs.next()) {
-                String genreName = rs.getString("name");
-                int bookCount = rs.getInt("book_count");
-                genresWithBooks.add(genreName);
-                System.out.println("Genre: " + genreName + " - " + bookCount + " books");
+                genres.add(rs.getString("name"));
             }
         }
         
-        return genresWithBooks;
+        return genres;
     }
 
-    private void loadGenreSection(String genre) {
+    private void createGenreSections(List<String> availableGenres) {
         try {
-            // Load sectionContainer for this genre
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/fxml/Collection/sectionContainer.fxml"));
-            VBox sectionNode = loader.load();
+            System.out.println("Creating genre sections with optimized loading...");
             
-            sectionContainerController controller = loader.getController();
-            genreSections.put(genre, controller);
+            // Define 4 main genre categories in consistent order
+            Map<String, List<String>> genreCategories = new LinkedHashMap<>();
+            genreCategories.put("Fiction & Literature", Arrays.asList(
+                "Fantasy", "Adventure", "Mythology", "Science Fiction", "Sci-Fi", 
+                "Dystopian", "Space Opera", "Mystery", "Thriller", "Crime", "Suspense",
+                "Horror", "Romance", "Love Story", "Contemporary Romance",
+                "Classic", "Literary Fiction", "Historical Fiction", "Young Adult", "YA", "Teen",
+                "Children's Fiction", "Children?s Fiction"
+            ));
+            genreCategories.put("Non-Fiction & Reference", Arrays.asList(
+                "Non-Fiction", "Biography", "History", "Self-Help", "Philosophy",
+                "Political Science", "Sociology", "Psychology"
+            ));
+            genreCategories.put("Science & Technology", Arrays.asList(
+                "Science", "Physics", "Astronomy", "Technology", "Engineering", "Mathematics"
+            ));
+            genreCategories.put("Academic & Professional", Arrays.asList(
+                "Academic", "Research", "Professional", "Business", "Education"
+            ));
             
-            // Load books for this genre
-            List<Book> books = bookDAO.getBooksByGenre(genre);
+            // Pre-load all books at once instead of per genre
+            Map<String, List<Book>> allGenreBooks = preloadAllGenreBooks(availableGenres);
             
-            // Set the genre title and load books into the section
-            controller.setGenreTitle(genre);
-            controller.displayBooks(books);
-            
-            // Add section to main catalogue container
-            catalogueContainer.getChildren().add(sectionNode);
-            
-            System.out.println("Loaded " + books.size() + " books for genre: " + genre);
+            // Create sections for each category in order
+            for (Map.Entry<String, List<String>> entry : genreCategories.entrySet()) {
+                String categoryTitle = entry.getKey();
+                List<String> categoryGenres = entry.getValue();
+                
+                // Find which genres from this category are actually available
+                List<String> availableCategoryGenres = new ArrayList<>();
+                for (String genre : categoryGenres) {
+                    if (availableGenres.contains(genre)) {
+                        availableCategoryGenres.add(genre);
+                    }
+                }
+                
+                if (!availableCategoryGenres.isEmpty()) {
+                    createOptimizedGenreSection(categoryTitle, availableCategoryGenres, allGenreBooks);
+                }
+            }
             
         } catch (Exception e) {
-            System.err.println("Error loading genre section for " + genre + ": " + e.getMessage());
+            System.err.println("Error creating genre sections: " + e.getMessage());
             e.printStackTrace();
         }
     }
 
+    // Optimized method to preload all books for all genres at once
+    private Map<String, List<Book>> preloadAllGenreBooks(List<String> genres) throws SQLException {
+        System.out.println("Preloading books for " + genres.size() + " genres...");
+        long startTime = System.currentTimeMillis();
+        
+        Map<String, List<Book>> genreBooksMap = new HashMap<>();
+        
+        // Create IN clause with placeholders for each genre
+        StringBuilder queryBuilder = new StringBuilder();
+        queryBuilder.append("""
+            SELECT DISTINCT b.*, g.name as genre_name
+            FROM books b
+            JOIN book_genres bg ON b.isbn = bg.book_id
+            JOIN genres g ON bg.genre_id = g.id
+            WHERE b.status = 'available' AND g.name IN (
+            """);
+        
+        // Add placeholders for each genre
+        for (int i = 0; i < genres.size(); i++) {
+            if (i > 0) queryBuilder.append(",");
+            queryBuilder.append("?");
+        }
+        queryBuilder.append(") ORDER BY g.name, b.title");
+        
+        try (PreparedStatement ps = dbConnection.getConnection().prepareStatement(queryBuilder.toString())) {
+            // Set parameters for each genre
+            for (int i = 0; i < genres.size(); i++) {
+                ps.setString(i + 1, genres.get(i));
+            }
+            
+            ResultSet rs = ps.executeQuery();
+            
+            // Process results and group by genre
+            while (rs.next()) {
+                String genreName = rs.getString("genre_name");
+                Book book = createBookFromResultSet(rs);
+                
+                genreBooksMap.computeIfAbsent(genreName, k -> new ArrayList<>()).add(book);
+            }
+        }
+        
+        long endTime = System.currentTimeMillis();
+        System.out.println("Preloaded " + genreBooksMap.size() + " genres in " + (endTime - startTime) + "ms");
+        
+        return genreBooksMap;
+    }
+    
+    // Helper method to create Book from ResultSet
+    private Book createBookFromResultSet(ResultSet rs) throws SQLException {
+        return new Book(
+            rs.getString("isbn"),
+            rs.getString("title"),
+            rs.getString("author"),
+            rs.getString("synopsis"),
+            rs.getString("publisher"),
+            rs.getDate("publication_date").toLocalDate(),
+            com.example.model.Book.BookStatus.valueOf(rs.getString("status").toUpperCase()),
+            com.example.utility.CoverImageMatcher.getCoverImagePath(rs.getString("title"))
+        );
+    }
+    
+    // Optimized genre section creation using preloaded books
+    private void createOptimizedGenreSection(String categoryTitle, List<String> genres, Map<String, List<Book>> allGenreBooks) {
+        try {
+            System.out.println("Creating optimized section: " + categoryTitle);
+            
+            // Load section container
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/fxml/Collection/sectionContainer.fxml"));
+            VBox sectionNode = loader.load();
+            
+            sectionContainerController controller = loader.getController();
+            
+            // Combine books from all genres in this category using preloaded data
+            Set<String> seenIsbns = new HashSet<>();
+            List<Book> categoryBooks = new ArrayList<>();
+            
+            for (String genre : genres) {
+                List<Book> genreBooks = allGenreBooks.get(genre);
+                if (genreBooks != null) {
+                    System.out.println("  " + genre + ": " + genreBooks.size() + " books (preloaded)");
+                    
+                    // Add unique books
+                    for (Book book : genreBooks) {
+                        if (seenIsbns.add(book.getIsbn())) {
+                            categoryBooks.add(book);
+                        }
+                    }
+                }
+            }
+            
+            System.out.println("  Total unique books: " + categoryBooks.size());
+            
+            // Set category title and display books
+            controller.setGenreTitle(categoryTitle);
+            controller.displayBooks(categoryBooks);
+            
+            // Add section to container
+            catalogueContainer.getChildren().add(sectionNode);
+            genreSections.put(categoryTitle, controller);
+            
+        } catch (Exception e) {
+            System.err.println("Error creating optimized genre section for " + categoryTitle + ": " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    private void createGenreSection(String categoryTitle, List<String> genres) {
+        try {
+            System.out.println("Creating section: " + categoryTitle);
+            
+            // Load section container
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/fxml/Collection/sectionContainer.fxml"));
+            VBox sectionNode = loader.load();
+            
+            sectionContainerController controller = loader.getController();
+            
+            // Get all books from all genres in this category
+            Set<String> seenIsbns = new HashSet<>();
+            List<Book> categoryBooks = new ArrayList<>();
+            
+            for (String genre : genres) {
+                try {
+                    List<Book> genreBooks = bookDAO.getBooksByGenre(genre);
+                    System.out.println("  " + genre + ": " + genreBooks.size() + " books");
+                    
+                    // Add unique books
+                    for (Book book : genreBooks) {
+                        if (seenIsbns.add(book.getIsbn())) {
+                            categoryBooks.add(book);
+                        }
+                    }
+                } catch (SQLException e) {
+                    System.err.println("Error loading books for genre " + genre + ": " + e.getMessage());
+                }
+            }
+            
+            System.out.println("  Total unique books: " + categoryBooks.size());
+            
+            // Set category title and display books
+            controller.setGenreTitle(categoryTitle);
+            controller.displayBooks(categoryBooks);
+            
+            // Add section to container
+            catalogueContainer.getChildren().add(sectionNode);
+            genreSections.put(categoryTitle, controller);
+            
+        } catch (Exception e) {
+            System.err.println("Error creating genre section for " + categoryTitle + ": " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+
     public void refreshCatalogue() {
-        catalogueContainer.getChildren().clear();
-        genreSections.clear();
+        if (isDataLoaded && !catalogueContainer.getChildren().isEmpty()) {
+            System.out.println("Catalogue data already loaded, skipping refresh");
+            return;
+        }
+        
+        System.out.println("Refreshing catalogue...");
         loadCatalogue();
     }
     
@@ -128,10 +313,7 @@ public class displayCatalogueController {
             genreSections.clear();
             
             if (searchQuery == null || searchQuery.trim().isEmpty()) {
-                // Show empty search message
-                Text noSearchText = new Text("Please enter a search term");
-                noSearchText.setStyle("-fx-font-size: 18px; -fx-fill: #666;");
-                catalogueContainer.getChildren().add(noSearchText);
+                showEmptyMessage("Please enter a search term");
                 return;
             }
             
@@ -139,12 +321,8 @@ public class displayCatalogueController {
             List<Book> searchResults = bookDAO.searchBooks(searchQuery.trim());
             
             if (searchResults.isEmpty()) {
-                // Show no results message
-                Text noResultsText = new Text("No books found matching the criteria");
-                noResultsText.setStyle("-fx-font-size: 18px; -fx-fill: #666;");
-                catalogueContainer.getChildren().add(noResultsText);
+                showEmptyMessage("No books found matching: \"" + searchQuery + "\"");
             } else {
-                // Create a single section for all search results
                 createSearchResultsSection(searchQuery, searchResults);
             }
             
@@ -153,27 +331,23 @@ public class displayCatalogueController {
         } catch (Exception e) {
             System.err.println("Error performing search: " + e.getMessage());
             e.printStackTrace();
-            
-            // Show error message
-            Text errorText = new Text("Error occurred while searching. Please try again.");
-            errorText.setStyle("-fx-font-size: 18px; -fx-fill: #ff0000;");
-            catalogueContainer.getChildren().add(errorText);
+            showErrorMessage("Search failed. Please try again.");
         }
     }
     
     private void createSearchResultsSection(String searchQuery, List<Book> books) {
         try {
-            // Load sectionContainer for search results
+            // Load section container for search results
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/fxml/Collection/sectionContainer.fxml"));
             VBox sectionNode = loader.load();
             
             sectionContainerController controller = loader.getController();
             
-            // Set the search title and load books into the section
-            controller.setGenreTitle("Books with matching results to \"" + searchQuery + "\"");
+            // Set search title and display books
+            controller.setGenreTitle("Search Results: \"" + searchQuery + "\" (" + books.size() + " books)");
             controller.displayBooks(books);
             
-            // Add section to catalogue container
+            // Add section to container
             catalogueContainer.getChildren().add(sectionNode);
             
             System.out.println("Created search results section with " + books.size() + " books");
@@ -183,65 +357,16 @@ public class displayCatalogueController {
             e.printStackTrace();
         }
     }
-
-    private void checkUnusedGenres() {
-        try {
-            String query = """
-                SELECT g.name 
-                FROM genres g
-                LEFT JOIN book_genres bg ON g.id = bg.genre_id
-                LEFT JOIN books b ON bg.book_id = b.isbn
-                WHERE bg.genre_id IS NULL OR b.isbn IS NULL
-                ORDER BY g.name
-                """;
-            
-            System.out.println("\n=== GENRES WITH NO BOOKS ===");
-            
-            try (PreparedStatement ps = dbConnection.getConnection().prepareStatement(query);
-                 ResultSet rs = ps.executeQuery()) {
-                
-                boolean foundUnused = false;
-                while (rs.next()) {
-                    String genreName = rs.getString("name");
-                    System.out.println("- " + genreName);
-                    foundUnused = true;
-                }
-                
-                if (!foundUnused) {
-                    System.out.println("All genres have books associated with them!");
-                }
-            }
-            
-            // Also show total vs used
-            String totalQuery = "SELECT COUNT(*) as total FROM genres";
-            String usedQuery = """
-                SELECT COUNT(DISTINCT g.id) as used 
-                FROM genres g
-                INNER JOIN book_genres bg ON g.id = bg.genre_id
-                INNER JOIN books b ON bg.book_id = b.isbn
-                WHERE b.status = 'available'
-                """;
-            
-            try (PreparedStatement ps1 = dbConnection.getConnection().prepareStatement(totalQuery);
-                 PreparedStatement ps2 = dbConnection.getConnection().prepareStatement(usedQuery);
-                 ResultSet rs1 = ps1.executeQuery();
-                 ResultSet rs2 = ps2.executeQuery()) {
-                
-                if (rs1.next() && rs2.next()) {
-                    int total = rs1.getInt("total");
-                    int used = rs2.getInt("used");
-                    int unused = total - used;
-                    
-                    System.out.println("\n=== GENRE SUMMARY ===");
-                    System.out.println("Total genres: " + total);
-                    System.out.println("Used genres: " + used);
-                    System.out.println("Unused genres: " + unused);
-                }
-            }
-            
-        } catch (SQLException e) {
-            System.err.println("Error checking unused genres: " + e.getMessage());
-            e.printStackTrace();
-        }
+    
+    private void showEmptyMessage(String message) {
+        Text emptyText = new Text(message);
+        emptyText.setStyle("-fx-font-size: 18px; -fx-fill: #666;");
+        catalogueContainer.getChildren().add(emptyText);
+    }
+    
+    private void showErrorMessage(String message) {
+        Text errorText = new Text(message);
+        errorText.setStyle("-fx-font-size: 18px; -fx-fill: #ff0000;");
+        catalogueContainer.getChildren().add(errorText);
     }
 }
