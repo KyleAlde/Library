@@ -8,11 +8,15 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
+import javafx.event.ActionEvent;
 
 public class bookViewController {
 
     @FXML
     private Button backButton;
+
+    @FXML
+    private Button addToCartButton;
 
     @FXML
     private Text bookAuthor;
@@ -34,8 +38,12 @@ public class bookViewController {
     
     @FXML
     private Text bookTitle;
+    
+    private Book currentBook;
 
     public void setBookData(Book book) {
+        this.currentBook = book;
+        
         // Set title
         bookTitle.setText(book.getTitle());
         
@@ -74,23 +82,46 @@ public class bookViewController {
     }
     
     @FXML
-    private void handleBackButton() {
+    private void handleBackButton(ActionEvent event) {
+        System.out.println("Back button clicked in book view");
+        
         // Navigate back to the book collection using direct approach
         try {
             navigateBackToCollection();
         } catch (Exception e) {
+            System.err.println("Error in back navigation: " + e.getMessage());
             e.printStackTrace();
+        }
+    }
+    
+    @FXML
+    private void addToCart() {
+        if (currentBook != null) {
+            memberPortalController memberController = memberPortalController.getInstance();
+            if (memberController != null) {
+                memberController.addToCart(currentBook);
+                System.out.println("Added to cart from book view: " + currentBook.getTitle());
+            } else {
+                System.err.println("Could not find member portal controller!");
+            }
+        } else {
+            System.err.println("No book data available to add to cart!");
         }
     }
     
     private void navigateBackToCollection() {
         try {
+            System.out.println("Attempting to navigate back to collection...");
+            
             // Get the current scene and find the memberPortal controller
             Scene scene = backButton.getScene();
             if (scene != null) {
+                System.out.println("Scene found, getting memberPortal controller...");
+                
                 // Try to find memberPortal controller first
                 memberPortalController memberController = memberPortalController.getInstance();
                 if (memberController != null) {
+                    System.out.println("MemberPortal controller found, calling showBookCollection...");
                     memberController.showBookCollection();
                     System.out.println("Back navigation via controller successful");
                 } else {
@@ -100,6 +131,8 @@ public class bookViewController {
                     // For now, let's try to trigger the showBooks method indirectly
                     triggerShowBooks();
                 }
+            } else {
+                System.err.println("Scene is null!");
             }
         } catch (Exception e) {
             System.err.println("Back navigation failed: " + e.getMessage());

@@ -43,6 +43,46 @@ public class RequestDAO {
     //                            READ
     //==============================================================
 
+    // Get all requests for a specific borrower
+    public java.util.List<Request> getRequestsByBorrower(String borrowerId) throws SQLException {
+        java.util.List<Request> requests = new java.util.ArrayList<>();
+        String selectQuery = "SELECT * FROM borrow_requests WHERE borrower_id = ? ORDER BY request_date DESC";
+
+        try (PreparedStatement ps = db.getConnection().prepareStatement(selectQuery)) {
+            ps.setString(1, borrowerId);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                //Convert UTC into Local Time Zone
+                OffsetDateTime utcRequestDate = rs.getObject("request_date", OffsetDateTime.class);
+                ZonedDateTime manilaRequestDate = utcRequestDate.atZoneSameInstant(ZoneId.of("Asia/Manila"));
+
+                OffsetDateTime utcProcessedAt = rs.getObject("processed_at", OffsetDateTime.class);
+                ZonedDateTime tempProcessedAt = null;
+                OffsetDateTime manilaProcessedAt = null;
+
+                if (utcProcessedAt != null) {
+                    tempProcessedAt = utcProcessedAt.atZoneSameInstant(ZoneId.of("Asia/Manila"));
+                    manilaProcessedAt = tempProcessedAt.toOffsetDateTime();
+                }
+
+                requests.add(new Request(
+                    rs.getString("id"),
+                    manilaRequestDate.toOffsetDateTime(),
+                    manilaProcessedAt,
+                    RequestStatus.valueOf(rs.getString("status").toUpperCase()),
+                    rs.getString("book_id"),
+                    rs.getString("borrower_id"),
+                    rs.getString("processed_by")
+                ));
+            }
+
+            System.out.println("Query Successful - Found " + requests.size() + " requests for borrower: " + borrowerId);
+        }
+        
+        return requests;
+    }
+
     //Select borrow request
     public Request selectRequest(String id) throws SQLException{
         String selectQuery = "SELECT * FROM borrow_requests WHERE id = ?";

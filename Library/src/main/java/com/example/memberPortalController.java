@@ -15,13 +15,23 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.example.utility.UserSession;
+import com.example.model.Book;
+import com.example.utility.dao.CartDAO;
+import com.example.utility.dao.BorrowRequestDAO;
 
 public class memberPortalController {
 
     // Static reference for global access
     private static memberPortalController instance;
+    
+    // Cart management
+    private CartDAO cartDAO;
+    private BorrowRequestDAO borrowRequestDAO;
+    private cartController cartController;
     
     @FXML
     private Button closeSideBar;
@@ -73,20 +83,28 @@ public class memberPortalController {
         return instance;
     }
 
+    public memberPortalController() {
+    // CartDAO will be initialized in initialize()
+}
+
     @FXML
     private void initialize() {
         // Validate user session
         UserSession session = UserSession.getInstance();
-        if (!session.isLoggedIn() || !session.isBorrower()) {
-            System.err.println("Unauthorized access to member portal - redirecting to login");
-            // TODO: Navigate back to login screen
+        if (!session.isLoggedIn() || !"borrower".equals(session.getUserType())) {
+            System.err.println("Unauthorized access attempt to member portal");
+            // TODO: Redirect to login screen
             return;
         }
         
-        System.out.println("Member portal initialized for user: " + session.getUserId());
-        
         // Set static instance for global access
         instance = this;
+        
+        // Initialize CartDAO
+        cartDAO = new CartDAO();
+        borrowRequestDAO = new BorrowRequestDAO();
+        
+        System.out.println("Member portal controller initialized for user: " + session.getUserName());
         
         // Initially hide sidebar and remove from layout
         sideBar.setVisible(false);
@@ -197,6 +215,13 @@ public class memberPortalController {
                 });
             }
             
+            // Store the controller reference for cart page
+            if ("cart".equals(pageName)) {
+                cartController = loader.getController();
+                // Update cart display with current items
+                updateCartDisplay();
+            }
+            
             wrapper.getChildren().add(pageNode);
             loadedPages.put(pageName, wrapper);
             
@@ -303,6 +328,110 @@ public class memberPortalController {
         showAccount();
     }
 
+    // Cart management methods
+    public void addToCart(Book book) {
+        if (book == null) return;
+        
+        // Get current user ID from session
+        UserSession session = UserSession.getInstance();
+        String userId = session.getUserId();
+        
+        // Check if book is already in cart using database
+        if (cartDAO.isBookInCart(userId, book.getIsbn())) {
+            System.out.println("Book already in cart: " + book.getTitle());
+            return;
+        }
+        
+        // Add to cart using database
+        if (cartDAO.addToCart(userId, book.getIsbn())) {
+            System.out.println("Added to cart: " + book.getTitle());
+            updateCartDisplay();
+        } else {
+            System.err.println("Failed to add book to cart: " + book.getTitle());
+        }
+    }
+    
+    public void removeFromCart(Book book) {
+        // Get current user ID from session
+        UserSession session = UserSession.getInstance();
+        String userId = session.getUserId();
+        
+        // Remove from cart using database
+        if (cartDAO.removeFromCart(userId, book.getIsbn())) {
+            System.out.println("Removed from cart: " + book.getTitle());
+            updateCartDisplay();
+        } else {
+            System.err.println("Failed to remove book from cart: " + book.getTitle());
+        }
+    }
+    
+    public void updateCartDisplay() {
+        if (cartController != null) {
+            // Get cart items from database
+            UserSession session = UserSession.getInstance();
+            String userId = session.getUserId();
+            List<Book> cartItems = cartDAO.getCartItems(userId);
+            cartController.updateCartItems(cartItems);
+        }
+    }
+    
+    public List<Book> getCartItems() {
+        // Get cart items from database
+        UserSession session = UserSession.getInstance();
+        String userId = session.getUserId();
+        return cartDAO.getCartItems(userId);
+    }
+    
+    public void clearCart() {
+        // Get current user ID from session
+        UserSession session = UserSession.getInstance();
+        String userId = session.getUserId();
+        
+        // Get current cart items before clearing
+        List<Book> cartItems = cartDAO.getCartItems(userId);
+        
+        if (cartItems.isEmpty()) {
+            System.out.println("Cart is already empty");
+            return;
+        }
+        
+        // Create borrow requests for all cart items (checkout process)
+        List<String> bookIsbns = new ArrayList<>();
+        for (Book book : cartItems) {
+            bookIsbns.add(book.getIsbn());
+        }
+        
+        // Create borrow requests
+        boolean requestsCreated = borrowRequestDAO.createBorrowRequests(bookIsbns, userId);
+        
+        if (requestsCreated) {
+            System.out.println("Created " + bookIsbns.size() + " borrow requests for checkout");
+            
+            // Clear the cart after successful borrow request creation
+            if (cartDAO.clearCart(userId)) {
+                System.out.println("Cart cleared successfully after checkout");
+                updateCartDisplay();
+            } else {
+                System.err.println("Failed to clear cart after checkout");
+            }
+        } else {
+            System.err.println("Failed to create borrow requests during checkout");
+        }
+    }
+    
+    // Add a separate method for just clearing cart without creating borrow requests
+    public void clearCartWithoutCheckout() {
+        UserSession session = UserSession.getInstance();
+        String userId = session.getUserId();
+        
+        if (cartDAO.clearCart(userId)) {
+            System.out.println("Cart cleared");
+            updateCartDisplay();
+        } else {
+            System.err.println("Failed to clear cart");
+        }
+    }
+
     // Book view navigation methods
     public void showBookView(javafx.scene.Parent bookViewRoot) {
         // Create a wrapper for the book view to match the pattern used by other pages
@@ -316,8 +445,13 @@ public class memberPortalController {
     }
     
     public void showBookCollection() {
-        // Return to the normal book collection view using the same pattern
-        showBooks();
+        System.out.println("showBookCollection() called in memberPortalController");
+        
+        // Use the proper page switching system instead of direct content restoration
+        // This ensures consistent behavior with other navigation methods
+        showCatalogue();
+        
+        System.out.println("Used showCatalogue() for proper page switching");
     }
 
 }

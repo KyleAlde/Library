@@ -38,7 +38,7 @@
                         </Text>
                         <Text fx:id="itemNo" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="Text-Body" text="placeholder" />
                         <Pane HBox.hgrow="ALWAYS" />
-                        <Button fx:id="cartCheckout" mnemonicParsing="false" prefHeight="60.0" prefWidth="120.0" styleClass="CarLoan-Button" text="Checkout">
+                        <Button fx:id="cartCheckout" mnemonicParsing="false" onAction="#handleCheckout" prefHeight="60.0" prefWidth="120.0" styleClass="CarLoan-Button" text="Checkout">
                            <HBox.margin>
                               <Insets />
                            </HBox.margin>
@@ -49,9 +49,9 @@
             </StackPane>
          </bottom>
          <center>
-            <ScrollPane fitToWidth="true" BorderPane.alignment="CENTER">
+            <ScrollPane fitToWidth="true" hbarPolicy="NEVER" BorderPane.alignment="CENTER">
                <content>
-                  <VBox fx:id="cartItemContainer" prefWidth="1420.0" />
+                  <VBox fx:id="cartItemContainer" prefWidth="1420.0" spacing="20.0" />
                </content>
             </ScrollPane>
          </center>

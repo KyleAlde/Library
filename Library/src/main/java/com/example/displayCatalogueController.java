@@ -312,6 +312,9 @@ public class displayCatalogueController {
             catalogueContainer.getChildren().clear();
             genreSections.clear();
             
+            // Reset data loaded flag since we're clearing the catalogue
+            isDataLoaded = false;
+            
             if (searchQuery == null || searchQuery.trim().isEmpty()) {
                 showEmptyMessage("Please enter a search term");
                 return;

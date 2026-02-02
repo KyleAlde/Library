@@ -44,6 +44,47 @@ public class LoanDAO {
     //                            READ
     //==============================================================
 
+    // Get all loans for a specific borrower
+    public java.util.List<Loan> getLoansByBorrower(String borrowerId) throws SQLException {
+        java.util.List<Loan> loans = new java.util.ArrayList<>();
+        String selectQuery = "SELECT * FROM loans WHERE borrower_id = ? ORDER BY loan_date DESC";
+
+        try (PreparedStatement ps = db.getConnection().prepareStatement(selectQuery)) {
+            ps.setString(1, borrowerId);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                //Convert UTC into Local Time Zone
+                OffsetDateTime utcLoanDate = rs.getObject("loan_date", OffsetDateTime.class);
+                ZonedDateTime manilaLoanDate = utcLoanDate.atZoneSameInstant(ZoneId.of("Asia/Manila"));
+
+                OffsetDateTime utcReturnDate = rs.getObject("return_date", OffsetDateTime.class);
+                ZonedDateTime tempManilaReturnDate = null;
+                OffsetDateTime manilaReturnDate = null;
+
+                if (utcReturnDate != null) {
+                    tempManilaReturnDate = utcReturnDate.atZoneSameInstant(ZoneId.of("Asia/Manila"));
+                    manilaReturnDate = tempManilaReturnDate.toOffsetDateTime();
+                }
+                
+                loans.add(new Loan(
+                    rs.getString("id"),
+                    manilaLoanDate.toOffsetDateTime(),
+                    rs.getDate("due_date").toLocalDate(),
+                    manilaReturnDate,
+                    rs.getBigDecimal("fine_amount"),
+                    rs.getString("book_id"),
+                    rs.getString("borrower_id"),
+                    rs.getString("processed_by")
+                ));
+            }
+
+            System.out.println("Query Successful - Found " + loans.size() + " loans for borrower: " + borrowerId);
+        }
+        
+        return loans;
+    }
+
     //Select a loan from the database
     public Loan selectLoan(String id) throws SQLException {
         String selectLoan = "SELECT * FROM loans WHERE id = ?";

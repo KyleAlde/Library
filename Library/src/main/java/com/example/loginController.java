@@ -64,10 +64,17 @@ public class loginController {
                 Parent root = loader.load();
                 
                 Stage stage = (Stage) returnLogin.getScene().getWindow();
-                Scene scene = new Scene(root, 1920, 1080);
-                stage.setScene(scene);
-                stage.setFullScreen(true);
-                stage.show();
+                Scene scene = stage.getScene();
+                
+                // Keep the current window state, just replace the scene content
+                scene.setRoot(root);
+                
+                // Maximize the window if not already maximized
+                if (!stage.isMaximized()) {
+                    stage.setMaximized(true);
+                }
+                
+                System.out.println("Switched to " + userData.userType + " portal");
             } catch (IOException e) {
                 e.printStackTrace();
                 showError("Error loading portal.");

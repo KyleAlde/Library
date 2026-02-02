@@ -33,15 +33,7 @@ public class App extends Application {
         
         // Create a loading screen for faster initial display
         StackPane loadingRoot = createLoadingScreen();
-        scene = new Scene(loadingRoot, 1920, 1080);
-        
-        // Set up key handler for fullscreen toggle
-        scene.setOnKeyPressed(event -> {
-            if (event.getCode() == KeyCode.ESCAPE) {
-                stage.setFullScreen(!stage.isFullScreen());
-                stage.initStyle(!stage.isFullScreen() ? StageStyle.DECORATED : StageStyle.UNDECORATED);
-            }
-        });
+        scene = new Scene(loadingRoot, 600, 400);
         
         stage.setScene(scene);
         stage.show();

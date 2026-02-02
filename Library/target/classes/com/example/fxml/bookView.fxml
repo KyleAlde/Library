@@ -62,7 +62,7 @@
                               <Insets left="20.0" top="40.0" />
                            </VBox.margin>
                         </Text>
-                        <Button mnemonicParsing="false" prefHeight="60.0" prefWidth="160.0" styleClass="CarLoan-Button" text="Add to Cart">
+                        <Button fx:id="addToCartButton" mnemonicParsing="false" onAction="#addToCart" prefHeight="60.0" prefWidth="160.0" styleClass="CarLoan-Button" text="Add to Cart">
                            <VBox.margin>
                               <Insets left="20.0" top="20.0" />
                            </VBox.margin>

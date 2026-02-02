@@ -1,86 +1,167 @@
 package com.example.utility.dao;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import com.example.model.Book;
+import com.example.utility.DatabaseConnection;
+
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.example.utility.DatabaseConnection;
-
 public class CartDAO {
-    private final DatabaseConnection db = new DatabaseConnection();
-
-    //==============================================================
-    //                           CREATE
-    //==============================================================
-
-    //Add item to cart
-    public void addToCart(String bookId, String borrowerId) throws SQLException {
-        String insertQuery = "INSERT INTO cart (book_id, borrower_id) VALUES (?, ?)";
-
-        try (PreparedStatement ps = db.getConnection().prepareStatement(insertQuery)) {
-            ps.setString(1, bookId);
-            ps.setString(2, borrowerId);
-            ps.executeUpdate();
-
-            System.out.println("Item added to cart successfully");
+    
+    private DatabaseConnection dbConnection;
+    
+    public CartDAO() {
+        this.dbConnection = new DatabaseConnection();
+    }
+    
+    // Add book to user's cart
+    public boolean addToCart(String userId, String bookIsbn) {
+        String sql = "INSERT INTO cart (book_id, borrower_id) VALUES (?, ?) " +
+                     "ON CONFLICT (book_id, borrower_id) DO NOTHING";
+        
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            
+            // Truncate user ID to 10 characters to match database constraint
+            String truncatedUserId = userId.length() > 10 ? userId.substring(0, 10) : userId;
+            
+            pstmt.setString(1, bookIsbn);
+            pstmt.setString(2, truncatedUserId);
+            
+            int rowsAffected = pstmt.executeUpdate();
+            return rowsAffected > 0;
+            
+        } catch (SQLException e) {
+            System.err.println("Error adding to cart: " + e.getMessage());
+            return false;
         }
     }
     
-    //==============================================================
-    //                            READ
-    //==============================================================
-
-    //Get cart item IDs for a borrower
-    public List<String> getCartItems(String borrowerId) throws SQLException {
-        List<String> cartItemIds = new ArrayList<>();
-        String selectCartBookIds = "SELECT book_id FROM cart WHERE borrower_id = ?";
-
-        try (PreparedStatement ps = db.getConnection().prepareStatement(selectCartBookIds)) {
-            ps.setString(1, borrowerId);
-            ResultSet rs = ps.executeQuery();
-
+    // Remove book from user's cart
+    public boolean removeFromCart(String userId, String bookIsbn) {
+        String sql = "DELETE FROM cart WHERE borrower_id = ? AND book_id = ?";
+        
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            
+            // Truncate user ID to 10 characters to match database constraint
+            String truncatedUserId = userId.length() > 10 ? userId.substring(0, 10) : userId;
+            
+            pstmt.setString(1, truncatedUserId);
+            pstmt.setString(2, bookIsbn);
+            
+            int rowsAffected = pstmt.executeUpdate();
+            return rowsAffected > 0;
+            
+        } catch (SQLException e) {
+            System.err.println("Error removing from cart: " + e.getMessage());
+            return false;
+        }
+    }
+    
+    // Get all books in user's cart
+    public List<Book> getCartItems(String userId) {
+        List<Book> cartItems = new ArrayList<>();
+        String sql = "SELECT b.* FROM books b " +
+                     "JOIN cart c ON b.isbn = c.book_id " +
+                     "WHERE c.borrower_id = ? " +
+                     "ORDER BY c.book_id";
+        
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            
+            // Truncate user ID to 10 characters to match database constraint
+            String truncatedUserId = userId.length() > 10 ? userId.substring(0, 10) : userId;
+            
+            pstmt.setString(1, truncatedUserId);
+            ResultSet rs = pstmt.executeQuery();
+            
             while (rs.next()) {
-                String bookId = rs.getString("book_id");
-                cartItemIds.add(bookId);
+                Book book = new Book(
+                    rs.getString("isbn"),
+                    rs.getString("title"),
+                    rs.getString("author"),
+                    rs.getString("synopsis"),
+                    rs.getString("publisher"),
+                    rs.getDate("publication_date").toLocalDate(),
+                    Book.BookStatus.valueOf(rs.getString("status").toUpperCase()),
+                    rs.getString("cover_id")
+                );
+                
+                cartItems.add(book);
             }
+            
+        } catch (SQLException e) {
+            System.err.println("Error getting cart items: " + e.getMessage());
         }
-
-        System.out.println("Query Successful - Retrieved " + cartItemIds.size() + " cart item IDs for borrower " + borrowerId);
-        return cartItemIds;
+        
+        return cartItems;
     }
-
-    //==============================================================
-    //                           DELETE
-    //==============================================================
-
-    //Remove item from cart
-    public void removeItem(String bookId, String borrowerId) throws SQLException {
-        String deleteQuery = "DELETE FROM cart WHERE book_id = ? AND borrower_id = ?";
-
-        try (PreparedStatement ps = db.getConnection().prepareStatement(deleteQuery)) {
-            ps.setString(1, bookId);
-            ps.setString(2, borrowerId);
-            int rowsAffected = ps.executeUpdate();
-
-            if (rowsAffected > 0) {
-                System.out.println("Item removed from cart successfully");
-            } else {
-                System.out.println("No matching item found in cart to remove");
+    
+    // Clear user's cart
+    public boolean clearCart(String userId) {
+        String sql = "DELETE FROM cart WHERE borrower_id = ?";
+        
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            
+            // Truncate user ID to 10 characters to match database constraint
+            String truncatedUserId = userId.length() > 10 ? userId.substring(0, 10) : userId;
+            
+            pstmt.setString(1, truncatedUserId);
+            int rowsAffected = pstmt.executeUpdate();
+            return rowsAffected >= 0; // Returns true even if no items to delete
+            
+        } catch (SQLException e) {
+            System.err.println("Error clearing cart: " + e.getMessage());
+            return false;
+        }
+    }
+    
+    // Check if book is in user's cart
+    public boolean isBookInCart(String userId, String bookIsbn) {
+        String sql = "SELECT 1 FROM cart WHERE borrower_id = ? AND book_id = ?";
+        
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            
+            // Truncate user ID to 10 characters to match database constraint
+            String truncatedUserId = userId.length() > 10 ? userId.substring(0, 10) : userId;
+            
+            pstmt.setString(1, truncatedUserId);
+            pstmt.setString(2, bookIsbn);
+            ResultSet rs = pstmt.executeQuery();
+            
+            return rs.next();
+            
+        } catch (SQLException e) {
+            System.err.println("Error checking cart: " + e.getMessage());
+            return false;
+        }
+    }
+    
+    // Get cart item count for user
+    public int getCartItemCount(String userId) {
+        String sql = "SELECT COUNT(*) FROM cart WHERE borrower_id = ?";
+        
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            
+            // Truncate user ID to 10 characters to match database constraint
+            String truncatedUserId = userId.length() > 10 ? userId.substring(0, 10) : userId;
+            
+            pstmt.setString(1, truncatedUserId);
+            ResultSet rs = pstmt.executeQuery();
+            
+            if (rs.next()) {
+                return rs.getInt(1);
             }
+            
+        } catch (SQLException e) {
+            System.err.println("Error getting cart count: " + e.getMessage());
         }
-    }
-
-    //Remove all items from a borrower's cart
-    public void removeAllItems(String borrowerId) throws SQLException {
-        String deleteQuery = "DELETE FROM cart WHERE borrower_id = ?";
-
-        try (PreparedStatement ps = db.getConnection().prepareStatement(deleteQuery)) {
-            ps.setString(1, borrowerId);
-            int rowsAffected = ps.executeUpdate();
-
-            System.out.println(rowsAffected + " items removed from cart for borrower " + borrowerId);
-        }
+        
+        return 0;
     }
 }

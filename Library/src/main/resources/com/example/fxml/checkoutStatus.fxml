@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Text?>
+
+<HBox fx:id="accountCheckoutStatus" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="60.0" prefWidth="710.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.checkOutStatusController">
+   <children>
+      <StackPane prefHeight="150.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+         <children>
+            <Text fx:id="accountBookTitle" strokeType="OUTSIDE" strokeWidth="0.0" text="Title" wrappingWidth="200.0" />
+         </children>
+      </StackPane>
+      <StackPane prefHeight="150.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+         <children>
+            <Text fx:id="accountBookAuthor" strokeType="OUTSIDE" strokeWidth="0.0" text="Author" wrappingWidth="200.0" />
+         </children>
+      </StackPane>
+      <StackPane prefHeight="150.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+         <children>
+            <Text fx:id="accountBookStatus" strokeType="OUTSIDE" strokeWidth="0.0" text="status" wrappingWidth="200.0" />
+         </children>
+      </StackPane>
+   </children>
+</HBox>
