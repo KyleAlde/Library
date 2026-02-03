@@ -1,8 +1,13 @@
 package com.example.utility.dao;
 
 import com.example.utility.DatabaseConnection;
+import com.example.model.Request;
+import com.example.model.Request.RequestStatus;
 
 import java.sql.*;
+import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class BorrowRequestDAO {
@@ -145,5 +150,48 @@ public class BorrowRequestDAO {
         public String getRequestId() { return requestId; }
         public String getBookId() { return bookId; }
         public String getStatus() { return status; }
+    }
+    
+    // Get all requests for librarian management
+    public List<Request> getAllRequests() throws SQLException {
+        List<Request> requests = new ArrayList<>();
+        String sql = "SELECT id, request_date, processed_at, status, book_id, borrower_id, processed_by FROM borrow_requests ORDER BY request_date DESC";
+        
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql);
+             ResultSet rs = pstmt.executeQuery()) {
+            
+            while (rs.next()) {
+                Request request = new Request(
+                    rs.getString("id"),
+                    rs.getTimestamp("request_date") != null ? 
+                        rs.getTimestamp("request_date").toLocalDateTime().atOffset(OffsetDateTime.now().getOffset()) : null,
+                    rs.getTimestamp("processed_at") != null ? 
+                        rs.getTimestamp("processed_at").toLocalDateTime().atOffset(OffsetDateTime.now().getOffset()) : null,
+                    RequestStatus.valueOf(rs.getString("status").toUpperCase()),
+                    rs.getString("book_id"),
+                    rs.getString("borrower_id"),
+                    rs.getString("processed_by")
+                );
+                requests.add(request);
+            }
+        }
+        
+        return requests;
+    }
+    
+    // Update request status
+    public boolean updateRequestStatus(String requestId, RequestStatus newStatus) throws SQLException {
+        String sql = "UPDATE borrow_requests SET status = ?, processed_at = CURRENT_TIMESTAMP WHERE id = ?";
+        
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            
+            pstmt.setString(1, newStatus.toString().toLowerCase());
+            pstmt.setString(2, requestId);
+            
+            int rowsAffected = pstmt.executeUpdate();
+            return rowsAffected > 0;
+        }
     }
 }

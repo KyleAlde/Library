@@ -143,4 +143,16 @@ public class LoanDAO {
             System.out.println("Query Successful");
         }
     }
+    
+    // Return a book (update return date)
+    public boolean returnBook(String loanId) throws SQLException {
+        String sql = "UPDATE loans SET return_date = CURRENT_TIMESTAMP WHERE id = ?";
+        
+        try (PreparedStatement ps = db.getConnection().prepareStatement(sql)) {
+            ps.setString(1, loanId);
+            
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected > 0;
+        }
+    }
 }

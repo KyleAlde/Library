@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
@@ -52,7 +53,7 @@
                               <TextField fx:id="insertLastName" promptText="Last Name" />
                               <TextField fx:id="insertFirstName" promptText="First Name" />
                               <TextField fx:id="insertAge" promptText="Age" />
-                              <TextField fx:id="insertType" promptText="Type" />
+                              <ComboBox fx:id="insertType" promptText="Type" />
                               <TextField fx:id="insertEmail" promptText="Email" />
                               <TextField fx:id="insertPassword" promptText="Password" />
                            </children></HBox>

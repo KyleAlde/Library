@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
@@ -12,7 +11,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1000.0" prefWidth="1420.0" stylesheets="@../style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.manageAccountsController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1000.0" prefWidth="1420.0" stylesheets="@../style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.manageRequestsController">
    
    <children>
       <BorderPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -31,37 +30,32 @@
             <VBox alignment="TOP_CENTER" prefWidth="1420.0" BorderPane.alignment="TOP_CENTER">
                <children>
                   <!-- FIXED TABLEVIEW: Removed horizontal scrollbar -->
-                  <TableView fx:id="borrowerList" maxWidth="Infinity" prefHeight="800.0">
+                  <TableView fx:id="requestList" maxWidth="Infinity" prefHeight="800.0">
                     <columnResizePolicy>
                       <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                     </columnResizePolicy>
                     <columns>
-                      <TableColumn fx:id="id" prefWidth="120" text="ID" />
-                      <TableColumn fx:id="last_name" prefWidth="180" text="Last Name" />
-                        <TableColumn fx:id="first_name" prefWidth="180" text="First Name" />
-                        <TableColumn fx:id="age" prefWidth="80" text="Age" />
-                        <TableColumn fx:id="type" prefWidth="120" text="Type" />
-                        <TableColumn fx:id="email" prefWidth="300" text="Email" />
-                        <TableColumn fx:id="password" prefWidth="180" text="Password" />
+                      <TableColumn fx:id="id" prefWidth="-1.0" text="Request ID" />
+                      <TableColumn fx:id="requestDate" prefWidth="-1.0" text="Request Date" />
+                        <TableColumn fx:id="status" prefWidth="-1.0" text="status" />
+                        <TableColumn fx:id="BookID" prefWidth="-1.0" text="Book ID" />
+                        <TableColumn fx:id="borrowerID" prefWidth="-1.0" text="Borrower ID" />
                     </columns>
                   </TableView>
                   <VBox alignment="CENTER" prefHeight="100.0" prefWidth="1420.0" spacing="10.0">
                      <children>
                         <HBox alignment="TOP_CENTER" prefWidth="1420.0" spacing="20.0">
                            <children>
-                              <TextField fx:id="insertID" promptText="ID" />
-                              <TextField fx:id="insertLastName" promptText="Last Name" />
-                              <TextField fx:id="insertFirstName" promptText="First Name" />
-                              <TextField fx:id="insertAge" promptText="Age" />
-                              <ComboBox fx:id="insertType" promptText="Type" />
-                              <TextField fx:id="insertEmail" promptText="Email" />
-                              <TextField fx:id="insertPassword" promptText="Password" />
+                              <TextField fx:id="displayRequestID" editable="false" promptText="Request ID" />
+                              <TextField fx:id="displayRequestDate" editable="false" promptText="Request Date" />
+                              <TextField fx:id="displayStatus" editable="false" promptText="Status" />
+                              <TextField fx:id="displayBookID" editable="false" promptText="Book ID" />
+                              <TextField fx:id="displayBorrowerID" editable="false" promptText="Borrower ID" />
                            </children></HBox>
                         <HBox alignment="CENTER" prefWidth="1420.0" spacing="20.0">
                            <children>
-                              <Button fx:id="addUser" mnemonicParsing="false" text="Add User" />
-                              <Button fx:id="editUser" mnemonicParsing="false" text="Edit User" />
-                              <Button fx:id="deleteUser" mnemonicParsing="false" text="Delete User" />
+                              <Button fx:id="approveRequest" mnemonicParsing="false" onAction="#onActionApproveRequest" prefWidth="120.0" text="Approve" />
+                              <Button fx:id="denyRequest" mnemonicParsing="false" onAction="#onActionDenyRequest" prefWidth="120.0" text="Deny" />
                            </children>
                         </HBox>
                      </children>

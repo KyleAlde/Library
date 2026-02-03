@@ -22,7 +22,7 @@ public class BookDAO {
                        String publisher, LocalDate publicationDate) throws SQLException {
         String insertQuery = """
             INSERT INTO books (isbn, title, author, publisher, publication_date, synopsis, status) 
-            VALUES (?, ?, ?, ?, ?, ?, ?)
+            VALUES (?, ?, ?, ?, ?, ?, CAST(? AS book_status))
             """;
 
         try (PreparedStatement ps = db.getConnection().prepareStatement(insertQuery)) {
@@ -77,8 +77,113 @@ public class BookDAO {
     }
 
     //==============================================================
+    //                            UPDATE
+    //==============================================================
+
+    // Update book information
+    public void updateBook(String isbn, String title, String synopsis, String author, 
+                         String publisher, LocalDate publicationDate) throws SQLException {
+        String updateQuery = """
+            UPDATE books 
+            SET title = ?, synopsis = ?, author = ?, publisher = ?, publication_date = ?
+            WHERE isbn = ?
+            """;
+
+        try (PreparedStatement ps = db.getConnection().prepareStatement(updateQuery)) {
+            ps.setString(1, title);
+            ps.setString(2, synopsis);
+            ps.setString(3, author);
+            ps.setString(4, publisher);
+            ps.setDate(5, java.sql.Date.valueOf(publicationDate));
+            ps.setString(6, isbn);
+            ps.executeUpdate();
+
+            System.out.println("Book updated successfully: " + title);
+        }
+    }
+
+    // Update book status
+    public void updateStatus(String isbn, String status) throws SQLException {
+        String updateStatusQuery = "UPDATE books SET status = CAST(? AS book_status) WHERE isbn = ?";
+
+        try (PreparedStatement ps = db.getConnection().prepareStatement(updateStatusQuery)) {
+            ps.setString(1, status);
+            ps.setString(2, isbn);
+            ps.executeUpdate();
+
+            System.out.println("Book status updated: " + isbn + " -> " + status);
+        }
+    }
+
+    //==============================================================
+    //                            DELETE
+    //==============================================================
+
+    // Delete a book from the database
+    public void deleteBook(String isbn) throws SQLException {
+        // First delete related records
+        deleteBookGenres(isbn);
+        deleteBookFormats(isbn);
+        
+        // Then delete the book
+        String deleteQuery = "DELETE FROM books WHERE isbn = ?";
+
+        try (PreparedStatement ps = db.getConnection().prepareStatement(deleteQuery)) {
+            ps.setString(1, isbn);
+            int rowsAffected = ps.executeUpdate();
+            
+            if (rowsAffected > 0) {
+                System.out.println("Book deleted successfully: " + isbn);
+            } else {
+                System.out.println("No book found with ISBN: " + isbn);
+            }
+        }
+    }
+
+    // Delete book genres
+    private void deleteBookGenres(String isbn) throws SQLException {
+        String deleteGenresQuery = "DELETE FROM book_genres WHERE book_id = ?";
+        
+        try (PreparedStatement ps = db.getConnection().prepareStatement(deleteGenresQuery)) {
+            ps.setString(1, isbn);
+            ps.executeUpdate();
+        }
+    }
+
+    // Delete book formats
+    private void deleteBookFormats(String isbn) throws SQLException {
+        String deleteFormatsQuery = "DELETE FROM available_formats WHERE isbn = ?";
+        
+        try (PreparedStatement ps = db.getConnection().prepareStatement(deleteFormatsQuery)) {
+            ps.setString(1, isbn);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            // Table doesn't exist, ignore silently
+            if (!e.getMessage().contains("does not exist")) {
+                throw e;
+            }
+        }
+    }
+
+    //==============================================================
     //                            READ
     //==============================================================
+
+    // Get all available genres
+    public List<String> getAllGenres() throws SQLException {
+        List<String> genres = new ArrayList<>();
+        String query = "SELECT name FROM genres ORDER BY name";
+
+        try (PreparedStatement ps = db.getConnection().prepareStatement(query)) {
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                genres.add(rs.getString("name"));
+            }
+        }
+
+        System.out.println("Retrieved " + genres.size() + " genres");
+        return genres;
+    }
 
     // Select a book from the database
     public Book getBook(String isbn) throws SQLException {

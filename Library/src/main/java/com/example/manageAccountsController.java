@@ -1,6 +1,7 @@
 package com.example;
 
 import com.example.model.Borrower;
+import com.example.model.Borrower.BorrowerType;
 import com.example.utility.dao.BorrowerDAO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -10,6 +11,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import java.net.URL;
@@ -71,7 +73,7 @@ public class manageAccountsController implements Initializable {
     private TextField insertPassword;
 
     @FXML
-    private TextField insertType;
+    private ComboBox<String> insertType;
     
     private BorrowerDAO borrowerDAO;
     private ObservableList<Borrower> borrowerData;
@@ -80,6 +82,7 @@ public class manageAccountsController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         borrowerDAO = new BorrowerDAO();
         setupTableColumns();
+        setupTypeComboBox();
         loadBorrowerData();
         setupButtonHandlers();
     }
@@ -107,6 +110,14 @@ public class manageAccountsController implements Initializable {
         borrowerList.setStyle("-fx-font-family: 'Segoe UI'; -fx-font-size: 16px;");
     }
     
+    private void setupTypeComboBox() {
+        // Use values from BorrowerType enum for consistency
+        for (BorrowerType type : BorrowerType.values()) {
+            insertType.getItems().add(type.toString());
+        }
+        insertType.setValue(BorrowerType.STUDENT.toString()); // Set default value
+    }
+    
     private void setupButtonHandlers() {
         addUser.setOnAction(event -> handleAddUser());
         editUser.setOnAction(event -> handleEditUser());
@@ -126,7 +137,7 @@ public class manageAccountsController implements Initializable {
         insertLastName.setText(borrower.getLastName());
         insertFirstName.setText(borrower.getFirstName());
         insertAge.setText(String.valueOf(borrower.getAge()));
-        insertType.setText(borrower.getType().toString());
+        insertType.setValue(borrower.getType().toString());
         insertEmail.setText(borrower.getEmail());
         insertPassword.setText(borrower.getPassword());
     }
@@ -136,7 +147,7 @@ public class manageAccountsController implements Initializable {
         insertLastName.clear();
         insertFirstName.clear();
         insertAge.clear();
-        insertType.clear();
+        insertType.setValue(null);
         insertEmail.clear();
         insertPassword.clear();
     }
@@ -167,7 +178,7 @@ public class manageAccountsController implements Initializable {
             String lastName = insertLastName.getText().trim();
             String firstName = insertFirstName.getText().trim();
             int age = Integer.parseInt(insertAge.getText().trim());
-            String type = insertType.getText().trim();
+            String type = insertType.getValue() != null ? insertType.getValue().trim() : "";
             String email = insertEmail.getText().trim();
             String password = insertPassword.getText().trim();
             
@@ -207,7 +218,7 @@ public class manageAccountsController implements Initializable {
             borrowerDAO.updateBorrower(borrowerId, "last_name", insertLastName.getText().trim());
             borrowerDAO.updateBorrower(borrowerId, "first_name", insertFirstName.getText().trim());
             borrowerDAO.updateBorrower(borrowerId, "age", insertAge.getText().trim());
-            borrowerDAO.updateBorrower(borrowerId, "type", insertType.getText().trim());
+            borrowerDAO.updateBorrower(borrowerId, "type", insertType.getValue() != null ? insertType.getValue().trim() : "");
             borrowerDAO.updateBorrower(borrowerId, "email", insertEmail.getText().trim());
             borrowerDAO.updateBorrower(borrowerId, "password", insertPassword.getText().trim());
             
@@ -263,7 +274,7 @@ public class manageAccountsController implements Initializable {
         if (insertLastName.getText().trim().isEmpty() ||
             insertFirstName.getText().trim().isEmpty() ||
             insertAge.getText().trim().isEmpty() ||
-            insertType.getText().trim().isEmpty() ||
+            insertType.getValue() == null || insertType.getValue().trim().isEmpty() ||
             insertEmail.getText().trim().isEmpty() ||
             insertPassword.getText().trim().isEmpty()) {
             

@@ -4,15 +4,11 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -69,10 +65,7 @@ public class librarianPortalController {
         sideBar.setVisible(false);
         imageHeader.setLeft(null);
         
-        // Preload all pages for efficient navigation
-        preloadPages();
-        
-        // Show initial page
+        // Show initial page (will load on-demand)
         showInitialPage();
         
         // Setup sidebar toggle
@@ -91,12 +84,18 @@ public class librarianPortalController {
         });
     }
     
-    // Preload all pages for efficient navigation
-    private void preloadPages() {
-        loadPageOnce("accounts", "LibrarianPage/manageAccounts.fxml");
-        loadPageOnce("books", "LibrarianPage/manageBooks.fxml");
-        // Add other pages when they exist
-        // loadPageOnce("requests", "LibrarianPage/manageRequests.fxml");
+    // Get FXML path for a page
+    private String getFxmlPath(String pageName) {
+        switch (pageName) {
+            case "accounts":
+                return "LibrarianPage/manageAccounts.fxml";
+            case "books":
+                return "LibrarianPage/manageBooks.fxml";
+            case "requests":
+                return "LibrarianPage/manageRequests.fxml";
+            default:
+                return null;
+        }
     }
     
     // Load a page once and cache it
@@ -124,14 +123,23 @@ public class librarianPortalController {
         switchToPage("accounts");
     }
     
-    // Efficient page switching using cached pages
+    // Lazy loading page switching - loads pages on-demand
     private void switchToPage(String pageName) {
         Node page = loadedPages.get(pageName);
+        if (page == null) {
+            // Load page on-demand if not already cached
+            String fxmlPath = getFxmlPath(pageName);
+            if (fxmlPath != null) {
+                loadPageOnce(pageName, fxmlPath);
+                page = loadedPages.get(pageName);
+            }
+        }
+        
         if (page != null) {
             contentContainer.getChildren().setAll(page);
             System.out.println("Switched to " + pageName + " page");
         } else {
-            System.err.println("Page " + pageName + " not found in cache");
+            System.err.println("Failed to load " + pageName + " page");
         }
     }
 
@@ -147,8 +155,7 @@ public class librarianPortalController {
 
     @FXML
     void handleRequestsButton(ActionEvent event) {
-        // TODO: Implement when manageRequests.fxml exists
-        System.out.println("Manage Requests - Coming Soon");
+        switchToPage("requests");
     }
 
 }

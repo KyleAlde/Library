@@ -193,12 +193,10 @@ public class manageBooksController {
             if (bookStatus == null) return;
             
             if (isEditMode) {
-                // Update existing book - NOTE: Your DAO doesn't have update method
-                // We'll delete and re-add for now
-                bookDAO.deleteBook(currentEditIsbn);
-                bookDAO.addBook(insertIsbn.getText(), insertTitle.getText(), 
-                              insertSynopsis.getText(), insertAuthor.getText(),
-                              insertPublisher.getText(), pubDate);
+                // Update existing book
+                bookDAO.updateBook(insertIsbn.getText(), insertTitle.getText(), 
+                                 insertSynopsis.getText(), insertAuthor.getText(),
+                                 insertPublisher.getText(), pubDate);
                 bookDAO.updateStatus(insertIsbn.getText(), bookStatus.toString());
                 
                 showAlert("Success", "Book updated successfully!", AlertType.INFORMATION);

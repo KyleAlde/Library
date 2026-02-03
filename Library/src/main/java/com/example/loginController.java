@@ -59,7 +59,7 @@ public class loginController {
             
             // Login successful - navigate to appropriate portal
             try {
-                String fxmlPath = "librarian".equals(userData.userType) ? "fxml/librarianPortal.fxml" : "fxml/memberPortal.fxml";
+                String fxmlPath = "librarian".equals(userData.userType) ? "fxml/LibrarianPage/librarianPortal.fxml" : "fxml/memberPortal.fxml";
                 FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
                 Parent root = loader.load();
                 

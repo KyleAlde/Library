@@ -5,24 +5,70 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="1420.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.loanItemController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="1420.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.loanItemController">
    <children>
-      <HBox fx:id="cartItemContainer" alignment="CENTER_LEFT" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <HBox fx:id="cartItemContainer" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Pane fx:id="bookCover" prefHeight="100.0" prefWidth="160.0" />
-            <Pane HBox.hgrow="ALWAYS" />
-            <Text fx:id="bookAuthor" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="Text-Body" text="Author" wrappingWidth="260.0" />
-            <Text fx:id="bookTitle" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="Text-Body" text="Title" wrappingWidth="260.0" />
-            <Text fx:id="bookPublisher" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="Text-Body" text="Publisher" wrappingWidth="260.0" />
-            <Text fx:id="dueDate" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="Text-Body" text="Due Date" wrappingWidth="260.0" />
-            <CheckBox fx:id="returnItem" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="60.0" prefWidth="120.0" textAlignment="CENTER">
+            <StackPane alignment="TOP_LEFT">
+               <children>
+                  <Text fx:id="bookAuthor" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="Text-Body" text="Author" wrappingWidth="300.0" />
+               </children>
+               <padding>
+                  <Insets left="30.0" top="30.0" />
+               </padding>
                <HBox.margin>
                   <Insets />
                </HBox.margin>
-            </CheckBox>
+            </StackPane>
+            <StackPane alignment="TOP_LEFT" HBox.hgrow="ALWAYS">
+               <children>
+                  <Text fx:id="bookTitle" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="Text-Body" text="Title" wrappingWidth="300.0" />
+               </children>
+               <padding>
+                  <Insets left="30.0" top="30.0" />
+               </padding>
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+            </StackPane>
+            <StackPane alignment="TOP_LEFT" HBox.hgrow="ALWAYS">
+               <children>
+                  <Text fx:id="bookPublisher" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="Text-Body" text="Publisher" wrappingWidth="300.0" />
+               </children>
+               <padding>
+                  <Insets left="30.0" top="30.0" />
+               </padding>
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+            </StackPane>
+            <StackPane alignment="TOP_LEFT" HBox.hgrow="ALWAYS">
+               <children>
+                  <Text fx:id="dueDate" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="Text-Body" text="Due Date" wrappingWidth="300.0" />
+               </children>
+               <padding>
+                  <Insets left="30.0" top="30.0" />
+               </padding>
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+            </StackPane>
             <Pane HBox.hgrow="ALWAYS" />
+            <StackPane>
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+               <children>
+                  <CheckBox fx:id="returnItem" mnemonicParsing="false" prefHeight="60.0" prefWidth="120.0" text="Return">
+                     <StackPane.margin>
+                        <Insets right="20.0" />
+                     </StackPane.margin>
+                  </CheckBox>
+               </children>
+            </StackPane>
          </children>
       </HBox>
    </children>

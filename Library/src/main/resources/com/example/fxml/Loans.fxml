@@ -38,7 +38,7 @@
                         </Text>
                         <Text fx:id="loanItemNo" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="Text-Body" text="placeholder" />
                         <Pane HBox.hgrow="ALWAYS" />
-                        <Button fx:id="loansReturn" mnemonicParsing="false" prefHeight="60.0" prefWidth="120.0" styleClass="CarLoan-Button" text="Checkout">
+                        <Button fx:id="loansReturn" mnemonicParsing="false" prefHeight="60.0" prefWidth="120.0" styleClass="CarLoan-Button" text="Return">
                            <HBox.margin>
                               <Insets />
                            </HBox.margin>
