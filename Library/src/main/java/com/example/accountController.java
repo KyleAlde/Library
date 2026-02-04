@@ -5,7 +5,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import java.io.IOException;
@@ -71,7 +70,7 @@ public class accountController {
         try {
             // Create a status controller to load the data
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/fxml/checkoutStatus.fxml"));
-            HBox statusContainer = loader.load();
+            VBox statusContainer = loader.load();
             // The checkout status will load automatically in initialize()
             
             // Add to the status container

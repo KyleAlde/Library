@@ -10,24 +10,19 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.control.Label;
-import javafx.scene.control.Separator;
-import javafx.geometry.Insets;
 
 import java.util.List;
 
 public class checkOutStatusController {
 
     @FXML
-    private Text accountBookAuthor;
+    private VBox accountCheckoutStatus;
 
     @FXML
-    private Text accountBookStatus;
+    private Text sectionHeader;
 
     @FXML
-    private Text accountBookTitle;
-
-    @FXML
-    private HBox accountCheckoutStatus;
+    private VBox requestsContainer;
 
     private RequestDAO requestDAO;
     private BookDAO bookDAO;
@@ -49,36 +44,24 @@ public class checkOutStatusController {
             String userId = UserSession.getInstance().getUserId();
             System.out.println("DEBUG: Loading checkout requests for user: " + userId);
             
+            // Clear existing requests
+            requestsContainer.getChildren().clear();
+            
             // Get pending requests for current user
             List<Request> requests = requestDAO.getRequestsByBorrower(userId);
             
             if (requests.isEmpty()) {
                 // Show no pending requests message
-                accountBookTitle.setText("No pending checkout requests");
-                accountBookAuthor.setText("");
-                accountBookStatus.setText("None");
-                accountBookStatus.setStyle("-fx-fill: #27ae60;"); // Green
+                Label noRequestsLabel = new Label("No pending checkout requests");
+                noRequestsLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: #27ae60;");
+                requestsContainer.getChildren().add(noRequestsLabel);
             } else {
-                // Show the most recent request (or first one)
-                Request request = requests.get(0);
-                Book book = bookDAO.getBook(request.getBookId());
-                
-                if (book != null) {
-                    accountBookTitle.setText(book.getTitle());
-                    accountBookAuthor.setText(book.getAuthor());
-                    accountBookStatus.setText(request.getStatus().toString());
-                    
-                    // Set color based on status
-                    setStatusColor(request.getStatus().toString());
-                } else {
-                    accountBookTitle.setText("Book not found");
-                    accountBookAuthor.setText(request.getBookId());
-                    accountBookStatus.setText(request.getStatus().toString());
-                    setStatusColor(request.getStatus().toString());
+                // Show all requests
+                for (Request request : requests) {
+                    displayRequest(request);
                 }
                 
-                System.out.println("DEBUG: Loaded request for book: " + request.getBookId() + 
-                                 " with status: " + request.getStatus());
+                System.out.println("DEBUG: Loaded " + requests.size() + " requests for user");
             }
             
         } catch (Exception e) {
@@ -86,41 +69,74 @@ public class checkOutStatusController {
             e.printStackTrace();
             
             // Show error message
-            accountBookTitle.setText("Error loading requests");
-            accountBookAuthor.setText("");
-            accountBookStatus.setText("Error");
-            accountBookStatus.setStyle("-fx-fill: #e74c3c;"); // Red
+            Label errorLabel = new Label("Error loading requests");
+            errorLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: #e74c3c;");
+            requestsContainer.getChildren().add(errorLabel);
         }
     }
     
-    private void setStatusColor(String status) {
-        switch (status != null ? status.toLowerCase() : "unknown") {
-            case "pending":
-                accountBookStatus.setStyle("-fx-fill: #FFA500;"); // Orange
-                break;
-            case "approved":
-                accountBookStatus.setStyle("-fx-fill: #27ae60;"); // Green
-                break;
-            case "rejected":
-                accountBookStatus.setStyle("-fx-fill: #e74c3c;"); // Red
-                break;
-            default:
-                accountBookStatus.setStyle("-fx-fill: #34495e;"); // Dark gray
-                break;
+    private void displayRequest(Request request) {
+        try {
+            Book book = bookDAO.getBook(request.getBookId());
+            
+            // Create HBox for this request
+            HBox requestRow = new HBox(10);
+            requestRow.setStyle("-fx-padding: 5px; -fx-background-color: #f8f9fa; -fx-border-radius: 5px;");
+            
+            // Title
+            Text titleText = new Text(book != null ? book.getTitle() : "Unknown Book");
+            titleText.setWrappingWidth(250);
+            titleText.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
+            
+            // Author
+            Text authorText = new Text(book != null ? book.getAuthor() : "Unknown Author");
+            authorText.setWrappingWidth(200);
+            authorText.setStyle("-fx-font-size: 12px; -fx-text-fill: #666;");
+            
+            // Status
+            Text statusText = new Text(request.getStatus().toString());
+            statusText.setWrappingWidth(150);
+            statusText.setStyle("-fx-font-size: 12px; -fx-font-weight: bold;");
+            setStatusColor(statusText, request.getStatus().toString());
+            
+            // Add to row
+            requestRow.getChildren().addAll(titleText, authorText, statusText);
+            
+            // Add to container
+            requestsContainer.getChildren().add(requestRow);
+            
+            System.out.println("DEBUG: Displayed request for book: " + request.getBookId() + 
+                             " with status: " + request.getStatus());
+            
+        } catch (Exception e) {
+            System.err.println("Error displaying request: " + e.getMessage());
+            
+            // Show error row for this request
+            HBox errorRow = new HBox(10);
+            errorRow.setStyle("-fx-padding: 5px; -fx-background-color: #ffe6e6; -fx-border-radius: 5px;");
+            
+            Text errorText = new Text("Error loading book: " + request.getBookId());
+            errorText.setStyle("-fx-font-size: 12px; -fx-text-fill: #e74c3c;");
+            
+            errorRow.getChildren().add(errorText);
+            requestsContainer.getChildren().add(errorRow);
         }
     }
-
-    // Simple method to set book data
-    public void setBookData(String title, String author, String status) {
-        if (accountBookTitle != null) {
-            accountBookTitle.setText(title != null ? title : "No title");
-        }
-        if (accountBookAuthor != null) {
-            accountBookAuthor.setText(author != null ? author : "No author");
-        }
-        if (accountBookStatus != null) {
-            accountBookStatus.setText(status != null ? status : "Unknown");
-            setStatusColor(status);
+    
+    private void setStatusColor(Text statusText, String status) {
+        switch (status != null ? status.toLowerCase() : "unknown") {
+            case "pending":
+                statusText.setStyle("-fx-fill: #FFA500; -fx-font-size: 12px; -fx-font-weight: bold;");
+                break;
+            case "approved":
+                statusText.setStyle("-fx-fill: #27ae60; -fx-font-size: 12px; -fx-font-weight: bold;");
+                break;
+            case "rejected":
+                statusText.setStyle("-fx-fill: #e74c3c; -fx-font-size: 12px; -fx-font-weight: bold;");
+                break;
+            default:
+                statusText.setStyle("-fx-fill: #34495e; -fx-font-size: 12px; -fx-font-weight: bold;");
+                break;
         }
     }
 }
