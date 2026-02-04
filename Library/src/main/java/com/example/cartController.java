@@ -76,10 +76,32 @@ public class cartController {
                 cartItemContainer.getChildren().clear();
                 itemNo.setText("0");
                 
+                // Refresh checkout status in account page
+                refreshCheckoutStatus();
+                
             } catch (Exception e) {
                 System.err.println("Error during checkout: " + e.getMessage());
                 e.printStackTrace();
             }
+        }
+    }
+    
+    private void refreshCheckoutStatus() {
+        try {
+            System.out.println("Refreshing checkout status after checkout...");
+            
+            // Get the account controller instance and refresh its checkout status
+            accountController accountCtrl = accountController.getInstance();
+            if (accountCtrl != null) {
+                accountCtrl.refreshCheckoutStatus();
+                System.out.println("Checkout status refreshed successfully");
+            } else {
+                System.out.println("Account controller not initialized - status will update on next account page visit");
+            }
+            
+        } catch (Exception e) {
+            System.err.println("Error refreshing checkout status: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 }

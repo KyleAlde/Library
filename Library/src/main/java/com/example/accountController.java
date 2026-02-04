@@ -8,8 +8,12 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import java.io.IOException;
 
 public class accountController {
+
+    // Static instance for external access
+    private static accountController instance;
 
     @FXML
     private VBox checkHistory;
@@ -27,11 +31,19 @@ public class accountController {
     private Button returnLogout;
 
     public void initialize() {
+        // Set static instance for external access
+        instance = this;
+        
         // Load user session data
         loadUserData();
         
         // Load checkout data from database
         loadCheckoutData();
+    }
+    
+    // Static method to get instance for external access
+    public static accountController getInstance() {
+        return instance;
     }
 
     private void loadUserData() {
@@ -102,8 +114,29 @@ public class accountController {
         UserSession.getInstance().clearSession();
         try {
             App.setRoot("fxml/welcomePage/welcomePortal");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    // Method to refresh checkout status - called after checkout
+    public void refreshCheckoutStatus() {
+        try {
+            System.out.println("Refreshing checkout status in account controller...");
+            
+            // Clear existing checkout status
+            checkStatus.getChildren().clear();
+            
+            // Reload checkout status
+            String userId = UserSession.getInstance().getUserId();
+            if (userId != null) {
+                loadCheckoutStatus(userId);
+                System.out.println("Checkout status refreshed successfully");
+            }
+            
         } catch (Exception e) {
-            System.err.println("Error logging out: " + e.getMessage());
+            System.err.println("Error refreshing checkout status: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 }
