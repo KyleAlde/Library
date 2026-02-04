@@ -18,7 +18,7 @@
          <top>
             <StackPane alignment="CENTER_LEFT" prefHeight="100.0" BorderPane.alignment="TOP_LEFT">
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="Text-Header" text="Your Cart" StackPane.alignment="TOP_LEFT">
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="general-Header" text="Your Cart" StackPane.alignment="TOP_LEFT">
                      <StackPane.margin>
                         <Insets />
                      </StackPane.margin>
@@ -31,12 +31,12 @@
                <children>
                   <HBox alignment="CENTER_LEFT">
                      <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="Text-Body" text="No. of items in cart. ">
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="general-Sub-Header" text="No. of items in cart. ">
                            <HBox.margin>
                               <Insets />
                            </HBox.margin>
                         </Text>
-                        <Text fx:id="itemNo" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="Text-Body" text="placeholder" />
+                        <Text fx:id="itemNo" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="general-Sub-Header" text="placeholder" />
                         <Pane HBox.hgrow="ALWAYS" />
                         <Button fx:id="cartCheckout" mnemonicParsing="false" onAction="#handleCheckout" prefHeight="60.0" prefWidth="120.0" styleClass="CarLoan-Button" text="Checkout">
                            <HBox.margin>

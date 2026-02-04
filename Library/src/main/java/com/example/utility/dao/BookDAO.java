@@ -13,6 +13,23 @@ import com.example.model.Book.BookStatus;
 public class BookDAO {
     private final DatabaseConnection db = new DatabaseConnection();
 
+    // Helper method to convert BookStatus enum to lowercase for PostgreSQL
+    private String bookStatusToDbString(BookStatus status) {
+        if (status == null) return null;
+        return status.toString().toLowerCase();
+    }
+
+    // Helper method to convert PostgreSQL string to BookStatus enum
+    private BookStatus dbStringToBookStatus(String dbStatus) {
+        if (dbStatus == null) return null;
+        try {
+            return BookStatus.valueOf(dbStatus.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            System.err.println("Invalid status value from database: " + dbStatus);
+            return BookStatus.AVAILABLE;
+        }
+    }
+
     //==============================================================
     //                           CREATE
     //==============================================================
@@ -32,7 +49,7 @@ public class BookDAO {
             ps.setString(4, publisher);
             ps.setDate(5, java.sql.Date.valueOf(publicationDate));
             ps.setString(6, synopsis);
-            ps.setString(7, BookStatus.AVAILABLE.toString()); // Default status
+            ps.setString(7, bookStatusToDbString(BookStatus.AVAILABLE)); // Fixed: use lowercase
             ps.executeUpdate();
 
             System.out.println("Book added successfully: " + title);
@@ -102,16 +119,26 @@ public class BookDAO {
         }
     }
 
-    // Update book status
-    public void updateStatus(String isbn, String status) throws SQLException {
+    // Update book status (using enum)
+    public void updateStatus(String isbn, BookStatus status) throws SQLException {
         String updateStatusQuery = "UPDATE books SET status = CAST(? AS book_status) WHERE isbn = ?";
 
         try (PreparedStatement ps = db.getConnection().prepareStatement(updateStatusQuery)) {
-            ps.setString(1, status);
+            ps.setString(1, bookStatusToDbString(status));
             ps.setString(2, isbn);
             ps.executeUpdate();
 
-            System.out.println("Book status updated: " + isbn + " -> " + status);
+            System.out.println("Book status updated successfully: " + isbn + " -> " + status);
+        }
+    }
+
+    // Update book status (using string - for UI/controller)
+    public void updateStatus(String isbn, String statusString) throws SQLException {
+        try {
+            BookStatus status = BookStatus.valueOf(statusString.toUpperCase());
+            updateStatus(isbn, status);
+        } catch (IllegalArgumentException e) {
+            throw new SQLException("Invalid status value: " + statusString);
         }
     }
 
@@ -204,7 +231,7 @@ public class BookDAO {
                     rs.getString("synopsis"),
                     rs.getString("publisher"),
                     rs.getDate("publication_date").toLocalDate(),
-                    BookStatus.valueOf(rs.getString("status").toUpperCase()),
+                    dbStringToBookStatus(rs.getString("status")), // Fixed: use helper
                     CoverImageMatcher.getCoverImagePath(rs.getString("title"))
                 );
             } else {
@@ -239,7 +266,7 @@ public class BookDAO {
                     rs.getString("synopsis"),
                     rs.getString("publisher"),
                     rs.getDate("publication_date").toLocalDate(),
-                    BookStatus.valueOf(rs.getString("status").toUpperCase()),
+                    dbStringToBookStatus(rs.getString("status")), // Fixed: use helper
                     CoverImageMatcher.getCoverImagePath(rs.getString("title"))
                 );
 
@@ -297,7 +324,7 @@ public class BookDAO {
                     rs.getString("synopsis"),
                     rs.getString("publisher"),
                     rs.getDate("publication_date").toLocalDate(),
-                    BookStatus.valueOf(rs.getString("status").toUpperCase()),
+                    dbStringToBookStatus(rs.getString("status")), // Fixed: use helper
                     CoverImageMatcher.getCoverImagePath(rs.getString("title"))
                 );
 
@@ -335,7 +362,7 @@ public class BookDAO {
                     rs.getString("synopsis"),
                     rs.getString("publisher"),
                     rs.getDate("publication_date").toLocalDate(),
-                    BookStatus.valueOf(rs.getString("status").toUpperCase()),
+                    dbStringToBookStatus(rs.getString("status")), // Fixed: use helper
                     CoverImageMatcher.getCoverImagePath(rs.getString("title"))
                 );
 

@@ -199,6 +199,8 @@ public class manageBooksController {
                                  insertPublisher.getText(), pubDate);
                 bookDAO.updateStatus(insertIsbn.getText(), bookStatus.toString());
                 
+                // Invalidate cache to refresh book data across the application
+                                
                 showAlert("Success", "Book updated successfully!", AlertType.INFORMATION);
                 isEditMode = false;
                 currentEditIsbn = "";
@@ -210,6 +212,8 @@ public class manageBooksController {
                               insertPublisher.getText(), pubDate);
                 bookDAO.updateStatus(insertIsbn.getText(), bookStatus.toString());
                 
+                // Invalidate cache to refresh book data across the application
+                                
                 showAlert("Success", "Book added successfully!", AlertType.INFORMATION);
             }
             
@@ -261,6 +265,9 @@ public class manageBooksController {
         if (confirmAlert.showAndWait().orElse(javafx.scene.control.ButtonType.CANCEL) == javafx.scene.control.ButtonType.OK) {
             try {
                 bookDAO.deleteBook(selectedBook.getIsbn());
+                
+                // Invalidate cache to refresh book data across the application
+                                
                 showAlert("Success", "Book deleted successfully!", AlertType.INFORMATION);
                 loadBooks();
                 clearFields();
