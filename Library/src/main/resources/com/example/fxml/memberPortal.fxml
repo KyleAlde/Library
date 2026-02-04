@@ -36,12 +36,10 @@
                                  <font>
                                     <Font name="Segoe UI" size="18.0" />
                                  </font>
-                              </TextField>
-                              <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="60.0" prefWidth="60.0" styleClass="member-Account-Icon">
                                  <HBox.margin>
-                                    <Insets right="100.0" />
+                                    <Insets right="20.0" />
                                  </HBox.margin>
-                              </Pane>
+                              </TextField>
                            </children>
                         </HBox>
                      </children>
@@ -57,11 +55,11 @@
             </BorderPane>
          </center>
          <left>
-            <AnchorPane fx:id="sideBar" BorderPane.alignment="CENTER">
+            <AnchorPane fx:id="sideBar" style="-fx-background-color: # rgba(26,122,62);" BorderPane.alignment="CENTER">
                <children>
                   <VBox prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <HBox alignment="CENTER" prefHeight="80.0">
+                        <HBox alignment="CENTER" prefHeight="80.0" style="-fx-background-color: #afcfbe;">
                            <children>
                               <Pane prefWidth="170.0" styleClass="member-Portal-logo" />
                               <Pane HBox.hgrow="ALWAYS" />
@@ -81,22 +79,22 @@
                               <Insets left="20.0" />
                            </padding>
                         </HBox>
-                        <Button fx:id="returnBrowse" mnemonicParsing="false" onAction="#handleBrowseButton" styleClass="member-portal-button" text="Browse">
+                        <Button fx:id="returnBrowse" mnemonicParsing="false" onAction="#handleBrowseButton" styleClass="member-Navigation" text="Browse">
                            <VBox.margin>
                               <Insets left="14.0" top="10.0" />
                            </VBox.margin>
                         </Button>
-                        <Button fx:id="returnCart" mnemonicParsing="false" onAction="#handleCartButton" styleClass="member-portal-button" text="My Cart">
+                        <Button fx:id="returnCart" mnemonicParsing="false" onAction="#handleCartButton" styleClass="member-Navigation" text="My Cart">
                            <VBox.margin>
                               <Insets left="14.0" top="10.0" />
                            </VBox.margin>
                         </Button>
-                        <Button fx:id="returnLoans" mnemonicParsing="false" onAction="#handleLoansButton" styleClass="member-portal-button" text="My Loans">
+                        <Button fx:id="returnLoans" mnemonicParsing="false" onAction="#handleLoansButton" styleClass="member-Navigation" text="My Loans">
                            <VBox.margin>
                               <Insets left="14.0" top="10.0" />
                            </VBox.margin>
                         </Button>
-                        <Button fx:id="returnAccount" mnemonicParsing="false" onAction="#handleAccountButton" styleClass="member-portal-button" text="Accounts">
+                        <Button fx:id="returnAccount" mnemonicParsing="false" onAction="#handleAccountButton" styleClass="member-Navigation" text="Accounts">
                            <VBox.margin>
                               <Insets left="14.0" top="10.0" />
                            </VBox.margin>

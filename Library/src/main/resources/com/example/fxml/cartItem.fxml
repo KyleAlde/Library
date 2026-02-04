@@ -8,13 +8,13 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="1420.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.cartItemController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="1420.0" style="-fx-background-color: #afcfbe; -fx-background-radius: 15; -fx-border-radius: 15; -fx-border-color: black; -fx-border-width: 0.5;" stylesheets="@style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.cartItemController">
    <children>
       <HBox fx:id="cartItemContainer" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <StackPane alignment="TOP_LEFT">
                <children>
-                  <Text fx:id="bookAuthor" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="Text-Body" text="Author" wrappingWidth="300.0" />
+                  <Text fx:id="bookAuthor" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="general-Content" text="Author" wrappingWidth="300.0" />
                </children>
                <padding>
                   <Insets left="30.0" top="30.0" />
@@ -25,7 +25,7 @@
             </StackPane>
             <StackPane alignment="TOP_LEFT" HBox.hgrow="ALWAYS">
                <children>
-                  <Text fx:id="bookTitle" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="Text-Body" text="Title" wrappingWidth="300.0" />
+                  <Text fx:id="bookTitle" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="general-Content" text="Title" wrappingWidth="300.0" />
                </children>
                <padding>
                   <Insets left="30.0" top="30.0" />
@@ -36,7 +36,7 @@
             </StackPane>
             <StackPane alignment="TOP_LEFT" HBox.hgrow="ALWAYS">
                <children>
-                  <Text fx:id="bookPublisher" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="Text-Body" text="Publisher" wrappingWidth="300.0" />
+                  <Text fx:id="bookPublisher" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="general-Content" text="Publisher" wrappingWidth="300.0" />
                </children>
                <padding>
                   <Insets left="30.0" top="30.0" />

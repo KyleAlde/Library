@@ -22,19 +22,10 @@
                      <children>
                         <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
-                              <StackPane alignment="TOP_CENTER" prefHeight="125.0">
-                                 <children>
-                                    <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="75.0" prefWidth="300.0" styleClass="login-logo" stylesheets="@../style.css" StackPane.alignment="CENTER_LEFT">
-                                       <StackPane.margin>
-                                          <Insets left="50.0" />
-                                       </StackPane.margin>
-                                    </Pane>
-                                 </children>
-                              </StackPane>
                               <Pane prefHeight="100.0" />
                               <StackPane>
                                  <children>
-                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="login-welcome-text" text="Welcome to the NU Codex Library" />
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-fill: rgba(26,122,62);" styleClass="welcome-Main-Header" text="Welcome to the NU Codex Library" />
                                  </children>
                               </StackPane>
                               <Pane prefHeight="80.0" />
@@ -42,20 +33,20 @@
                                  <children>
                                     <VBox alignment="CENTER">
                                        <children>
-                                          <TextField fx:id="memberIDField" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="80.0" prefWidth="580.0" promptText="MemberID" styleClass="credentials-format">
+                                          <TextField fx:id="memberIDField" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="80.0" prefWidth="580.0" promptText="MemberID" styleClass="welcome-Login-Format" stylesheets="@../style.css">
                                              <font>
-                                                <Font name="Segoe UI" size="16.0" />
+                                                <Font size="16.0" />
                                              </font>
                                           </TextField>
-                                          <PasswordField fx:id="passwordField" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="80.0" prefWidth="580.0" promptText="Password" styleClass="credentials-format">
+                                          <PasswordField fx:id="passwordField" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="80.0" prefWidth="580.0" promptText="Password" styleClass="welcome-Login-Format" stylesheets="@../style.css">
                                              <font>
-                                                <Font name="Segoe UI" size="16.0" />
+                                                <Font size="16.0" />
                                              </font>
                                              <VBox.margin>
                                                 <Insets top="10.0" />
                                              </VBox.margin>
                                           </PasswordField>
-                                          <Text fx:id="verify" fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="verification-status" text="Incorrect ID or Password, please try again.">
+                                          <Text fx:id="verify" fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="welcome-Content" text="Incorrect ID or Password, please try again.">
                                              <VBox.margin>
                                                 <Insets bottom="5.0" top="5.0" />
                                              </VBox.margin>
@@ -98,7 +89,7 @@
                            <children>
                               <StackPane>
                                  <children>
-                                    <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="login-sub-welcome-text" text="Login to a world full of knowledge." />
+                                    <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="welcome-Main-Header" text="Login to a world full of knowledge." />
                                  </children>
                               </StackPane>
                            </children>

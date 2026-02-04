@@ -1,16 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.text.Text?>
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
 
-<VBox fx:id="accountCheckoutStatus" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="710.0" spacing="5.0" styleClass="account-section" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.checkOutStatusController">
+<VBox fx:id="accountCheckoutStatus" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="710.0" spacing="5.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.checkOutStatusController">
    <children>
-      <Text fx:id="sectionHeader" strokeType="OUTSIDE" strokeWidth="0.0" text="Checkout Status" styleClass="section-header" wrappingWidth="690.0" />
+      <Text fx:id="sectionHeader" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-fill: rgba(26,122,62);" styleClass="general-Sub-Header" text="Checkout Status" wrappingWidth="690.0" />
       <Separator />
-      <VBox fx:id="requestsContainer" spacing="10.0" prefWidth="690.0" />
+      <VBox fx:id="requestsContainer" prefWidth="690.0" spacing="10.0" />
    </children>
 </VBox>

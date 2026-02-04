@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -16,20 +15,20 @@
    <children>
       <BorderPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <top>
-            <StackPane alignment="CENTER_LEFT" prefHeight="200.0" styleClass="home-background-filter" BorderPane.alignment="TOP_LEFT">
+            <StackPane alignment="CENTER_LEFT" prefHeight="200.0" BorderPane.alignment="TOP_LEFT">
                <children>
                   <HBox alignment="CENTER_RIGHT" spacing="20.0">
                      <children>
                         <VBox alignment="TOP_RIGHT">
                            <children>
-                              <Text fx:id="memberFullName" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="Text-Header" text="Name Placeholder" />
-                              <Text fx:id="memberType" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="Text-Body" text="Member Type Placeholder" />
+                              <Text fx:id="memberFullName" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="general-Header" text="Name Placeholder" />
+                              <Text fx:id="memberType" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="general-Header" text="Member Type Placeholder" />
                            </children>
                            <HBox.margin>
                               <Insets top="20.0" />
                            </HBox.margin>
                         </VBox>
-                        <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="160.0" prefWidth="160.0" styleClass="User-Icon" />
+                        <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="160.0" prefWidth="160.0" styleClass="martin" />
                      </children>
                   </HBox>
                </children>
@@ -38,12 +37,7 @@
          <bottom>
             <StackPane alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <children>
-                  <Button fx:id="returnLogout" mnemonicParsing="false" onAction="#handleLogout" prefHeight="60.0" prefWidth="120.0" text="Log out">
-                     <styleClass>
-                        <String fx:value="Text-Body" />
-                        <String fx:value="CarLoan-Button" />
-                     </styleClass>
-                  </Button>
+                  <Button fx:id="returnLogout" mnemonicParsing="false" onAction="#handleLogout" prefHeight="60.0" prefWidth="120.0" styleClass="CarLoan-Button" text="Log out" />
                </children>
             </StackPane>
          </bottom>
@@ -54,7 +48,7 @@
                      <children>
                         <StackPane prefHeight="60.0">
                            <children>
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Checkout Status" />
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-fill: rgba(26,122,62);" styleClass="general-Sub-Header" text="Checkout Status" />
                            </children>
                         </StackPane>
                      </children>
@@ -63,7 +57,7 @@
                      <children>
                         <StackPane prefHeight="60.0">
                            <children>
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Checkout History" />
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-fill: rgba(26,122,62);" styleClass="general-Sub-Header" text="Checkout History" />
                            </children>
                         </StackPane>
                      </children>

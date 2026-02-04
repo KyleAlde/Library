@@ -22,7 +22,7 @@
                         <Pane prefWidth="200.0" styleClass="logo-image" BorderPane.alignment="CENTER" />
                      </left>
                      <right>
-                        <Button fx:id="loginButton" maxHeight="60.0" mnemonicParsing="false" prefWidth="200.0" styleClass="header-text-format" text="Login" textFill="WHITE" BorderPane.alignment="CENTER">
+                        <Button fx:id="loginButton" maxHeight="60.0" mnemonicParsing="false" prefWidth="200.0" styleClass="welcome-Navigation" text="Login" textFill="WHITE" BorderPane.alignment="CENTER">
                            <cursor>
                               <Cursor fx:constant="CROSSHAIR" />
                            </cursor>
@@ -31,17 +31,17 @@
                      <center>
                         <HBox alignment="CENTER" maxHeight="80.0" minHeight="80.0" prefHeight="80.0" BorderPane.alignment="CENTER">
                            <children>
-                              <Button fx:id="homeButton" maxHeight="60.0" mnemonicParsing="false" prefWidth="120.0" styleClass="header-text-format" text="Home" textFill="WHITE">
+                              <Button fx:id="homeButton" maxHeight="60.0" mnemonicParsing="false" prefWidth="120.0" styleClass="welcome-Navigation" text="Home" textFill="WHITE">
                                  <cursor>
                                     <Cursor fx:constant="CROSSHAIR" />
                                  </cursor>
                               </Button>
-                              <Button fx:id="aboutButton" maxHeight="60.0" mnemonicParsing="false" prefWidth="120.0" styleClass="header-text-format" text="About" textFill="WHITE">
+                              <Button fx:id="aboutButton" maxHeight="60.0" mnemonicParsing="false" prefWidth="120.0" styleClass="welcome-Navigation" text="About" textFill="WHITE">
                                  <cursor>
                                     <Cursor fx:constant="CROSSHAIR" />
                                  </cursor>
                               </Button>
-                              <Button fx:id="branchesButton" maxHeight="60.0" mnemonicParsing="false" prefWidth="120.0" styleClass="header-text-format" text="Branches" textFill="WHITE">
+                              <Button fx:id="branchesButton" maxHeight="60.0" mnemonicParsing="false" prefWidth="120.0" styleClass="welcome-Navigation" text="Branches" textFill="WHITE">
                                  <cursor>
                                     <Cursor fx:constant="CROSSHAIR" />
                                  </cursor>
@@ -57,7 +57,7 @@
                               <Insets left="20.0" />
                            </HBox.margin>
                         </Line>
-                        <Text fx:id="tabName" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="header-Nav-text" text="Placeholder" />
+                        <Text fx:id="tabName" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="welcome-Main-Header" text="Placeholder" />
                      </children></HBox>
                </children>
             </VBox>

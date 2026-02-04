@@ -18,20 +18,11 @@
                      <children>
                         <VBox alignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
-                              <StackPane alignment="TOP_CENTER" prefHeight="125.0">
-                                 <children>
-                                    <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="75.0" prefWidth="300.0" styleClass="login-logo" stylesheets="@../style.css" StackPane.alignment="CENTER_LEFT">
-                                       <StackPane.margin>
-                                          <Insets left="50.0" />
-                                       </StackPane.margin>
-                                    </Pane>
-                                 </children>
-                              </StackPane>
                               <VBox>
                                  <children>
-                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-fill: rgba(26,122,62);" styleClass="branches-Header" text="NU Manila" />
-                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="branches-location" text="551 F Jhocson St, Sampaloc, Manila, 1008 Metro Manila" />
-                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="branches-Content" text="The flagship library of National University Philippines, serving as the central repository of academic resources and special collections." wrappingWidth="580.0">
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-fill: rgba(26,122,62);" styleClass="welcome-Header" text="NU Manila" />
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="welcome-Content" text="551 F Jhocson St, Sampaloc, Manila, 1008 Metro Manila" wrappingWidth="580.0" />
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="welcome-Content" text="The flagship library of National University Philippines, serving as the central repository of academic resources and special collections." wrappingWidth="580.0">
                                        <VBox.margin>
                                           <Insets top="5.0" />
                                        </VBox.margin>
@@ -43,13 +34,13 @@
                               </VBox>
                               <VBox>
                                  <children>
-                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-fill: rgba(26,122,62);" styleClass="branches-Header" text="NU MOA">
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-fill: rgba(26,122,62);" styleClass="welcome-Header" text="NU MOA">
                                        <VBox.margin>
                                           <Insets />
                                        </VBox.margin>
                                     </Text>
-                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="branches-location" text="Coral Way, Pasay City, Metro Manila" />
-                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="branches-Content" text="A modern, accessible library branch conveniently located in one of the Philippines' largest commercial centers." wrappingWidth="580.0">
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="welcome-Content" text="Coral Way, Pasay City, Metro Manila" wrappingWidth="580.0" />
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="welcome-Content" text="A modern, accessible library branch conveniently located in one of the Philippines' largest commercial centers." wrappingWidth="580.0">
                                        <VBox.margin>
                                           <Insets top="5.0" />
                                        </VBox.margin>
@@ -64,13 +55,13 @@
                               </VBox>
                               <VBox>
                                  <children>
-                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-fill: rgba(26,122,62);" styleClass="branches-Header" text="NU Fairview">
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-fill: rgba(26,122,62);" styleClass="welcome-Header" text="NU Fairview">
                                        <VBox.margin>
                                           <Insets />
                                        </VBox.margin>
                                     </Text>
-                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="branches-location" text="SM Fairview Complex, Quirino Hwy, corner Regalado Hwy, Quezon City, Metro Manila" />
-                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="branches-Content" text="Serving the growing Quezon City student community, this branch specializes in business and technology collections." wrappingWidth="580.0">
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="welcome-Content" text="SM Fairview Complex, Quirino Hwy, corner Regalado Hwy, Quezon City, Metro Manila" wrappingWidth="580.0" />
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="welcome-Content" text="Serving the growing Quezon City student community, this branch specializes in business and technology collections." wrappingWidth="580.0">
                                        <VBox.margin>
                                           <Insets top="5.0" />
                                        </VBox.margin>
@@ -85,13 +76,13 @@
                               </VBox>
                               <VBox>
                                  <children>
-                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-fill: rgba(26,122,62);" styleClass="branches-Header" text="NU East Ortigas">
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-fill: rgba(26,122,62);" styleClass="welcome-Header" text="NU East Ortigas">
                                        <VBox.margin>
                                           <Insets />
                                        </VBox.margin>
                                     </Text>
-                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="branches-location" text="Ortigas Ave Ext, Pasig, 1608 Metro Manila" />
-                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="branches-Content" text="Strategically positioned in Manila's educational corridor, this branch focuses on engineering and architecture resources." wrappingWidth="580.0">
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="welcome-Content" text="Ortigas Ave Ext, Pasig, 1608 Metro Manila" wrappingWidth="580.0" />
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="welcome-Content" text="Strategically positioned in Manila's educational corridor, this branch focuses on engineering and architecture resources." wrappingWidth="580.0">
                                        <VBox.margin>
                                           <Insets top="5.0" />
                                        </VBox.margin>
@@ -106,13 +97,13 @@
                               </VBox>
                               <VBox>
                                  <children>
-                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-fill: rgba(26,122,62);" styleClass="branches-Header" text="NU Las Piñas">
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-fill: rgba(26,122,62);" styleClass="welcome-Header" text="NU Las Piñas">
                                        <VBox.margin>
                                           <Insets />
                                        </VBox.margin>
                                     </Text>
-                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="branches-location" text="South Tower, 2 Southmall Complex, Almanza Uno, Las Piñas, Metro Manila" />
-                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="branches-Content" text="The southern gateway to NU's academic resources, serving students in the Cavite-Laguna corridor. " wrappingWidth="580.0">
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="welcome-Content" text="South Tower, 2 Southmall Complex, Almanza Uno, Las Piñas, Metro Manila" wrappingWidth="580.0" />
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="welcome-Content" text="The southern gateway to NU's academic resources, serving students in the Cavite-Laguna corridor. " wrappingWidth="580.0">
                                        <VBox.margin>
                                           <Insets top="5.0" />
                                        </VBox.margin>
@@ -139,6 +130,9 @@
                                  </VBox.margin>
                               </StackPane>
                            </children>
+                           <padding>
+                              <Insets top="50.0" />
+                           </padding>
                         </VBox>
                      </children></AnchorPane>
                   <AnchorPane prefWidth="1180.0">

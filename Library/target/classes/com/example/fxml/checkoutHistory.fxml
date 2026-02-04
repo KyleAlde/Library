@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Text?>
 
-<VBox fx:id="historyContainer" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="710.0" spacing="10.0" styleClass="account-section" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.checkoutHistoryController">
+<VBox fx:id="historyContainer" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="710.0" spacing="10.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.checkoutHistoryController">
    <children>
-      <Text fx:id="accountBookTitle" strokeType="OUTSIDE" strokeWidth="0.0" text="Loading checkout history..." styleClass="section-header" wrappingWidth="690.0" />
+      <Text fx:id="accountBookTitle" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-fill: rgba(26,122,62);" styleClass="general-Sub-Header" text="Loading checkout history..." wrappingWidth="690.0" />
    </children>
 </VBox>

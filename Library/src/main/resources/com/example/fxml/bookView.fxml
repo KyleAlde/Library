@@ -28,7 +28,7 @@
                               <Insets left="20.0" top="40.0" />
                            </VBox.margin>
                         </Pane>
-                        <GridPane styleClass="librarian-Text-Body" vgap="10.0">
+                        <GridPane styleClass="general-Sub-Header" vgap="10.0">
                           <columnConstraints>
                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
                             <ColumnConstraints hgrow="SOMETIMES" maxWidth="441.0" minWidth="10.0" prefWidth="230.0" />
@@ -57,22 +57,26 @@
                   </VBox>
                   <VBox prefWidth="920.0">
                      <children>
-                        <Text fx:id="bookTitle" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="Text-Header" text="Lorem ipsum dolor sit amet">
+                        <HBox>
                            <VBox.margin>
                               <Insets left="20.0" top="40.0" />
                            </VBox.margin>
-                        </Text>
-                        <Button fx:id="addToCartButton" mnemonicParsing="false" onAction="#addToCart" prefHeight="60.0" prefWidth="160.0" styleClass="CarLoan-Button" text="Add to Cart">
-                           <VBox.margin>
-                              <Insets left="20.0" top="20.0" />
-                           </VBox.margin>
-                        </Button>
+                           <children>
+                              <Text fx:id="bookTitle" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="general-Header" text="Lorem ipsum dolor sit amet" />
+                              <Pane HBox.hgrow="ALWAYS" />
+                              <Button fx:id="backButton" mnemonicParsing="false" onAction="#handleBackButton" prefHeight="60.0" prefWidth="160.0" styleClass="CarLoan-Button" text="Back">
+                                 <HBox.margin>
+                                    <Insets right="40.0" />
+                                 </HBox.margin>
+                              </Button>
+                           </children>
+                        </HBox>
                         <StackPane fx:id="bookSynopsisContainer" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="367.0" prefWidth="860.0" style="-fx-background-color: #b5e7cb; -fx-background-radius: 15;">
                            <VBox.margin>
                               <Insets left="20.0" top="20.0" />
                            </VBox.margin>
                            <children>
-                              <Text fx:id="bookSynopsis" strokeType="OUTSIDE" strokeWidth="0.0" text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum." wrappingWidth="840.0">
+                              <Text fx:id="bookSynopsis" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="general-Sub-Header" text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum." wrappingWidth="840.0">
                                  <StackPane.margin>
                                     <Insets top="10.0" />
                                  </StackPane.margin>
@@ -82,12 +86,12 @@
                               </Text>
                            </children>
                         </StackPane>
-                        <Pane VBox.vgrow="ALWAYS" />
-                        <Button fx:id="backButton" mnemonicParsing="false" onAction="#handleBackButton" prefHeight="60.0" prefWidth="160.0" styleClass="CarLoan-Button" text="Back">
+                        <Button fx:id="addToCartButton" mnemonicParsing="false" onAction="#addToCart" prefHeight="60.0" prefWidth="160.0" styleClass="CarLoan-Button" text="Add to Cart">
                            <VBox.margin>
-                              <Insets bottom="40.0" left="720.0" />
+                              <Insets left="20.0" top="20.0" />
                            </VBox.margin>
                         </Button>
+                        <Pane VBox.vgrow="ALWAYS" />
                      </children>
                   </VBox>
                </children>
