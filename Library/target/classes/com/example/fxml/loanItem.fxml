@@ -62,7 +62,7 @@
                   <Insets />
                </HBox.margin>
                <children>
-                  <CheckBox fx:id="returnItem" mnemonicParsing="false" prefHeight="60.0" prefWidth="120.0" text="Return">
+                  <CheckBox fx:id="returnItem" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="20.0" prefWidth="20.0" StackPane.alignment="CENTER">
                      <StackPane.margin>
                         <Insets right="20.0" />
                      </StackPane.margin>

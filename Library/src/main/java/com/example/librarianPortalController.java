@@ -29,6 +29,9 @@ public class librarianPortalController {
     private Button openSideBar;
 
     @FXML
+    private Button logoutButton;
+
+    @FXML
     private Button returnManageAccounts;
 
     @FXML
@@ -156,6 +159,21 @@ public class librarianPortalController {
     @FXML
     void handleRequestsButton(ActionEvent event) {
         switchToPage("requests");
+    }
+
+    @FXML
+    void onActionLogout(ActionEvent event) {
+        // Clear user session
+        UserSession.getInstance().clearSession();
+        
+        try {
+            // Navigate back to welcome portal
+            App.setRoot("fxml/welcomePage/welcomePortal");
+            System.out.println("Librarian logged out successfully");
+        } catch (Exception e) {
+            System.err.println("Error during librarian logout: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
 }

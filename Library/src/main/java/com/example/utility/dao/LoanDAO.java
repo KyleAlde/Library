@@ -47,7 +47,7 @@ public class LoanDAO {
     // Get all loans for a specific borrower
     public java.util.List<Loan> getLoansByBorrower(String borrowerId) throws SQLException {
         java.util.List<Loan> loans = new java.util.ArrayList<>();
-        String selectQuery = "SELECT * FROM loans WHERE borrower_id = ? ORDER BY loan_date DESC";
+        String selectQuery = "SELECT * FROM loans WHERE borrower_id = ? AND return_date IS NULL ORDER BY loan_date DESC";
 
         try (PreparedStatement ps = db.getConnection().prepareStatement(selectQuery)) {
             ps.setString(1, borrowerId);

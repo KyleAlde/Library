@@ -182,7 +182,7 @@ public class BorrowRequestDAO {
     
     // Update request status
     public boolean updateRequestStatus(String requestId, RequestStatus newStatus) throws SQLException {
-        String sql = "UPDATE borrow_requests SET status = ?, processed_at = CURRENT_TIMESTAMP WHERE id = ?";
+        String sql = "UPDATE borrow_requests SET status = ?::request_status, processed_at = CURRENT_TIMESTAMP WHERE id = ?";
         
         try (Connection conn = dbConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {

@@ -38,7 +38,7 @@
          <bottom>
             <StackPane alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <children>
-                  <Button fx:id="returnLogout" mnemonicParsing="false" prefHeight="60.0" prefWidth="120.0" text="Log out">
+                  <Button fx:id="returnLogout" mnemonicParsing="false" onAction="#handleLogout" prefHeight="60.0" prefWidth="120.0" text="Log out">
                      <styleClass>
                         <String fx:value="Text-Body" />
                         <String fx:value="CarLoan-Button" />

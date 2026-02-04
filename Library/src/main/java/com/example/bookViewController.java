@@ -4,6 +4,7 @@ import com.example.model.Book;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -97,6 +98,25 @@ public class bookViewController {
     @FXML
     private void addToCart() {
         if (currentBook != null) {
+            // Check if book is available before adding to cart
+            if (currentBook.getStatus() == Book.BookStatus.CHECKED_OUT) {
+                System.out.println("Cannot add to cart - book is already checked out: " + currentBook.getTitle());
+                showAlert("Book Unavailable", "This book cannot be added to cart because it is currently loaned out.", javafx.scene.control.Alert.AlertType.WARNING);
+                return;
+            }
+            
+            if (currentBook.getStatus() == Book.BookStatus.RESERVED) {
+                System.out.println("Cannot add to cart - book is reserved: " + currentBook.getTitle());
+                showAlert("Book Reserved", "This book cannot be added to cart because it is currently reserved.", javafx.scene.control.Alert.AlertType.WARNING);
+                return;
+            }
+            
+            if (currentBook.getStatus() == Book.BookStatus.LOST || currentBook.getStatus() == Book.BookStatus.DAMAGED) {
+                System.out.println("Cannot add to cart - book is " + currentBook.getStatus() + ": " + currentBook.getTitle());
+                showAlert("Book Unavailable", "This book cannot be added to cart because it is " + currentBook.getStatus() + ".", javafx.scene.control.Alert.AlertType.WARNING);
+                return;
+            }
+            
             memberPortalController memberController = memberPortalController.getInstance();
             if (memberController != null) {
                 memberController.addToCart(currentBook);
@@ -107,6 +127,14 @@ public class bookViewController {
         } else {
             System.err.println("No book data available to add to cart!");
         }
+    }
+    
+    private void showAlert(String title, String message, Alert.AlertType alertType) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
     
     private void navigateBackToCollection() {

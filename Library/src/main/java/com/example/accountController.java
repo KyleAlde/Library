@@ -4,6 +4,7 @@ import com.example.utility.UserSession;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -59,10 +60,7 @@ public class accountController {
             // Create a status controller to load the data
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/fxml/checkoutStatus.fxml"));
             HBox statusContainer = loader.load();
-            checkOutStatusController controller = loader.getController();
-            
-            // Load actual checkout status from database
-            controller.loadCheckoutStatus(userId);
+            // The checkout status will load automatically in initialize()
             
             // Add to the status container
             checkStatus.getChildren().add(statusContainer);
@@ -70,8 +68,11 @@ public class accountController {
         } catch (Exception e) {
             System.err.println("Error loading checkout status: " + e.getMessage());
             e.printStackTrace();
-            // Fallback to simple item
-            createSimpleStatusItem();
+            
+            // Show error message instead of fallback
+            Label errorLabel = new Label("Error loading checkout status");
+            errorLabel.setStyle("-fx-text-fill: #e74c3c; -fx-font-size: 14px;");
+            checkStatus.getChildren().add(errorLabel);
         }
     }
 
@@ -80,10 +81,7 @@ public class accountController {
             // Create a history controller to load the data
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/fxml/checkoutHistory.fxml"));
             HBox historyContainer = loader.load();
-            checkoutHistoryController controller = loader.getController();
-            
-            // Load actual checkout history from database
-            controller.loadCheckoutHistory(userId);
+            // The checkout history will load automatically in initialize()
             
             // Add to the history container
             checkHistory.getChildren().add(historyContainer);
@@ -91,40 +89,11 @@ public class accountController {
         } catch (Exception e) {
             System.err.println("Error loading checkout history: " + e.getMessage());
             e.printStackTrace();
-            // Fallback to simple item
-            createSimpleHistoryItem();
-        }
-    }
-
-    private void createSimpleStatusItem() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/fxml/checkoutStatus.fxml"));
-            HBox statusItem = loader.load();
-            checkOutStatusController controller = loader.getController();
             
-            // Set simple data
-            controller.setBookData("Sample Request", "Sample Author", "pending");
-            
-            checkStatus.getChildren().add(statusItem);
-            
-        } catch (Exception e) {
-            System.err.println("Error creating status item: " + e.getMessage());
-        }
-    }
-
-    private void createSimpleHistoryItem() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/fxml/checkoutHistory.fxml"));
-            HBox historyItem = loader.load();
-            checkoutHistoryController controller = loader.getController();
-            
-            // Set simple data
-            controller.setBookData("Sample Book Title", "Sample Author", "Jan 15, 2024");
-            
-            checkHistory.getChildren().add(historyItem);
-            
-        } catch (Exception e) {
-            System.err.println("Error creating history item: " + e.getMessage());
+            // Show error message instead of fallback
+            Label errorLabel = new Label("Error loading checkout history");
+            errorLabel.setStyle("-fx-text-fill: #e74c3c; -fx-font-size: 14px;");
+            checkHistory.getChildren().add(errorLabel);
         }
     }
 
@@ -132,7 +101,7 @@ public class accountController {
     private void handleLogout() {
         UserSession.getInstance().clearSession();
         try {
-            App.setRoot("login");
+            App.setRoot("fxml/welcomePage/welcomePortal");
         } catch (Exception e) {
             System.err.println("Error logging out: " + e.getMessage());
         }

@@ -40,6 +40,7 @@
                         <TableColumn fx:id="status" prefWidth="-1.0" text="status" />
                         <TableColumn fx:id="BookID" prefWidth="-1.0" text="Book ID" />
                         <TableColumn fx:id="borrowerID" prefWidth="-1.0" text="Borrower ID" />
+                        <TableColumn fx:id="borrowerName" prefWidth="-1.0" text="Borrower Name" />
                     </columns>
                   </TableView>
                   <VBox alignment="CENTER" prefHeight="100.0" prefWidth="1420.0" spacing="10.0">
@@ -51,6 +52,7 @@
                               <TextField fx:id="displayStatus" editable="false" promptText="Status" />
                               <TextField fx:id="displayBookID" editable="false" promptText="Book ID" />
                               <TextField fx:id="displayBorrowerID" editable="false" promptText="Borrower ID" />
+                              <TextField fx:id="displayBorrowerName" editable="false" promptText="Borrower Name" />
                            </children></HBox>
                         <HBox alignment="CENTER" prefWidth="1420.0" spacing="20.0">
                            <children>

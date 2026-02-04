@@ -40,9 +40,10 @@
                         <Pane HBox.hgrow="ALWAYS" />
                         <Button fx:id="loansReturn" mnemonicParsing="false" prefHeight="60.0" prefWidth="120.0" styleClass="CarLoan-Button" text="Return">
                            <HBox.margin>
-                              <Insets />
+                              <Insets right="20.0" />
                            </HBox.margin>
                         </Button>
+                        <Button fx:id="loansReturnAll" mnemonicParsing="false" prefHeight="60.0" prefWidth="120.0" styleClass="CarLoan-Button" text="Return All" />
                      </children>
                   </HBox>
                </children>

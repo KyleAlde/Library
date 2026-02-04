@@ -2,9 +2,11 @@ package com.example;
 
 import com.example.utility.dao.BorrowRequestDAO;
 import com.example.utility.dao.LoanDAO;
+import com.example.utility.dao.BorrowerDAO;
 import com.example.utility.UserSession;
 import com.example.model.Request;
 import com.example.model.Request.RequestStatus;
+import com.example.model.Borrower;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -35,6 +37,9 @@ public class manageRequestsController {
     private TextField displayBorrowerID;
 
     @FXML
+    private TextField displayBorrowerName;
+
+    @FXML
     private TextField displayRequestDate;
 
     @FXML
@@ -61,9 +66,13 @@ public class manageRequestsController {
     @FXML
     private TableColumn<Request, String> borrowerID;
 
+    @FXML
+    private TableColumn<Request, String> borrowerName;
+
     // DAO and data management
     private final BorrowRequestDAO borrowRequestDAO = new BorrowRequestDAO();
     private final LoanDAO loanDAO = new LoanDAO();
+    private final BorrowerDAO borrowerDAO = new BorrowerDAO();
     private final ObservableList<Request> requestData = FXCollections.observableArrayList();
 
     @FXML
@@ -84,6 +93,20 @@ public class manageRequestsController {
             new SimpleStringProperty(cellData.getValue().getBookId()));
         borrowerID.setCellValueFactory(cellData -> 
             new SimpleStringProperty(cellData.getValue().getBorrowerId()));
+        
+        // Set up borrower name column with a custom cell value factory
+        borrowerName.setCellValueFactory(cellData -> {
+            String borrowerId = cellData.getValue().getBorrowerId();
+            try {
+                Borrower borrower = borrowerDAO.getBorrower(borrowerId);
+                if (borrower != null) {
+                    return new SimpleStringProperty(borrower.getFirstName() + " " + borrower.getLastName());
+                }
+            } catch (Exception e) {
+                System.err.println("Error fetching borrower name for ID: " + borrowerId);
+            }
+            return new SimpleStringProperty("Unknown");
+        });
         
         requestList.setItems(requestData);
     }
@@ -115,6 +138,19 @@ public class manageRequestsController {
         displayStatus.setText(request.getStatus().toString());
         displayBookID.setText(request.getBookId());
         displayBorrowerID.setText(request.getBorrowerId());
+        
+        // Fetch and display borrower name
+        try {
+            Borrower borrower = borrowerDAO.getBorrower(request.getBorrowerId());
+            if (borrower != null) {
+                displayBorrowerName.setText(borrower.getFirstName() + " " + borrower.getLastName());
+            } else {
+                displayBorrowerName.setText("Unknown");
+            }
+        } catch (Exception e) {
+            System.err.println("Error fetching borrower name: " + e.getMessage());
+            displayBorrowerName.setText("Error");
+        }
     }
 
     @FXML
@@ -178,6 +214,7 @@ public class manageRequestsController {
         displayStatus.clear();
         displayBookID.clear();
         displayBorrowerID.clear();
+        displayBorrowerName.clear();
     }
 
     private String getCurrentLibrarianId() {

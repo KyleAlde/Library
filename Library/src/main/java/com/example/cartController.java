@@ -64,11 +64,22 @@ public class cartController {
             System.out.println("- " + book.getTitle() + " by " + book.getAuthor());
         }
         
-        // Clear cart after checkout
+        // Clear cart after checkout - this creates borrow requests
         memberPortalController memberController = memberPortalController.getInstance();
         if (memberController != null) {
-            memberController.clearCart();
-            System.out.println("Checkout completed and cart cleared");
+            try {
+                memberController.clearCart();
+                System.out.println("Checkout completed - borrow requests created and cart cleared");
+                
+                // Clear local cart items to refresh display
+                currentCartItems.clear();
+                cartItemContainer.getChildren().clear();
+                itemNo.setText("0");
+                
+            } catch (Exception e) {
+                System.err.println("Error during checkout: " + e.getMessage());
+                e.printStackTrace();
+            }
         }
     }
 }
