@@ -2,11 +2,16 @@ package com.example;
 
 import com.example.utility.dao.RequestDAO;
 import com.example.utility.dao.BookDAO;
+import com.example.utility.UserSession;
 import com.example.model.Request;
 import com.example.model.Book;
 import javafx.fxml.FXML;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.scene.control.Label;
+import javafx.scene.control.Separator;
+import javafx.geometry.Insets;
 
 import java.util.List;
 
@@ -30,6 +35,79 @@ public class checkOutStatusController {
     public void initialize() {
         requestDAO = new RequestDAO();
         bookDAO = new BookDAO();
+        
+        // Method to refresh the status display
+        refreshStatus();
+    }
+    
+    public void refreshStatus() {
+        loadCheckoutRequests();
+    }
+    
+    private void loadCheckoutRequests() {
+        try {
+            String userId = UserSession.getInstance().getUserId();
+            System.out.println("DEBUG: Loading checkout requests for user: " + userId);
+            
+            // Get pending requests for current user
+            List<Request> requests = requestDAO.getRequestsByBorrower(userId);
+            
+            if (requests.isEmpty()) {
+                // Show no pending requests message
+                accountBookTitle.setText("No pending checkout requests");
+                accountBookAuthor.setText("");
+                accountBookStatus.setText("None");
+                accountBookStatus.setStyle("-fx-fill: #27ae60;"); // Green
+            } else {
+                // Show the most recent request (or first one)
+                Request request = requests.get(0);
+                Book book = bookDAO.getBook(request.getBookId());
+                
+                if (book != null) {
+                    accountBookTitle.setText(book.getTitle());
+                    accountBookAuthor.setText(book.getAuthor());
+                    accountBookStatus.setText(request.getStatus().toString());
+                    
+                    // Set color based on status
+                    setStatusColor(request.getStatus().toString());
+                } else {
+                    accountBookTitle.setText("Book not found");
+                    accountBookAuthor.setText(request.getBookId());
+                    accountBookStatus.setText(request.getStatus().toString());
+                    setStatusColor(request.getStatus().toString());
+                }
+                
+                System.out.println("DEBUG: Loaded request for book: " + request.getBookId() + 
+                                 " with status: " + request.getStatus());
+            }
+            
+        } catch (Exception e) {
+            System.err.println("Error loading checkout requests: " + e.getMessage());
+            e.printStackTrace();
+            
+            // Show error message
+            accountBookTitle.setText("Error loading requests");
+            accountBookAuthor.setText("");
+            accountBookStatus.setText("Error");
+            accountBookStatus.setStyle("-fx-fill: #e74c3c;"); // Red
+        }
+    }
+    
+    private void setStatusColor(String status) {
+        switch (status != null ? status.toLowerCase() : "unknown") {
+            case "pending":
+                accountBookStatus.setStyle("-fx-fill: #FFA500;"); // Orange
+                break;
+            case "approved":
+                accountBookStatus.setStyle("-fx-fill: #27ae60;"); // Green
+                break;
+            case "rejected":
+                accountBookStatus.setStyle("-fx-fill: #e74c3c;"); // Red
+                break;
+            default:
+                accountBookStatus.setStyle("-fx-fill: #34495e;"); // Dark gray
+                break;
+        }
     }
 
     // Simple method to set book data
@@ -42,72 +120,7 @@ public class checkOutStatusController {
         }
         if (accountBookStatus != null) {
             accountBookStatus.setText(status != null ? status : "Unknown");
-            
-            // Set color based on status
-            switch (status != null ? status.toLowerCase() : "unknown") {
-                case "pending":
-                    accountBookStatus.setStyle("-fx-fill: #FFA500;"); // Orange
-                    break;
-                case "approved":
-                    accountBookStatus.setStyle("-fx-fill: #00FF00;"); // Green
-                    break;
-                case "rejected":
-                    accountBookStatus.setStyle("-fx-fill: #FF0000;"); // Red
-                    break;
-                default:
-                    accountBookStatus.setStyle("-fx-fill: #808080;"); // Gray
-                    break;
-            }
+            setStatusColor(status);
         }
-    }
-
-    // Load checkout status using existing DAO
-    public void loadCheckoutStatus(String borrowerId) {
-        try {
-            System.out.println("DEBUG: Loading checkout status for borrower: " + borrowerId);
-            
-            // Get all requests for the borrower using existing DAO
-            List<Request> requests = requestDAO.getRequestsByBorrower(borrowerId);
-            System.out.println("DEBUG: Found " + requests.size() + " requests");
-            
-            if (requests.isEmpty()) {
-                // Show no requests message
-                setBookData("No pending requests", "", "All requests processed");
-                accountBookStatus.setStyle("-fx-fill: #00FF00;"); // Green
-            } else {
-                // Display each request
-                for (Request request : requests) {
-                    displayRequest(request);
-                }
-            }
-            
-        } catch (Exception e) {
-            System.err.println("Error loading checkout status: " + e.getMessage());
-            e.printStackTrace();
-            setBookData("Error loading status", "Please try again", "Error");
-            accountBookStatus.setStyle("-fx-fill: #FF0000;"); // Red
-        }
-    }
-
-    private void displayRequest(Request request) {
-        try {
-            // Get book details using existing DAO
-            Book book = bookDAO.getBook(request.getBookId());
-            
-            if (book != null) {
-                setBookData(book.getTitle(), book.getAuthor(), request.getStatus().toString());
-            } else {
-                setBookData("Unknown Book", "Unknown Author", request.getStatus().toString());
-            }
-            
-        } catch (Exception e) {
-            System.err.println("Error displaying request: " + e.getMessage());
-            setBookData("Error", "", request.getStatus().toString());
-        }
-    }
-
-    // Getter for the HBox container
-    public HBox getAccountCheckoutStatus() {
-        return accountCheckoutStatus;
     }
 }

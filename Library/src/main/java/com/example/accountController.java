@@ -80,7 +80,7 @@ public class accountController {
         try {
             // Create a history controller to load the data
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/fxml/checkoutHistory.fxml"));
-            HBox historyContainer = loader.load();
+            VBox historyContainer = loader.load();
             // The checkout history will load automatically in initialize()
             
             // Add to the history container
