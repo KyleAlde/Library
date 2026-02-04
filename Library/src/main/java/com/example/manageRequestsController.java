@@ -180,6 +180,9 @@ public class manageRequestsController {
             showAlert("Success", "Request approved and loan created!", AlertType.INFORMATION);
             loadRequests();
             clearFields();
+            
+            // Refresh checkout status for the borrower
+            refreshBorrowerCheckoutStatus(selectedRequest.getBorrowerId());
         } catch (SQLException e) {
             showAlert("Error", "Failed to process request: " + e.getMessage(), AlertType.ERROR);
         }
@@ -203,6 +206,9 @@ public class manageRequestsController {
             showAlert("Success", "Request denied successfully!", AlertType.INFORMATION);
             loadRequests();
             clearFields();
+            
+            // Refresh checkout status for the borrower
+            refreshBorrowerCheckoutStatus(selectedRequest.getBorrowerId());
         } catch (SQLException e) {
             showAlert("Error", "Failed to deny request: " + e.getMessage(), AlertType.ERROR);
         }
@@ -227,6 +233,25 @@ public class manageRequestsController {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+    
+    private void refreshBorrowerCheckoutStatus(String borrowerId) {
+        try {
+            System.out.println("Refreshing checkout status for borrower: " + borrowerId);
+            
+            // Get the account controller instance and refresh its checkout status
+            accountController accountCtrl = accountController.getInstance();
+            if (accountCtrl != null) {
+                accountCtrl.refreshCheckoutStatus();
+                System.out.println("Checkout status refreshed successfully for borrower: " + borrowerId);
+            } else {
+                System.out.println("Account controller not initialized - status will update on next account page visit for borrower: " + borrowerId);
+            }
+            
+        } catch (Exception e) {
+            System.err.println("Error refreshing checkout status for borrower " + borrowerId + ": " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
 }
